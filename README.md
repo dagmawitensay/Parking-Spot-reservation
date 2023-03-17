@@ -6,7 +6,7 @@ This is a mobile app that allows users to reserve, book, and review parking spot
 
 The app includes the following features:
 
-- User authentication: Users can sign up and log in to the app using their email address and password, or using their social media accounts.
+- User authentication: Users can sign up and log in to the app using their email address and password.
 - Parking spot reservation: Users can search for available parking spots near their desired location and reserve a spot for a specific date and time.
 - Parking spot booking: Users can book a parking spot for longer periods of time, up to a maximum limit set by the spot owner.
 - Parking spot details: Users can view details about the parking spot they reserved or booked, including its location, price, availability, and any special requirements or instructions.

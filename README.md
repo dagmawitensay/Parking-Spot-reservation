@@ -25,7 +25,7 @@ The app is built using the following technologies:
 | Name                     | Section     | ID          |
 | :---                     |  :---:      |       ---:  |
 | [Ephrem Shimels](https://github.com/Ephrem-shimels21)           |    2        | UGR/8099/13 |
-| [Dagmawi Tensay](https://github.com/yourusername)           |    3        | UGR/0443/13 |
+| [Dagmawi Tensay](https://github.com/dagiTensay)           |    3        | UGR/0443/13 |
 | [Nathnael Yimer](https://github.com/natnaelyimer2040)          |    1        | UGR/6855/13 |
 | [Natnael Dejene](https://github.com/natnaeldejenekebede)           |    2        | UGR/4254/13 |
 | [Brihanu Asmamaw](https://github.com/BirhanuAsmamaw)         |    2        | UGR/2204/13 |

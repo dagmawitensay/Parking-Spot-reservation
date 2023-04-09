@@ -29,5 +29,8 @@ The app is built using the following technologies:
 | [Nathnael Yimer](https://github.com/natnaelyimer2040)          |    1        | UGR/6855/13 |
 | [Natnael Dejene](https://github.com/natnaeldejenekebede)           |    2        | UGR/4254/13 |
 | [Brihanu Asmamaw](https://github.com/BirhanuAsmamaw)         |    2        | UGR/2204/13 |
-##Feature update
+
+
+
+## Feature update
 - Adding and managing parking spots: The owner of parking spots can add and manage the status of the parking spot they own

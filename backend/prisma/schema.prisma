@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model parking_compound {
+  id              Int       @id @default(autoincrement())
+  owner_id        Int
+  Region          String    @db.VarChar(200)
+  Zone            String    @db.VarChar(200)
+  Wereda          String    @db.VarChar(200)
+  Kebele          Int
+  price           Decimal   @db.Decimal(10, 2)
+  available_spots Int
+  total_spots     Int
+  created_at      DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([owner_id], map: "owner_id")
+}
+
+model parking_spots {
+  id         Int @id @default(autoincrement())
+  compund_id Int
+
+  @@index([compund_id], map: "compund_id")
+}
+
+model reservations {
+  id              Int       @id @default(autoincrement())
+  user_id         Int
+  parking_spot_id Int
+  start_time      DateTime  @db.DateTime(0)
+  end_time        DateTime  @db.DateTime(0)
+  created_at      DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([parking_spot_id], map: "parking_spot_id")
+  @@index([user_id], map: "user_id")
+}
+
+model reviews {
+  id                  Int       @id @default(autoincrement())
+  user_id             Int
+  parking_compound_id Int
+  rating              Int
+  comment             String?   @db.Text
+  created_at          DateTime? @default(now()) @db.Timestamp(0)
+
+  @@index([parking_compound_id], map: "parking_compound_id")
+  @@index([user_id], map: "user_id")
+}
+
+model compound_owner {
+  id         Int    @id @default(autoincrement())
+  first_name String @db.VarChar(150)
+  last_name  String @db.VarChar(150)
+  email      String @db.VarChar(150)
+  phone_no   String @db.VarChar(150)
+}
+
+model spot_user {
+  id         Int    @id @default(autoincrement())
+  first_name String @db.VarChar(150)
+  last_name  String @db.VarChar(150)
+  email      String @db.VarChar(150)
+  phone_no   String @db.VarChar(150)
+}
+
+model user {
+  id            Int       @id @default(autoincrement())
+  user_name     String    @db.VarChar(200)
+  hash          String    @db.VarChar(200)
+  refresh_token String?   @db.VarChar(200)
+  role          user_role @default(reserver)
+}
+
+enum user_role {
+  owner
+  reserver
+}

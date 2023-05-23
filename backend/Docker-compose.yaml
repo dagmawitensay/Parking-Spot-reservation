@@ -1,0 +1,11 @@
+version: '23.0.5'
+services:
+  dev-db:
+    image: mysql:latest
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: parking_spot
+      MYSQL_ROOT_PASSWORD: root

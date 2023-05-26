@@ -78,7 +78,7 @@ model spot_user {
   user_id    Int    @unique
 }
 
-model user {
+model User {
   id            Int       @id @default(autoincrement())
   user_name     String    @db.VarChar(200)
   hash          String    @db.VarChar(200)

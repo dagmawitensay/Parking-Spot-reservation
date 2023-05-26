@@ -30,6 +30,7 @@ export class AuthService{
               user_name: dto.first_name,
               hash: hash,
               email: dto.email,
+              role : 'owner',
               compoundOwner :{
                 create: {
                   first_name: dto.first_name,
@@ -67,7 +68,14 @@ export class AuthService{
             data: {
               user_name: dto.first_name,
               email: dto.email,
-              hash: hash             
+              hash: hash,
+              spotUser :{
+                create: {
+                  first_name: dto.first_name,
+                  last_name: dto.last_name,
+                  phone_no: dto.phone_no
+                }
+              }            
               
             },
           });

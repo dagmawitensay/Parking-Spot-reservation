@@ -1,16 +1,33 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { prismaModule } from './prisma/prisma.module';
+import { SpotUserModule } from './spot-user/spot-user.module';
+import { CompoundOwnerModule } from './compound-owner/compound-owner.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guard/role.guard';
+import { JwtStrategy } from './auth/strategy';
+import { JwtGuard } from './auth/guard';
 import { UserModule } from './user/user.module';
-import { ParkingSpotModule } from './parking-spot/parking-spot.module';
-import { ReservationModule } from './reservation/reservation.module';
-import { AuthModule } from './Auth/auth.module';
-import { ParkingCompoundModule } from './parking-compound/parkingCompound.module';
-import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [UserModule, ParkingSpotModule, ReservationModule, AuthModule, PrismaModule, ParkingCompoundModule, ParkingSpotModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal:true,
+    }),
+    AuthModule,
+    prismaModule,
+    CompoundOwnerModule,
+    SpotUserModule,
+    UserModule
+  ]
+  // providers: [
+  //   JwtStrategy
+  //   // {
+  //   //   provide: APP_GUARD,
+  //   //   useClass: RolesGuard,
+  //   // }
+   
+  // ]
 })
 export class AppModule {}

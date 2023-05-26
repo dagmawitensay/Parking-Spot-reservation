@@ -11,10 +11,11 @@ export class ParkingCompoundService {
         const parking_compound = await this.prisma.parking_compound.create({
             data: {
                 owner_id: owner_id,
-                Region: dto.Region,
-                Zone: dto.Zone,
-                Wereda: dto.Wereda,
-                Kebele: dto.Kebele,
+                // Region: dto.Region,
+                // Zone: dto.Zone,
+                // Wereda: dto.Wereda,
+                // Kebele: dto.Kebele,
+                location:dto.location,
                 price: dto.price,
                 available_spots: dto.available_spots,
                 total_spots: dto.total_spots

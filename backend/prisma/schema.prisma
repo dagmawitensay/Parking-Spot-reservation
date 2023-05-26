@@ -10,10 +10,7 @@ datasource db {
 model parking_compound {
   id              Int       @id @default(autoincrement())
   owner_id        Int
-  Region          String    @db.VarChar(200)
-  Zone            String    @db.VarChar(200)
-  Wereda          String    @db.VarChar(200)
-  Kebele          Int
+  location        String    @db.VarChar(200)
   price           Decimal   @db.Decimal(10, 2)
   available_spots Int
   total_spots     Int
@@ -53,28 +50,41 @@ model reviews {
   @@index([user_id], map: "user_id")
 }
 
+model users {
+  id         Int       @id @default(autoincrement())
+  email      String    @unique(map: "email") @db.VarChar(100)
+  password   String    @db.VarChar(255)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  role       String    @db.VarChar(20)
+}
+
 model compound_owner {
   id         Int    @id @default(autoincrement())
   first_name String @db.VarChar(150)
   last_name  String @db.VarChar(150)
-  email      String @db.VarChar(150)
   phone_no   String @db.VarChar(150)
+  user       User  @relation(fields:[user_id], references: [id])
+  user_id     Int  @unique
 }
 
 model spot_user {
-  id         Int    @id @default(autoincrement())
+  id         Int    @id @default(autoincrement()) 
   first_name String @db.VarChar(150)
   last_name  String @db.VarChar(150)
-  email      String @db.VarChar(150)
   phone_no   String @db.VarChar(150)
+  user       User   @relation(fields:[user_id], references : [id])
+  user_id    Int     @unique
 }
 
-model user {
+model User {
   id            Int       @id @default(autoincrement())
   user_name     String    @db.VarChar(200)
   hash          String    @db.VarChar(200)
   refresh_token String?   @db.VarChar(200)
   role          user_role @default(reserver)
+  email         String    @db.VarChar(250)
+  compoundOwner  compound_owner?
+  spotUser       spot_user?
 }
 
 enum user_role {

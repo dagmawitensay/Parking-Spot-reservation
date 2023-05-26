@@ -85,7 +85,7 @@ export class AuthService{
         }
       }
        
-      async compoundOwnerSignin(dto:AuthDto){
+      async Signin(dto:AuthDto){
         const user = await this.prisma.User.findUnique({
           where: {
             email: dto.email
@@ -96,9 +96,7 @@ export class AuthService{
           throw new ForbiddenException("Incorrect Email")
         }
       const user_password = await argon.hash(dto.password)
-      const paswMatches = argon.verify(user_password,user.hash)
-      // const paswMatches = user.password === dto.password
-      
+      const paswMatches = argon.verify(user_password,user.hash)   
 
       if(!paswMatches){
         throw new ForbiddenException("Incorrect password")

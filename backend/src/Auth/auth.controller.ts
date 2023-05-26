@@ -25,7 +25,7 @@ export class AuthController{
    
     @Post('signin')
     signin(@Body() dto: AuthDto){
-        return this.authservice.compoundOwnerSignin(dto);
+        return this.authservice.Signin(dto);
     }
     @Roles(Role.owner)
     @UseGuards(JwtGuard, RolesGuard)

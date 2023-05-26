@@ -69,6 +69,7 @@ export class AuthService{
               user_name: dto.first_name,
               email: dto.email,
               hash: hash,
+              role: 'reserver',
               spotUser :{
                 create: {
                   first_name: dto.first_name,

@@ -67,6 +67,7 @@ model compound_owner {
   first_name String @db.VarChar(150)
   last_name  String @db.VarChar(150)
   phone_no   String @db.VarChar(150)
+  user       User   @relation(fields: [user_id], references: [id])
   user_id    Int    @unique
 }
 
@@ -75,6 +76,7 @@ model spot_user {
   first_name String @db.VarChar(150)
   last_name  String @db.VarChar(150)
   phone_no   String @db.VarChar(150)
+  user       User   @relation(fields: [user_id], references: [id])
   user_id    Int    @unique
 }
 
@@ -85,6 +87,8 @@ model User {
   refresh_token String?   @db.VarChar(200)
   role          user_role @default(reserver)
   email         String    @db.VarChar(250)
+  compoundOwner  compound_owner?
+  spotUser       spot_user?
 }
 
 enum user_role {

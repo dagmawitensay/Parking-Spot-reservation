@@ -1,19 +1,23 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator"
 
 export class ParkingCompoundDto {
-    id: number;
+    // id: number;
 
-    // @IsNotEmpty()
-    // Region: string;
+    @IsNotEmpty()
+    @IsString()
+    Region: string;
 
-    // @IsNotEmpty()
-    // Zone: string
+    @IsNotEmpty()
+    @IsString()
+    Zone: string
 
-    // @IsNotEmpty()
-    // Wereda: string
+    @IsNotEmpty()
+    @IsString()
+    Wereda: string
 
-    // @IsNotEmpty()
-    // Kebele: number
+    @IsNotEmpty()
+    @IsString()
+    Kebele: string
     @IsNotEmpty()
     @IsString()
     location: string

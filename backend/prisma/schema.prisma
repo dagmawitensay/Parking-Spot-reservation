@@ -11,6 +11,10 @@ model parking_compound {
   id              Int       @id @default(autoincrement())
   owner_id        Int
   location        String    @db.VarChar(200)
+  Region          String    @db.VarChar(250)
+  Zone            String    @db.VarChar(250)
+  Wereda          String    @db.VarChar(250)
+  Kebele          String    @db.VarChar(250)
   price           Decimal   @db.Decimal(10, 2)
   available_spots Int
   total_spots     Int
@@ -63,28 +67,24 @@ model compound_owner {
   first_name String @db.VarChar(150)
   last_name  String @db.VarChar(150)
   phone_no   String @db.VarChar(150)
-  user       User  @relation(fields:[user_id], references: [id])
-  user_id     Int  @unique
+  user_id    Int    @unique
 }
 
 model spot_user {
-  id         Int    @id @default(autoincrement()) 
+  id         Int    @id @default(autoincrement())
   first_name String @db.VarChar(150)
   last_name  String @db.VarChar(150)
   phone_no   String @db.VarChar(150)
-  user       User   @relation(fields:[user_id], references : [id])
-  user_id    Int     @unique
+  user_id    Int    @unique
 }
 
-model User {
+model user {
   id            Int       @id @default(autoincrement())
   user_name     String    @db.VarChar(200)
   hash          String    @db.VarChar(200)
   refresh_token String?   @db.VarChar(200)
   role          user_role @default(reserver)
   email         String    @db.VarChar(250)
-  compoundOwner  compound_owner?
-  spotUser       spot_user?
 }
 
 enum user_role {

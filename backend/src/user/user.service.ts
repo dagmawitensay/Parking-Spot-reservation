@@ -80,20 +80,40 @@ export class UserService {
     });
     
   }
-  async deleteAccount(userId:Number): Promise<any>{
-    const data = this.prismaService.User.delete({
+  async deleteAccount(userId:number): Promise<any>{
+    const data = await this.prismaService.User.findUnique({
+      where: {
+        id: userId
+      },
+    });
+    console.log(data)
+    if (data.role === 'owner'){
+      await this.prismaService.compound_owner.delete({
+        where:{
+          user_id : userId
+        }
+      });
+
+      await this.prismaService.User.delete({
         where: {
             id: userId
+        },
+      });
+
+    
+    } else if (data.role === 'reserver'){
+      await this.prismaService.spot_user.delete({
+        where:{
+          user_id: userId
         }
-        // compoundOwner:{
-        //     delete:{
-        //         where:{
-        //             user_id: userId
-        //         }
-        //     }
-        // }
-    });
-    return data
+      });
+      await this.prismaService.User.delete({
+        where: {
+            id: userId
+        },
+      });
+    };
+
     
   }
 }

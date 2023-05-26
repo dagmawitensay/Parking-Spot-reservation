@@ -86,7 +86,7 @@ model User {
   hash          String    @db.VarChar(200)
   refresh_token String?   @db.VarChar(200)
   role          user_role @default(reserver)
-  email         String    @db.VarChar(250)
+  email         String    @db.VarChar(250) @unique
   compoundOwner  compound_owner?
   spotUser       spot_user?
 }

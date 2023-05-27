@@ -15,9 +15,7 @@ export class AuthService{
         private config: ConfigService,
       ) {}
       
-      async getUserById(id: number): Promise<compound_owner | undefined> {
-        return this.prisma.compound_owner.findUnique({ where: { id } });
-      }
+     
     
       async compoundOwnerSignup(dto: Dto) {
         // generate the password hash

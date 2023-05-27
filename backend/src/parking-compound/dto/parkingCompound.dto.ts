@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator"
+import { IsInt, IsNotEmpty, IsNumber, IsString } from "class-validator"
 
 export class ParkingCompoundDto {
-    // id: number;
+    id: number;
 
     @IsNotEmpty()
     @IsString()
@@ -16,21 +16,20 @@ export class ParkingCompoundDto {
     Wereda: string
 
     @IsNotEmpty()
-    @IsString()
     Kebele: string
     @IsNotEmpty()
     @IsString()
     location: string
     
     @IsNotEmpty()
-    @IsNumber()
+    // @IsNumber()
     price: number;
 
     @IsNotEmpty()
-    @IsNumber()
+    // @IsNumber()
     available_spots: number;
 
     @IsNotEmpty()
-    @IsNumber()
+    // @IsNumber()
     total_spots: number
 }

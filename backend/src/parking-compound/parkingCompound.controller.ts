@@ -1,17 +1,28 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
 import { ParkingCompoundService } from "./parkingCompound.service";
 import { ParkingCompoundDto } from "./dto";
 import { combineLatest } from "rxjs";
+import { Role } from "src/auth/decorator/role.enum";
+import { JwtGuard } from "src/auth/guard";
+import { RolesGuard } from "src/auth/guard/role.guard";
+import { Roles } from "src/auth/decorator/roles.decorator";
+
+
 
 @Controller('parking-compounds')
+
+@Roles(Role.owner)
+@UseGuards(JwtGuard, RolesGuard)
 export class ParkingCompoundCotroller {
     constructor(private parkingCompoundService: ParkingCompoundService) {}
     
-    @Post()
-    create_parking_compound(@Body('owner_id', ParseIntPipe) owner_id: number, @Body() dto: ParkingCompoundDto) {
+    
+    @Post(':owner_id')
+    create_parking_compound(@Param('owner_id', ParseIntPipe) owner_id: number, @Body() dto: ParkingCompoundDto) {
         return this.parkingCompoundService.create_parking_compound(owner_id, dto)
     }
-
+     
+   
     @Put(':compound_id')
     update_parking_compound(@Param('compound_id', ParseIntPipe) compound_id: number,  @Body() dto: ParkingCompoundDto) {
         return this.parkingCompoundService.edit_parking_compound(compound_id, dto)

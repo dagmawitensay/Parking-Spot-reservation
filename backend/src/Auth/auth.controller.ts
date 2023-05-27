@@ -21,12 +21,13 @@ export class AuthController{
     Parker_signup(@Body() dto:Dto){
         return this.authservice.spotUserSignup(dto);
     }
-
+    @Roles(Role.owner)
+    @UseGuards(JwtGuard, RolesGuard)
     @Post('signin')
     signin(@Body() dto: AuthDto){
         return this.authservice.Signin(dto);
     }
-    @Roles(Role.owner)
+    @Roles(Role.reserver)
     @UseGuards(JwtGuard, RolesGuard)
     @Get('check')
     for_checking(){

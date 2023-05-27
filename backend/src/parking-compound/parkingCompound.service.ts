@@ -8,7 +8,8 @@ export class ParkingCompoundService {
     constructor(private prisma: PrismaService, private parkingSpotService: ParkingSpotService) {}
 
     async create_parking_compound(owner_id:number, dto: ParkingCompoundDto) {
-        const parking_compound = await this.prisma.parking_compound .create({
+    
+        const parking_compound = await this.prisma.parking_compound.create({
             data: {
                 owner_id: owner_id,
                 Region: dto.Region,
@@ -21,7 +22,7 @@ export class ParkingCompoundService {
                 total_spots: dto.total_spots
             }
         });
-
+      
         const compound_id = parking_compound.id;
         for(let i = 0; i < parking_compound.total_spots; i++) {
             await this.parkingSpotService.createParkingSpot(compound_id);

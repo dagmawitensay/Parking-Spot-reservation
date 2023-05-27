@@ -9,6 +9,7 @@ import { RolesGuard } from './auth/guard/role.guard';
 import { JwtStrategy } from './auth/strategy';
 import { JwtGuard } from './auth/guard';
 import { UserModule } from './user/user.module';
+import { ParkingCompoundModule } from './parking-compound/parkingCompound.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { UserModule } from './user/user.module';
     prismaModule,
     CompoundOwnerModule,
     SpotUserModule,
-    UserModule
+    UserModule,
+    ParkingCompoundModule,
   ]
   // providers: [
   //   JwtStrategy

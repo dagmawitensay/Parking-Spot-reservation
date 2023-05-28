@@ -12,7 +12,7 @@ import { Roles } from "src/auth/decorator/roles.decorator";
 @Controller('parking-compounds')
 
 @Roles(Role.owner)
-@UseGuards(JwtGuard, RolesGuard)
+@UseGuards(JwtGuard, )
 export class ParkingCompoundCotroller {
     constructor(private parkingCompoundService: ParkingCompoundService) {}
     

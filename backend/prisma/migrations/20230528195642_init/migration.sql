@@ -2,7 +2,10 @@
 CREATE TABLE `parking_compound` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `owner_id` INTEGER NOT NULL,
-    `location` VARCHAR(200) NOT NULL,
+    `Region` VARCHAR(250) NOT NULL,
+    `Zone` VARCHAR(250) NOT NULL,
+    `Wereda` VARCHAR(250) NOT NULL,
+    `Kebele` VARCHAR(250) NOT NULL,
     `price` DECIMAL(10, 2) NOT NULL,
     `available_spots` INTEGER NOT NULL,
     `total_spots` INTEGER NOT NULL,
@@ -60,3 +63,46 @@ CREATE TABLE `users` (
     UNIQUE INDEX `email`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `compound_owner` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `first_name` VARCHAR(150) NOT NULL,
+    `last_name` VARCHAR(150) NOT NULL,
+    `phone_no` VARCHAR(150) NOT NULL,
+    `user_id` INTEGER NOT NULL,
+
+    UNIQUE INDEX `compound_owner_user_id_key`(`user_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `spot_user` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `first_name` VARCHAR(150) NOT NULL,
+    `last_name` VARCHAR(150) NOT NULL,
+    `phone_no` VARCHAR(150) NOT NULL,
+    `user_id` INTEGER NOT NULL,
+
+    UNIQUE INDEX `spot_user_user_id_key`(`user_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `User` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `user_name` VARCHAR(200) NOT NULL,
+    `hash` VARCHAR(200) NOT NULL,
+    `refresh_token` VARCHAR(200) NULL,
+    `role` ENUM('owner', 'reserver') NOT NULL DEFAULT 'reserver',
+    `email` VARCHAR(250) NOT NULL,
+
+    UNIQUE INDEX `User_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `compound_owner` ADD CONSTRAINT `compound_owner_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `spot_user` ADD CONSTRAINT `spot_user_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

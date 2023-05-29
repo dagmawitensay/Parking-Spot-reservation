@@ -2,7 +2,9 @@ import { IsInt, IsNotEmpty, IsNumber, IsString } from "class-validator"
 
 export class ParkingCompoundDto {
     id: number;
-
+    @IsString()
+    @IsNotEmpty()
+    name: string;
     @IsNotEmpty()
     @IsString()
     Region: string;

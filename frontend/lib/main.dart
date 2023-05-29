@@ -21,6 +21,7 @@ void main() {
   runApp(CompoundApp(compoundRepository: compoundRepository));
 }
 
+// ignore: must_be_immutable
 class CompoundApp extends StatelessWidget {
   CompoundRepository compoundRepository;
 

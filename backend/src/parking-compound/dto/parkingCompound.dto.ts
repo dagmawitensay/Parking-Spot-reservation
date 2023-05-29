@@ -17,9 +17,6 @@ export class ParkingCompoundDto {
 
     @IsNotEmpty()
     Kebele: string
-    @IsNotEmpty()
-    @IsString()
-    location: string
     
     @IsNotEmpty()
     // @IsNumber()

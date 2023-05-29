@@ -33,7 +33,8 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
             child: ListView(
               children: [
                 TextFormField(
-                    initialValue: widget.args.edit? widget.args.compound?.Region: '',
+                    initialValue:
+                        widget.args.edit ? widget.args.compound?.Region : '',
                     validator: (value) {
                       if (value != null && value.isEmpty) {
                         return 'Please enter the region';
@@ -42,9 +43,11 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                     },
                     decoration: const InputDecoration(labelText: 'Region'),
                     onSaved: (value) {
-                      setState(() {
-                        _compound['Region'] == value;
-                      });
+                      setState(
+                        () {
+                          _compound['Region'] = value;
+                        },
+                      );
                     }),
                 TextFormField(
                     initialValue: '',
@@ -56,12 +59,15 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                     },
                     decoration: const InputDecoration(labelText: 'Wereda'),
                     onSaved: (value) {
-                      setState(() {
-                        _compound['Wereda'] == value;
-                      });
+                      setState(
+                        () {
+                          _compound['Wereda'] = value;
+                        },
+                      );
                     }),
                 TextFormField(
-                    initialValue: widget.args.edit? widget.args.compound?.Wereda : '',
+                    initialValue:
+                        widget.args.edit ? widget.args.compound?.Wereda : '',
                     validator: (value) {
                       if (value != null && value.isEmpty) {
                         return 'please enter zone';
@@ -94,24 +100,27 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                 //   },
                 // ),
                 TextFormField(
-                  initialValue: widget.args.edit? widget.args.compound?.Kebele.toString(): '',
-                  validator: (value) {
-                    if (value != null && value.isEmpty) {
-                      return 'Please enter kebele';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(labelText: 'Kebele'),
-                  onSaved: (value) {
-                    setState(
-                      () {
-                        _compound['Kebele'] = value;
-                      },
-                    );
-                  },
-                ),
+                    initialValue: widget.args.edit
+                        ? widget.args.compound?.Kebele.toString()
+                        : '',
+                    validator: (value) {
+                      if (value != null && value.isEmpty) {
+                        return 'Please enter kebele';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(labelText: 'Kebele'),
+                    onSaved: (value) {
+                      setState(
+                        () {
+                          _compound['Kebele'] = value;
+                        },
+                      );
+                    }),
                 TextFormField(
-                  initialValue: widget.args.edit? widget.args.compound?.SlotPricePerHour.toString(): '',
+                  initialValue: widget.args.edit
+                      ? widget.args.compound?.SlotPricePerHour.toString()
+                      : '',
                   validator: (value) {
                     if (value != null && value.isEmpty) {
                       return 'Please enter price per slot';
@@ -123,13 +132,15 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                   onSaved: (value) {
                     setState(
                       () {
-                        _compound['Price'] = value;
+                        _compound['SlotPricePerHour'] = value;
                       },
                     );
                   },
                 ),
                 TextFormField(
-                  initialValue: widget.args.edit? widget.args.compound?.totalSpots.toString(): '',
+                  initialValue: widget.args.edit
+                      ? widget.args.compound?.totalSpots.toString()
+                      : '',
                   validator: (value) {
                     if (value != null && value.isEmpty) {
                       return 'Please enter total spots';
@@ -140,7 +151,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                   onSaved: (value) {
                     setState(
                       () {
-                        _compound['Spots'] = value;
+                        _compound['totalSpots'] = value;
                       },
                     );
                   },
@@ -152,6 +163,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                         final form = _formkey.currentState;
                         if (form != null && form.validate()) {
                           form.save();
+                          print(_compound);
                           final CompoundEvent event = widget.args.edit
                               ? CompoundUpdate(
                                   widget.args.compound?.id ?? 0,
@@ -170,18 +182,22 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                                       totalSpots: _compound['totalSpots']))
                               : CompoundCreate(Compound(
                                   id: null,
-                                  ownerId: _compound['ownerId'],
+                                  ownerId: 1,
                                   Region: _compound['Region'],
                                   Wereda: _compound['Wereda'],
                                   Zone: _compound['Zone'],
                                   Kebele: _compound['Kebele'],
                                   // City: _compound['City'],
-                                  availableSpots: _compound['availableSpots'],
-                                  SlotPricePerHour:
-                                      _compound['SlotPricePerHour'],
-                                  totalSpots: _compound['totalSpots']));
+                                  // availableSpots: _compound['availableSpots'],
+                                  availableSpots: 2,
+                                  SlotPricePerHour: double.parse(
+                                      _compound['SlotPricePerHour']),
+                                  // totalSpots: 3
+                                  totalSpots:
+                                      int.parse(_compound['totalSpots'])));
+                          print(event);
                           BlocProvider.of<CompoundBloc>(context).add(event);
-                          (context).go('./parking-compounds');
+                          (context).go('/');
                         }
                       },
                       label: const Text('SAVE'),

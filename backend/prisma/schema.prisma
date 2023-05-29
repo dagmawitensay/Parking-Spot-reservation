@@ -10,6 +10,7 @@ datasource db {
 model parking_compound {
   id              Int       @id @default(autoincrement())
   owner_id        Int
+  name            String    @db.VarChar(250)
   Region          String    @db.VarChar(250)
   Zone            String    @db.VarChar(250)
   Wereda          String    @db.VarChar(250)

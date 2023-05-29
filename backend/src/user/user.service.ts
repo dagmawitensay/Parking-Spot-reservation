@@ -50,6 +50,7 @@ export class UserService {
         if (userProfile.role === owner){
           this.prismaService.User.update({
             data:{
+                hash:hash,
                 compoundOwner:{
                 update:{
                     first_name: updateDto.first_name,
@@ -62,6 +63,7 @@ export class UserService {
         } else if (userProfile.role === 'reserver'){
             this.prismaService.User.update({
                 data:{
+                   hash: hash,
                     spotUser:{
                     update:{
                         first_name: updateDto.first_name,

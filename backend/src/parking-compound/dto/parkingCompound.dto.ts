@@ -4,6 +4,7 @@ export class ParkingCompoundDto {
     id: number;
     @IsString()
     @IsNotEmpty()
+    
     name: string;
     @IsNotEmpty()
     @IsString()

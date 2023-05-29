@@ -26,10 +26,9 @@ class CompoundLoad extends CompoundEvent {
 }
 
 class CompoundUpdate extends CompoundEvent {
-  final int id;
   final Compound compound;
 
-  const CompoundUpdate(this.id, this.compound);
+  const CompoundUpdate(this.compound);
 
   @override
   List<Object> get props => [Compound];

@@ -12,10 +12,11 @@ class CompoundDataProvider {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzMDQ5MTYsImV4cCI6MTY4NTMyNjUxNn0.uETxKulqBW4iuTHlrIyLgJ55M9KRydKmvst5eWzj3Zg'
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzNTU4NTUsImV4cCI6MTY4NTM3NzQ1NX0.DfMFO_XTUHLWaW9LpRXlgdjUYs9XdJs3AylJBhCZALM'
       },
       body: jsonEncode(<String, dynamic>{
         'id': compound.id,
+        // 'name': compound.name,
         'Region': compound.Region,
         'Wereda': compound.Wereda,
         'Zone': compound.Zone,
@@ -35,10 +36,11 @@ class CompoundDataProvider {
   }
 
   Future<Compound> getCompound(int id) async {
-    final response = await http.get(Uri.parse('$_baseUrl/$id'),
-    headers: <String, String> { 'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzMDQ5MTYsImV4cCI6MTY4NTMyNjUxNn0.uETxKulqBW4iuTHlrIyLgJ55M9KRydKmvst5eWzj3Zg' }
-    );
+    final response =
+        await http.get(Uri.parse('$_baseUrl/$id'), headers: <String, String>{
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzNTU4NTUsImV4cCI6MTY4NTM3NzQ1NX0.DfMFO_XTUHLWaW9LpRXlgdjUYs9XdJs3AylJBhCZALM'
+    });
     print(Uri.parse('$_baseUrl/$id'));
     print(response.body);
     if (response.statusCode == 200) {
@@ -48,27 +50,31 @@ class CompoundDataProvider {
     }
   }
 
-  Future<void> updateCompound(int id, Compound compound) async {
+  Future<Compound> updateCompound(Compound compound) async {
     final http.Response response = await http.put(
-      Uri.parse('$_baseUrl/$id'),
+      Uri.parse('$_baseUrl/${compound.id}'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzNTU4NTUsImV4cCI6MTY4NTM3NzQ1NX0.DfMFO_XTUHLWaW9LpRXlgdjUYs9XdJs3AylJBhCZALM'
       },
       body: jsonEncode(<String, dynamic>{
         'id': compound.id,
+        // 'name': compound.name,
         'Region': compound.Region,
         'Wereda': compound.Wereda,
         'Zone': compound.Zone,
         // 'City': compound.City,
         'Kebele': compound.Kebele,
-        'SlotPricePerHour': compound.SlotPricePerHour,
-        'availableSpots': compound.availableSpots,
-        'totalSpots': compound.totalSpots,
+        'price': compound.SlotPricePerHour,
+        'available_spots': compound.availableSpots,
+        'total_spots': compound.totalSpots,
         'owner_id': compound.ownerId,
       }),
     );
-
-    if (response.statusCode != 204) {
+    if (response.statusCode == 204 || response.statusCode == 200) {
+      return compound;
+    } else {
       throw Exception('Failed to load Compound');
     }
   }
@@ -91,16 +97,38 @@ class CompoundDataProvider {
   }
 
   Future<List<Compound>> fetchAll() async {
-
     final http.Response response = await http.get(
       Uri.parse('http://localhost:3000/parking-compounds'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzMDQ5MTYsImV4cCI6MTY4NTMyNjUxNn0.uETxKulqBW4iuTHlrIyLgJ55M9KRydKmvst5eWzj3Zg'
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzNTU4NTUsImV4cCI6MTY4NTM3NzQ1NX0.DfMFO_XTUHLWaW9LpRXlgdjUYs9XdJs3AylJBhCZALM'
       },
     );
     print(response.body);
+    print("after excution");
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      final List<Compound> compounds = List<Compound>.from(
+        data.map((dynamic item) => Compound.fromJson(item)),
+      );
+      return compounds;
+    } else {
+      throw Exception('Falied to load compounds');
+    }
+  }
+
+  
+  Future<List<Compound>> fetchAllOwner(int ownerId) async {
+    final http.Response response = await http.get(
+      Uri.parse('http://localhost:3000/parking-compounds/$ownerId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzNTU4NTUsImV4cCI6MTY4NTM3NzQ1NX0.DfMFO_XTUHLWaW9LpRXlgdjUYs9XdJs3AylJBhCZALM'
+      },
+    );
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       final List<Compound> compounds = List<Compound>.from(
@@ -113,12 +141,14 @@ class CompoundDataProvider {
   }
 
   Future<void> deleteCompound(int id) async {
-    final http.Response reponse =
+    final http.Response response =
         await http.delete(Uri.parse('$_baseUrl/$id'), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization':
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzNTU4NTUsImV4cCI6MTY4NTM3NzQ1NX0.DfMFO_XTUHLWaW9LpRXlgdjUYs9XdJs3AylJBhCZALM'
     });
 
-    if (reponse.statusCode != 204) {
+    if (!(response.statusCode == 200 || response.statusCode == 204)) {
       throw Exception('Failed to delete compound');
     }
   }
@@ -140,7 +170,3 @@ class CompoundDataProvider {
 //   print(dataproviders.getCompound(1));
 // }
 
-void main() {
-  CompoundDataProvider dataproviders = CompoundDataProvider();
-  print(dataproviders.fetchAll());
-}

@@ -8,6 +8,7 @@ class UserDataProvider {
   static const String _baseUrl = 'http://localhost:3000/auth';
 
   Future<CompoundOwner> signUpCompoundOwner(CompoundOwner owner) async {
+    print("In data provider sign up owner");
     final response = await http.post(
       Uri.parse('$_baseUrl/owner/signup'),
       headers: <String, String>{

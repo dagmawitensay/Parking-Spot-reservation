@@ -7,23 +7,27 @@ class CompoundRepository {
   CompoundRepository(this.dataProvider);
 
   Future<Compound> create(Compound compound) async {
-    return this.dataProvider.createCompound(compound);
+    return await this.dataProvider.createCompound(compound);
   }
 
-  Future<Compound> get(int id) {
-    return this.dataProvider.getCompound(id);
+  Future<Compound> get(int id) async {
+    return await this.dataProvider.getCompound(id);
   }
 
-  Future<List<Compound>> fetchAll() {
-    return this.dataProvider.fetchAll();
+  Future<List<Compound>> fetchAll() async {
+    return await this.dataProvider.fetchAll();
   }
 
-  Future<void> update(int id, Compound compound) async {
-    this.dataProvider.updateCompound(id, compound);
+  Future<List<Compound>> fetchAllOwner(int ownerId) async {
+    return await this.dataProvider.fetchAllOwner(ownerId);
+  }
+
+  Future<Compound> update(Compound compound) async {
+    return await this.dataProvider.updateCompound(compound);
   }
 
   Future<void> delete(int id) async {
-    this.dataProvider.deleteCompound(id);
+    return await this.dataProvider.deleteCompound(id);
   }
 
   Future<List<Compound>> fetchCompound(int userId) {

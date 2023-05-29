@@ -9,14 +9,14 @@ class CompoundOwnerSignupBloc
   final AuthRepository authRepository;
 
   CompoundOwnerSignupBloc({required this.authRepository})
-      : super(SignUpInital()) {
+      : super(OwnerSignUpInital()) {
     on<OwnerSignUp>((event, emit) async {
-      emit(SignUpLoading());
+      emit(OwnerSignUpLoading());
       try {
         final owner = await authRepository.signUpCompoundOwner(event.owner);
-        emit(SignUpSucess(owner));
+        emit(OwnerSignUpSucess(owner));
       } catch (error) {
-        emit(SignUpFailure(error.toString()));
+        emit(OwnerSignUpFailure("failed in here"));
       }
     });
   }

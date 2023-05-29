@@ -19,14 +19,14 @@ export class ParkingCompoundDto {
     Kebele: string
     
     @IsNotEmpty()
-    // @IsNumber()
+    @IsNumber()
     price: number;
 
     @IsNotEmpty()
-    // @IsNumber()
+    @IsNumber()
     available_spots: number;
 
     @IsNotEmpty()
-    // @IsNumber()
+    @IsNumber()
     total_spots: number
 }

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
+import 'package:frontend/auth/screens/owner_signup.dart';
+import 'package:frontend/auth/screens/signin.dart';
+import 'package:frontend/auth/screens/spot_reserver_signup.dart';
 import 'package:frontend/compounds/bloc/compound_event.dart';
 import 'package:frontend/compounds/data_provider/compound_data_provider.dart';
 import 'package:frontend/compounds/repository/compound_repository.dart';
 import 'package:frontend/compounds/screens/compound_add_update.dart';
+import 'package:frontend/compounds/screens/compound_detail.dart';
 import 'package:frontend/compounds/screens/compound_list.dart';
 import 'package:frontend/compounds/screens/compound_route.dart';
 import 'package:go_router/go_router.dart';
@@ -48,15 +53,37 @@ class CompoundApp extends StatelessWidget {
 
   final GoRouter _router = GoRouter(routes: <GoRoute>[
     GoRoute(
-        path: '/',
-        builder: (context, state) => CompoundList(),
-        routes: <GoRoute>[
-          GoRoute(
-              path: 'addUpdateCompound',
-              builder: (context, state) {
-                CompoundArgument args = state.extra as CompoundArgument;
-                return AddUpdateCompound(args: args);
-              })
-        ])
+      path: '/',
+      builder: (context, state) => CompoundList(),
+      routes: <GoRoute>[
+        GoRoute(
+            path: 'addUpdateCompound',
+            builder: (context, state) {
+              CompoundArgument args = state.extra as CompoundArgument;
+              return AddUpdateCompound(args: args);
+            }),
+        GoRoute(
+            path: 'details',
+            builder: (context, state) {
+              CompoundArgument args = state.extra as CompoundArgument;
+              return CompoundDetail(compound: args.compound!);
+            }),
+        GoRoute(
+            path: 'auth/owner/signup',
+            builder: (context, state) {
+              return const OwnerSignupPage();
+            }),
+        GoRoute(
+            path: 'auth/reserver/signup',
+            builder: (context, state) {
+              return const SpotReserverSignupPage();
+            }),
+        GoRoute(
+            path: 'auth/signin',
+            builder: (context, state) {
+              return const LoginPage();
+            })
+      ],
+    )
   ]);
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/auth/bloc/blocs/owner_signup_bloc.dart';
 import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
 import 'package:frontend/auth/models/auth.dart';
+import 'package:go_router/go_router.dart';
 
 class OwnerSignupPage extends StatefulWidget {
   const OwnerSignupPage({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneNoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -145,6 +147,42 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                   ),
                   const SizedBox(height: 16.0),
                   TextFormField(
+                    controller: _phoneNoController,
+                    decoration: InputDecoration(
+                      labelText: 'Phone number',
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide:
+                            const BorderSide(color: Colors.blue, width: 2.0),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 16.0),
+                      prefixIcon: const Icon(Icons.person),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide:
+                            const BorderSide(color: Colors.red, width: 2.0),
+                      ),
+                      errorStyle: const TextStyle(color: Colors.red),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter phone number';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _owner['phoneNo'] = value;
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'example@gmail.com',
@@ -227,6 +265,8 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                       onPressed: () {
                         final form = _formKey.currentState;
                         if (form!.validate()) {
+                          form.save();
+                          print(_owner);
                           final CompoundOwnerSignUpEvent event = OwnerSignUp(
                               owner: CompoundOwner(
                                   email: _owner['email'],
@@ -235,8 +275,10 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                                   password: _owner['password'],
                                   username: _owner['username'],
                                   phoneNo: _owner['phoneNo']));
+                          print(event);
                           BlocProvider.of<CompoundOwnerSignupBloc>(context)
                               .add(event);
+                          (context).go('auth/signin');
                         }
                       },
                       child: const Text('Sign Up'),
@@ -279,21 +321,5 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
         ),
       ),
     );
-  }
-}
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Login and Signup',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const OwnerSignupPage());
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/auth/bloc/blocs/owner_signup_bloc.dart';
 import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
 import 'package:frontend/auth/models/auth.dart';
+import 'package:go_router/go_router.dart';
 
 class SpotReserverSignupPage extends StatefulWidget {
   const SpotReserverSignupPage({Key? key}) : super(key: key);
@@ -237,6 +238,7 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
                                   phoneNo: _reserver['phoneNo']));
                           BlocProvider.of<CompoundOwnerSignupBloc>(context)
                               .add(event);
+                          (context).go('auth/signin');
                         }
                       },
                       child: const Text('Sign Up'),

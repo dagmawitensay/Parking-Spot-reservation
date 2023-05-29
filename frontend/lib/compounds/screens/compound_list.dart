@@ -28,7 +28,10 @@ class CompoundList extends StatelessWidget {
                               .elementAt(idx)
                               .SlotPricePerHour
                               .toString()),
-                          onTap: () => (context).go('./details')),
+                          onTap: () => (context).go('/details',
+                              extra: CompoundArgument(
+                                  edit: true,
+                                  compound: compounds.elementAt(idx)))),
                     ));
           }
 

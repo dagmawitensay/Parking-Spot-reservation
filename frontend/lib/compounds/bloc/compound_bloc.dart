@@ -9,10 +9,11 @@ class CompoundBloc extends Bloc<CompoundEvent, CompoundState> {
 
   CompoundBloc({required this.compoundRepository}) : super(CompoundLoading()) {
     on<CompoundLoad>((event, emit) async {
-      final int userId;
       emit(CompoundLoading());
       try {
+        print("trying now");
         final compounds = await compoundRepository.fetchAll();
+        print("finished trying");
         emit(CompoundOperationSuccess(compounds));
       } catch (error) {
         emit(CompoundOperationFailure(error));
@@ -34,8 +35,11 @@ class CompoundBloc extends Bloc<CompoundEvent, CompoundState> {
 
     on<CompoundUpdate>((event, emit) async {
       try {
-        await compoundRepository.update(event.id, event.compound);
+        print("here to update");
+        await compoundRepository.update(event.compound);
+        print("after update");
         final compounds = await compoundRepository.fetchAll();
+        print(compounds);
         emit(CompoundOperationSuccess(compounds));
       } catch (error) {
         emit(CompoundOperationFailure(error));

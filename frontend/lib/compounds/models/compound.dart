@@ -1,6 +1,7 @@
 class Compound {
   int? id;
   int ownerId;
+  // String name;
   String Region;
   String Wereda;
   String Zone;
@@ -12,6 +13,7 @@ class Compound {
 
   Compound(
       {this.id,
+      // required this.name,
       required this.Region,
       required this.Wereda,
       required this.Zone,
@@ -25,6 +27,7 @@ class Compound {
   factory Compound.fromJson(Map<String, dynamic> json) {
     return Compound(
         id: json['id'],
+        // name: json['name'],
         Region: json['Region'],
         Wereda: json['Wereda'],
         Zone: json['Zone'],

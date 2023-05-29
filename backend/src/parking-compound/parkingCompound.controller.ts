@@ -17,14 +17,14 @@ export class ParkingCompoundCotroller {
     constructor(private parkingCompoundService: ParkingCompoundService) {}
     
     
-    @Post(':owner_id')
-    create_parking_compound(@Param('owner_id', ParseIntPipe) owner_id: number, @Body() dto: ParkingCompoundDto) {
+    @Post()
+    create_parking_compound(@Body('owner_id', ParseIntPipe) owner_id: number, @Body() dto: ParkingCompoundDto) {
         return this.parkingCompoundService.create_parking_compound(owner_id, dto)
     }
      
    
     @Put(':compound_id')
-    update_parking_compound(@Param('compound_id', ParseIntPipe) compound_id: number,  @Body() dto: ParkingCompoundDto) {
+    update_parking_compound(@Body('compound_id', ParseIntPipe) compound_id: number,  @Body() dto: ParkingCompoundDto) {
         return this.parkingCompoundService.edit_parking_compound(compound_id, dto)
     }
 

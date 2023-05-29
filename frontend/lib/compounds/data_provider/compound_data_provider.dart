@@ -11,6 +11,8 @@ class CompoundDataProvider {
       Uri.parse(_baseUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzMDQ5MTYsImV4cCI6MTY4NTMyNjUxNn0.uETxKulqBW4iuTHlrIyLgJ55M9KRydKmvst5eWzj3Zg'
       },
       body: jsonEncode(<String, dynamic>{
         'id': compound.id,
@@ -33,7 +35,10 @@ class CompoundDataProvider {
   }
 
   Future<Compound> getCompound(int id) async {
-    final response = await http.get(Uri.parse('$_baseUrl/$id'));
+    final response = await http.get(Uri.parse('$_baseUrl/$id'),
+    headers: <String, String> { 'Authorization':
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzMDQ5MTYsImV4cCI6MTY4NTMyNjUxNn0.uETxKulqBW4iuTHlrIyLgJ55M9KRydKmvst5eWzj3Zg' }
+    );
     print(Uri.parse('$_baseUrl/$id'));
     print(response.body);
     if (response.statusCode == 200) {
@@ -86,11 +91,13 @@ class CompoundDataProvider {
   }
 
   Future<List<Compound>> fetchAll() async {
-    print("mother fucker fetching");
+
     final http.Response response = await http.get(
       Uri.parse('http://localhost:3000/parking-compounds'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization':
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWF0ZXdvc0BnbWFpbC5jb20iLCJyb2xlIjoib3duZXIiLCJpYXQiOjE2ODUzMDQ5MTYsImV4cCI6MTY4NTMyNjUxNn0.uETxKulqBW4iuTHlrIyLgJ55M9KRydKmvst5eWzj3Zg'
       },
     );
     print(response.body);

@@ -16,12 +16,15 @@ class CompoundBloc extends Bloc<CompoundEvent, CompoundState> {
         emit(CompoundOperationSuccess(compounds));
       } catch (error) {
         emit(CompoundOperationFailure(error));
+        // print(error);
       }
     });
 
     on<CompoundCreate>((event, emit) async {
       try {
+        print("here now");
         await compoundRepository.create(event.compound);
+        print("here trying to inser");
         final compounds = await compoundRepository.fetchAll();
         emit(CompoundOperationSuccess(compounds));
       } catch (error) {

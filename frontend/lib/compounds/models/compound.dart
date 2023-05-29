@@ -5,7 +5,7 @@ class Compound {
   String Wereda;
   String Zone;
   // String City;
-  int Kebele;
+  String Kebele;
   double SlotPricePerHour;
   int availableSpots;
   int totalSpots;

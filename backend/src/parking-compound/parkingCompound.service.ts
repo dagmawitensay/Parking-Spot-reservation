@@ -16,7 +16,6 @@ export class ParkingCompoundService {
                 Zone: dto.Zone,
                 Wereda: dto.Wereda,
                 Kebele: dto.Kebele,
-                location:dto.location,
                 price: dto.price,
                 available_spots: dto.available_spots,
                 total_spots: dto.total_spots

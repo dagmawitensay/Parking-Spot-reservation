@@ -38,4 +38,18 @@ class Compound {
         totalSpots: json['total_spots'],
         ownerId: json['owner_id']);
   }
+ 
+  Map <String,dynamic> toMap(){
+    return {
+      'id': id,
+      'owner_id': ownerId,
+      'Region':Region,
+      'Zone': Zone,
+      'Wereda':Wereda,
+      'Kebele':Kebele,
+      'price': SlotPricePerHour,
+      'available_spots':availableSpots,
+      'total_spots': totalSpots
+    };
+  }
 }

@@ -1,11 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/auth/bloc/blocs/authentication_bloc.dart';
 import 'package:frontend/auth/bloc/blocs/owner_signup_bloc.dart';
-import 'package:frontend/auth/bloc/events/authentication_event.dart';
 import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
-import 'package:frontend/auth/bloc/states/owner_signup_state.dart';
 import 'package:frontend/auth/data_provider/user_data_provider.dart';
 import 'package:frontend/auth/repository/auth_repository.dart';
 import 'package:frontend/auth/screens/owner_signup.dart';

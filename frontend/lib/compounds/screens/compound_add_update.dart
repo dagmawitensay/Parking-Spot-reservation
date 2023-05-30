@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +6,6 @@ import 'package:frontend/compounds/bloc/compound_event.dart';
 import 'package:frontend/compounds/models/compound.dart';
 import 'package:frontend/compounds/screens/compound_route.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AddUpdateCompound extends StatefulWidget {
   static const routeName = 'compoundAddUpdate';
@@ -30,7 +28,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-              '${widget.args.edit ? "Edit Compound" : "Add New Compound"}')),
+              widget.args.edit ? "Edit Compound" : "Add New Compound")),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(30.0, 8.0, 30.0, 8.0),
           child: Form(
@@ -182,7 +180,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                   },
                 ),
                 ElevatedButton(
-                    onPressed: () async {}, child: Text('Pick Compound Image')),
+                    onPressed: () async {}, child: const Text('Pick Compound Image')),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: ElevatedButton.icon(

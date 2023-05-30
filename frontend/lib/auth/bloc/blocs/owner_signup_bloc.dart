@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
 import 'package:frontend/auth/bloc/states/owner_signup_state.dart';
-import 'package:frontend/auth/models/auth.dart';
 import 'package:frontend/auth/repository/auth_repository.dart';
 
 class CompoundOwnerSignupBloc
@@ -16,7 +15,7 @@ class CompoundOwnerSignupBloc
         final owner = await authRepository.signUpCompoundOwner(event.owner);
         emit(OwnerSignUpSucess(owner));
       } catch (error) {
-        emit(OwnerSignUpFailure("failed in here"));
+        emit(const OwnerSignUpFailure("failed in here"));
       }
     });
   }

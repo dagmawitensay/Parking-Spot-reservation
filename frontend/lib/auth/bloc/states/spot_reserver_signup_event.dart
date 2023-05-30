@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:frontend/auth/bloc/events/spot_reserver_signup_event.dart';
 import 'package:frontend/auth/models/auth.dart';
 
 abstract class SpotReserverSignupState extends Equatable {

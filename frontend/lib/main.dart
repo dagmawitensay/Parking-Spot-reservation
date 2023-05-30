@@ -1,89 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
-import 'package:frontend/auth/screens/owner_signup.dart';
-import 'package:frontend/auth/screens/signin.dart';
-import 'package:frontend/auth/screens/spot_reserver_signup.dart';
-import 'package:frontend/compounds/bloc/compound_event.dart';
-import 'package:frontend/compounds/data_provider/compound_data_provider.dart';
-import 'package:frontend/compounds/repository/compound_repository.dart';
-import 'package:frontend/compounds/screens/compound_add_update.dart';
-import 'package:frontend/compounds/screens/compound_detail.dart';
-import 'package:frontend/compounds/screens/compound_list.dart';
-import 'package:frontend/compounds/screens/compound_route.dart';
-import 'package:go_router/go_router.dart';
-
-import 'compounds/bloc/compound_bloc.dart';
-import 'compounds/bloc_observer.dart';
+import 'package:frontend/reservation/bloc/compound_bloc.dart';
+import 'package:frontend/reservation/bloc/parking_spot_bloc.dart';
+import 'package:frontend/reservation/bloc/reservation_bloc.dart';
+import 'package:frontend/reservation/bloc/time_picker_bloc.dart';
+import 'package:frontend/reservation/data_provider/parking_compound_data_provider.dart';
+import 'package:frontend/reservation/data_provider/parking_spot_data_provider.dart';
+import 'package:frontend/reservation/data_provider/reservation_data_provider.dart';
+import 'package:frontend/reservation/models/parking_spot.dart';
+import 'package:frontend/reservation/repository/parking_spot_repository.dart';
+import 'package:frontend/reservation/repository/reservation_repository.dart';
+import 'package:frontend/reservation/screens/book_parking_details_page.dart';
+import 'package:frontend/reservation/screens/compound_listing_page.dart';
+import 'package:frontend/reservation/screens/pick_parking_spot_page.dart';
+import 'package:frontend/reservation/screens/success_page.dart';
+import 'package:frontend/reservation/screens/time_picker_page.dart';
 
 void main() {
-  CompoundDataProvider dataProvider = CompoundDataProvider();
-  final CompoundRepository compoundRepository =
-      CompoundRepository(dataProvider);
-
-  Bloc.observer = MyBlocObserver();
-
-  runApp(CompoundApp(compoundRepository: compoundRepository));
+  runApp(const MyApp());
 }
 
-class CompoundApp extends StatelessWidget {
-  CompoundRepository compoundRepository;
-
-  CompoundApp({required this.compoundRepository});
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-        value: this.compoundRepository,
-        child: BlocProvider(
-            create: (context) =>
-                CompoundBloc(compoundRepository: compoundRepository)
-                  ..add(CompoundLoad()),
-            child: MaterialApp.router(
-              title: 'Compound App',
-              routerDelegate: _router.routerDelegate,
-              routeInformationParser: _router.routeInformationParser,
-              routeInformationProvider: _router.routeInformationProvider,
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-              ),
-            )));
-  }
-
-  final GoRouter _router = GoRouter(routes: <GoRoute>[
-    GoRoute(
-      path: '/',
-      builder: (context, state) => CompoundList(),
-      routes: <GoRoute>[
-        GoRoute(
-            path: 'addUpdateCompound',
-            builder: (context, state) {
-              CompoundArgument args = state.extra as CompoundArgument;
-              return AddUpdateCompound(args: args);
-            }),
-        GoRoute(
-            path: 'details',
-            builder: (context, state) {
-              CompoundArgument args = state.extra as CompoundArgument;
-              return CompoundDetail(compound: args.compound!);
-            }),
-        GoRoute(
-            path: 'auth/owner/signup',
-            builder: (context, state) {
-              return const OwnerSignupPage();
-            }),
-        GoRoute(
-            path: 'auth/reserver/signup',
-            builder: (context, state) {
-              return const SpotReserverSignupPage();
-            }),
-        GoRoute(
-            path: 'auth/signin',
-            builder: (context, state) {
-              return const LoginPage();
-            })
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ParkingCompoundBloc>(
+          create: (_) => ParkingCompoundBloc(ParkingCompoundDataProvider()),
+        ),
+        BlocProvider<ParkingSpotBloc>(
+          create: (_) => ParkingSpotBloc(
+            parkingSpotRepository: ParkingSpotRepository(
+              parkingSpotDataProvider: ParkingSpotDataProvider(),
+            ),
+          ),
+        ),
+        BlocProvider<TimePickerBloc>(
+          create: (_) => TimePickerBloc(),
+        ),
+        BlocProvider<ReservationBloc>(
+          create: (_) => ReservationBloc(
+            ReservationRepository(ReservationDataProvider()),
+          ),
+        ),
       ],
-    )
-  ]);
+      child: MaterialApp(
+        title: 'Park System',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        routes: {
+          '/': (context) => const CompoundListingPage(),
+          '/park-spot/:compoundId': (context) {
+            final compoundId =
+                ModalRoute.of(context)!.settings.arguments as String;
+            return ParkSpotPage(compoundId: compoundId);
+          },
+          '/time-picker': (BuildContext context) {
+            final queryParams = ModalRoute.of(context)!.settings.arguments
+                as Map<String, dynamic>;
+            final parkingSpotId = queryParams['parkingSpot'] as String;
+            final compoundId = queryParams['compoundId'] as String;
+            final parkingSpot = ParkingSpot(
+              id: int.parse(parkingSpotId),
+              compoundId: int.parse(compoundId),
+            );
+            return TimePickerPage(parkingSpot: parkingSpot);
+          },
+          '/booking-details': (context) {
+            final args = ModalRoute.of(context)!.settings.arguments
+                as Map<String, String>;
+            final startTime = DateTime.parse(args['startTime']!);
+            final endTime = DateTime.parse(args['endTime']!);
+            return BookingDetailsPage(
+              startTime: startTime,
+              endTime: endTime,
+              reservationRepository: ReservationRepository(
+                ReservationDataProvider(),
+              ),
+            );
+          },
+          '/success': (context) => const BookingSuccessPage(),
+        },
+      ),
+    );
+  }
 }

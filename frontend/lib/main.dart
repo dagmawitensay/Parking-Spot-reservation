@@ -7,20 +7,26 @@ import 'package:frontend/compounds/screens/compound_add_update.dart';
 import 'package:frontend/compounds/screens/compound_list.dart';
 import 'package:frontend/compounds/screens/compound_route.dart';
 import 'package:go_router/go_router.dart';
-
 import 'compounds/bloc/compound_bloc.dart';
 import 'compounds/bloc_observer.dart';
+import 'compounds/data_provider/compound_local_data_provider.dart';
+import 'localDatabase/connectivity_checking.dart';
+import 'sync_manager/syncing.dart';
 
 void main() {
+  SyncManager      syncManager = SyncManager();
   CompoundDataProvider dataProvider = CompoundDataProvider();
+  CompoundLocalDataProvider localProvider = CompoundLocalDataProvider();
+  ConnectivityChecks  connectivitychecker = ConnectivityChecks();
   final CompoundRepository compoundRepository =
-      CompoundRepository(dataProvider);
+      CompoundRepository(dataProvider, localProvider,connectivitychecker);
 
   Bloc.observer = MyBlocObserver();
-
+  syncManager.syncingManager();
   runApp(CompoundApp(compoundRepository: compoundRepository));
 }
 
+// ignore: must_be_immutable
 class CompoundApp extends StatelessWidget {
   CompoundRepository compoundRepository;
 

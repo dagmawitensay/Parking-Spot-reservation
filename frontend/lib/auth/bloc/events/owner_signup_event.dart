@@ -12,6 +12,36 @@ class OwnerSignUpLoad extends CompoundOwnerSignUpEvent {
   List<Object> get props => [];
 }
 
+class OwnerSignUpFormInitalizedEvent extends CompoundOwnerSignUpEvent {
+  const OwnerSignUpFormInitalizedEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class OwnerSignUpButtonPressedEvent extends CompoundOwnerSignUpEvent {
+  const OwnerSignUpButtonPressedEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class OwnerSignUpEmailChangedEvent extends CompoundOwnerSignUpEvent {
+  final String email;
+  const OwnerSignUpEmailChangedEvent(this.email);
+
+  @override
+  List<Object> get props => [];
+}
+
+class OwnerSignUpPasswordChangedEvent extends CompoundOwnerSignUpEvent {
+  final String password;
+  const OwnerSignUpPasswordChangedEvent(this.password);
+
+  @override
+  List<Object> get props => [];
+}
+
 class OwnerSignUp extends CompoundOwnerSignUpEvent {
   final CompoundOwner owner;
 

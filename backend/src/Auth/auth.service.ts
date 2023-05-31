@@ -120,7 +120,7 @@ async signToken(
     userId: number,
     email: string,
     role: string
-  ): Promise<{ access_token: string}> {
+  ): Promise<{ access_token: string, role: string}> {
     const payload = {
       sub: userId,
       email,
@@ -135,7 +135,8 @@ async signToken(
       },
     );
     return {
-      access_token: token
+      access_token: token,
+      role: role
     };
   }
 }

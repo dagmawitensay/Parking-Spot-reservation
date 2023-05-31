@@ -1,14 +1,17 @@
 import 'dart:convert';
 
+import 'package:frontend/compounds/models/compound.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/auth.dart';
 
 class UserDataProvider {
   static const String _baseUrl = 'http://localhost:3000/auth';
+  SharedPreferences? prefs;
 
   Future<CompoundOwner> signUpCompoundOwner(CompoundOwner owner) async {
-    print("In data provider sign up owner");
+    print(owner);
     final response = await http.post(
       Uri.parse('$_baseUrl/owner/signup'),
       headers: <String, String>{
@@ -18,15 +21,24 @@ class UserDataProvider {
         'username': owner.username,
         'email': owner.email,
         'password': owner.password,
-        'firstName': owner.firstName,
-        'lastName': owner.lastName,
+        'first_name': owner.firstName,
+        'last_name': owner.lastName,
       }),
     );
 
+    print(response.body);
+    print('$_baseUrl/owner/signup');
+
     if (response.statusCode == 201) {
-      return CompoundOwner.fromJson(jsonDecode(response.body));
+      final responseBody = json.decode(response.body);
+      final accessToken = responseBody['access_token'];
+      final prefs = await SharedPreferences.getInstance();
+
+      prefs.setString('access_token', accessToken);
+
+      return owner;
     } else {
-      throw Exception('Failed to create user');
+      throw Exception('Failed to create owner');
     }
   }
 
@@ -45,6 +57,11 @@ class UserDataProvider {
         }));
 
     if (response.statusCode == 201) {
+      final responseBody = json.decode(response.body);
+      final accessToken = responseBody['access_token'];
+      final prefs = await SharedPreferences.getInstance();
+
+      prefs.setString('access_token', accessToken);
       return SpotReservingUser.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to create user');
@@ -52,19 +69,53 @@ class UserDataProvider {
   }
 
   Future<User> signIn(User user) async {
-    final response = await http.post(Uri.parse('$_baseUrl/signin'),
-        headers: <String, String>{
-          'Content-Type': 'application/josn; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'username': user.email,
-          'password': user.password,
-        }));
+    final response = await http.post(
+      Uri.parse('$_baseUrl/signin'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'email': user.email,
+        'password': user.password,
+      }),
+    );
+
+    print(response.body);
 
     if (response.statusCode == 201) {
-      return User.fromJson(jsonDecode(response.body));
+      final responseBody = json.decode(response.body);
+      final accessToken = responseBody['access_token'];
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('access_token', accessToken);
+      return user;
     } else {
-      throw Exception('Credentials not correct');
+      throw Exception('Failed to create owner');
     }
   }
 }
+
+//   Future<User> signIn(User user) async {
+//     print("here signing in");
+//     final http.Response response = await http
+//         .post(
+//           headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
+//           body: jsonEncode(<String, dynamic>{
+//         'email': user.email,
+//         'password': user.password,
+//       }),
+//           );
+//     print(user.email);
+//     print(user.password);
+//     print(response.body);
+//     if (response.statusCode == 201) {
+//       final responseBody = json.decode(response.body);
+//       final accessToken = responseBody['access_token'];
+//       final prefs = await SharedPreferences.getInstance();
+
+//       prefs.setString('access_token', accessToken);
+//       return user;
+//     } else {
+//       throw Exception('Credentials not correct');
+//     }
+//   }
+// }

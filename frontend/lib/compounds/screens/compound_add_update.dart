@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/compounds/bloc/compound_bloc.dart';
@@ -21,7 +19,6 @@ class AddUpdateCompound extends StatefulWidget {
 
 class _AddUpdateCompoundState extends State<AddUpdateCompound> {
   final _formkey = GlobalKey<FormState>();
-
 
   final Map<String, dynamic> _compound = {};
 
@@ -228,7 +225,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                                   totalSpots:
                                       int.parse(_compound['totalSpots'])));
                           BlocProvider.of<CompoundBloc>(context).add(event);
-                          (context).go('/');
+                          (context).go('/compoundList');
                         }
                       },
                       label: const Text('SAVE'),

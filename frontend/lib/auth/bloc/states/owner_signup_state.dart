@@ -29,3 +29,5 @@ class OwnerSignUpFailure extends CompoundOwnerSignUpState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+class OwnerSignUPSubmissionState extends CompoundOwnerSignUpState {}

@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/auth/bloc/blocs/authentication_bloc.dart';
 import 'package:frontend/auth/bloc/blocs/owner_signup_bloc.dart';
+import 'package:frontend/auth/bloc/blocs/signin_bloc.dart';
 import 'package:frontend/auth/bloc/events/authentication_event.dart';
 import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
+import 'package:frontend/auth/bloc/events/signin_event.dart';
 import 'package:frontend/auth/bloc/states/owner_signup_state.dart';
+import 'package:frontend/auth/bloc/states/spot_reserver_signup_event.dart';
 import 'package:frontend/auth/data_provider/user_data_provider.dart';
 import 'package:frontend/auth/repository/auth_repository.dart';
 import 'package:frontend/auth/screens/owner_signup.dart';
 import 'package:frontend/auth/screens/signin.dart';
 import 'package:frontend/auth/screens/spot_reserver_signup.dart';
+import 'package:frontend/compounds/bloc/compound_bloc.dart';
+import 'package:frontend/compounds/screens/compound_list.dart';
 import 'package:go_router/go_router.dart';
 
 import '../compounds/bloc_observer.dart';
@@ -36,17 +41,15 @@ class AuthApp extends StatelessWidget {
         child: BlocProvider(
             create: (context) =>
                 CompoundOwnerSignupBloc(authRepository: authRepository)
-                  ..add(const OwnerSignUpLoad()),
+                  ..add(const OwnerSignUpFormInitalizedEvent()),
             child: MaterialApp.router(
-              title: 'Compound App',
-              routerDelegate: _router.routerDelegate,
-              routeInformationParser: _router.routeInformationParser,
-              routeInformationProvider: _router.routeInformationProvider,
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-              ),
-            )));
+                routerDelegate: _router.routerDelegate,
+                routeInformationParser: _router.routeInformationParser,
+                routeInformationProvider: _router.routeInformationProvider,
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                ))));
   }
 
   final GoRouter _router = GoRouter(
@@ -69,8 +72,13 @@ class AuthApp extends StatelessWidget {
                 path: 'auth/signin',
                 builder: (context, state) {
                   return const LoginPage();
+                }),
+            GoRoute(
+                path: '/compoundList',
+                builder: (context, state) {
+                  return CompoundList();
                 })
-          ])
+          ]),
     ],
   );
 }

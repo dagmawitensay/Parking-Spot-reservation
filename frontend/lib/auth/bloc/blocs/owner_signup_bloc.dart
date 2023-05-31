@@ -10,13 +10,22 @@ class CompoundOwnerSignupBloc
 
   CompoundOwnerSignupBloc({required this.authRepository})
       : super(OwnerSignUpInital()) {
+    on<OwnerSignUpFormInitalizedEvent>((event, emit) async {
+      print('Owner signUp initalizing');
+      emit(OwnerSignUpInital());
+    });
+
+    // on<OwnerSignUpEmailChangedEvent>((event, emit)async {
+    //   final emailStatus = event.email;
+    //   emit(Owner)
+    // })
     on<OwnerSignUp>((event, emit) async {
-      emit(OwnerSignUpLoading());
+      emit(OwnerSignUPSubmissionState());
       try {
         final owner = await authRepository.signUpCompoundOwner(event.owner);
         emit(OwnerSignUpSucess(owner));
       } catch (error) {
-        emit(OwnerSignUpFailure("failed in here"));
+        emit(OwnerSignUpFailure(error.toString()));
       }
     });
   }

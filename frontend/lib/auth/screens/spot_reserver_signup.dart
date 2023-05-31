@@ -235,10 +235,10 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
                                   lastName: _reserver['lastName'],
                                   password: _reserver['password'],
                                   username: _reserver['username'],
-                                  phoneNo: _reserver['phoneNo']));
+                                  ));
                           BlocProvider.of<CompoundOwnerSignupBloc>(context)
                               .add(event);
-                          (context).go('auth/signin');
+                          (context).goNamed('signin');
                         }
                       },
                       child: const Text('Sign Up'),
@@ -248,7 +248,7 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
                   Center(
                       child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      (context).goNamed('signin');
                     },
                     child: const Text('Already have an account? Login'),
                   )),

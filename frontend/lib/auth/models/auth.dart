@@ -1,21 +1,23 @@
 class User {
   int? id;
-  String username;
+  String? username;
   String email;
   String password;
 
-  User({required this.email, required this.username, this.id, required this.password});
+  User({required this.email, this.username, this.id, required this.password});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-        id: json['id'], username: json['username'], email: json['email'], password: json['password']);
+        id: json['id'],
+        username: json['username'],
+        email: json['email'],
+        password: json['password']);
   }
 }
 
 class CompoundOwner extends User {
   String firstName;
   String lastName;
-  String phoneNo;
 
   CompoundOwner(
       {int? id,
@@ -24,7 +26,7 @@ class CompoundOwner extends User {
       required String password,
       required this.firstName,
       required this.lastName,
-      required this.phoneNo})
+      })
       : super(id: id, username: username, email: email, password: password);
 
   factory CompoundOwner.fromJson(Map<String, dynamic> json) {
@@ -35,14 +37,13 @@ class CompoundOwner extends User {
         password: json['password'],
         firstName: json['firstName'],
         lastName: json['lastName'],
-        phoneNo: json['phoneNo']);
+        );
   }
 }
 
 class SpotReservingUser extends User {
   String firstName;
   String lastName;
-  String phoneNo;
 
   SpotReservingUser(
       {required int id,
@@ -50,8 +51,7 @@ class SpotReservingUser extends User {
       required String email,
       required String password,
       required this.firstName,
-      required this.lastName,
-      required this.phoneNo})
+      required this.lastName,})
       : super(id: id, username: username, email: email, password: password);
 
   factory SpotReservingUser.fromJson(Map<String, dynamic> json) {
@@ -61,7 +61,6 @@ class SpotReservingUser extends User {
         email: json['email'],
         password: json['password'],
         firstName: json['firstName'],
-        lastName: json['lastName'],
-        phoneNo: json['phoneNo']);
+        lastName: json['lastName'],);
   }
 }

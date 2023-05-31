@@ -21,7 +21,7 @@ class AuthenticationBloc
       } else if (user is SpotReservingUser) {
         emit(ReserverAuthenticated(user));
       } else {
-        emit(AuthenticatoinFailure('Unkown user'));
+        emit(const AuthenticatoinFailure('Unkown user'));
       }
     });
 

@@ -24,7 +24,7 @@ class CompoundRepository {
 
   Future<void> delete(int id) async {
     this.dataProvider.deleteCompound(id);
-  }
+  } 
 
   Future<List<Compound>> fetchCompound(int userId) {
     return this.dataProvider.fetchCompounds(userId);

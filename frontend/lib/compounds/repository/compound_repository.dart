@@ -1,36 +1,97 @@
+import '../../localDatabase/connectivity_checking.dart';
 import '../data_provider/compound_data_provider.dart';
 import '../models/compound.dart';
+import '../data_provider/compound_local_data_provider.dart';
+
 
 class CompoundRepository {
   final CompoundDataProvider dataProvider;
+  final CompoundLocalDataProvider localDataProvider;
+  final ConnectivityChecks  connectivitychecker;
 
-  CompoundRepository(this.dataProvider);
-
+  CompoundRepository(this.dataProvider,this.localDataProvider,this.connectivitychecker);
+ 
   Future<Compound> create(Compound compound) async {
-    return await dataProvider.createCompound(compound);
+
+     final localCreateddata = await localDataProvider.createCompound(compound);
+     final isConnected = await connectivitychecker.checkNetworkConnectivity();
+
+     if (isConnected){
+       final newCreatedCompound = await dataProvider.createCompound(compound);
+       await localDataProvider.updatesyncPendingCompound(compound.id!,true,'created');
+       return newCreatedCompound;
+       
+     } else {
+       localDataProvider.updatesyncPendingCompound(compound.id!,false,null);
+       return localCreateddata;
+     }   
   }
 
   Future<Compound> get(int id) async {
-    return await dataProvider.getCompound(id);
+   final isConnected = await connectivitychecker.checkNetworkConnectivity();
+   if (isConnected){
+     return dataProvider.getCompound(id);
+   }else {
+   return localDataProvider.getCompound(id);
+   }
+   
   }
 
-  Future<List<Compound>> fetchAll() async {
-    return await dataProvider.fetchAll();
-  }
+  Future<List<Compound>> fetchAll() async{
+    final isConnected = await connectivitychecker.checkNetworkConnectivity();
+    final compounds = await localDataProvider.getCompounds();
 
-  Future<List<Compound>> fetchAllOwner(int ownerId) async {
-    return await dataProvider.fetchAllOwner(ownerId);
+    if (isConnected){
+      final fromRemote = await dataProvider.fetchAll();
+      return fromRemote;
+    }else{
+      return compounds;
+    }
+
+ 
   }
 
   Future<Compound> update(Compound compound) async {
-    return await dataProvider.updateCompound(compound);
+    final isConnected = await connectivitychecker.checkNetworkConnectivity();
+    if (isConnected){
+      return dataProvider.updateCompound(compound);
+    } else{
+      localDataProvider.updatesyncPendingCompound(compound.id!,true,'updated');
+      return localDataProvider.updateCompound(compound);
+      
+    }
   }
 
   Future<void> delete(int id) async {
-    return await dataProvider.deleteCompound(id);
+    final isConnected = await connectivitychecker.checkNetworkConnectivity();
+    // await localDataProvider.deleteCompoundStatus(id);
+    await localDataProvider.updatesyncPendingCompound(id, true,'deleted');
+    if (isConnected){
+      dataProvider.deleteCompound(id);
+      localDataProvider.deleteCompound(id);
+    }
+
   }
+
+ 
+  Future<List<Compound>> fetchAllOwner(int ownerId) async {
+    final isConnected = await connectivitychecker.checkNetworkConnectivity();
+    
+    if(isConnected){
+      return await dataProvider.fetchAllOwner(ownerId);
+    } else {
+      return await localDataProvider.getCompoundsOfOwner(ownerId);
+    }
+    
+  }
+
 
   Future<List<Compound>> fetchCompound(int userId) {
     return dataProvider.fetchCompounds(userId);
   }
-}
+
+  
+
+  }
+
+

@@ -66,7 +66,8 @@ class LocalDatabaseProvider{
           Kebele TEXT,
           price  REAL,
           available_spots INTEGER,
-          total_spots   INTEGER
+          total_spots   INTEGER,
+          sync_status TEXT CHECK(sync_status IN ('created','updated','deleted'))
 
           FOREIGN KEY (owner_id) REFERENCES compound_owner (id) ON DELETE CASCADE ON UPDATE CASCADE 
          )' ;
@@ -104,4 +105,5 @@ class LocalDatabaseProvider{
     );
     return database;
   }
+
 }

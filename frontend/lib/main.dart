@@ -29,15 +29,23 @@ import 'compounds/screens/compound_add_update.dart';
 import 'compounds/screens/compound_detail.dart';
 import 'compounds/screens/compound_route.dart';
 import 'compounds/screens/home_page.dart';
+import 'compounds/data_provider/compound_local_data_provider.dart';
+import 'localDatabase/connectivity_checking.dart';
+import 'sync_manager/syncing.dart';
+
+
 
 void main() {
   UserDataProvider userdataProvider = UserDataProvider();
   CompoundDataProvider compoundDataProvider = CompoundDataProvider();
+   SyncManager      syncManager = SyncManager();
+  CompoundLocalDataProvider localProvider = CompoundLocalDataProvider();
+  ConnectivityChecks  connectivitychecker = ConnectivityChecks();
 
   final AuthRepository authRepository = AuthRepository(userdataProvider);
-  final CompoundRepository compoundRepository =
-      CompoundRepository(compoundDataProvider);
-
+   final CompoundRepository compoundRepository =
+      CompoundRepository(compoundDataProvider, localProvider,connectivitychecker);
+  syncManager.syncingManager();
   Bloc.observer = MyBlocObserver();
   setPathUrlStrategy();
 
@@ -48,6 +56,7 @@ void main() {
 class AuthApp extends StatelessWidget {
   final AuthRepository authRepository;
   final CompoundRepository compoundRepository;
+
 
   AuthApp(
       {Key? key,

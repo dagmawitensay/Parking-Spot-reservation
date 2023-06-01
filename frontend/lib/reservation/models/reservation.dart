@@ -1,18 +1,16 @@
 class Reservation {
-  final String id;
+  final String? id;
   final String userId;
   final DateTime startTime;
   final DateTime endTime;
   final String spotId;
-  final String createdat;
 
   Reservation({
-    required this.id,
+    this.id,
     required this.userId,
     required this.startTime,
     required this.endTime,
     required this.spotId,
-    required this.createdat,
   });
 
   factory Reservation.fromJson(Map<String, dynamic> json) {
@@ -21,8 +19,7 @@ class Reservation {
       userId: json['userId'],
       startTime: DateTime.parse(json['startTime']),
       endTime: DateTime.parse(json['endTime']),
-      spotId: json['spotId'],
-      createdat: json['createdat'], // Fix the key here
+      spotId: json['spotId'], // Fix the key here
     );
   }
 
@@ -33,7 +30,6 @@ class Reservation {
       'startTime': startTime.toIso8601String(),
       'endTime': endTime.toIso8601String(),
       'spotId': spotId,
-      'createdat': createdat,
     };
   }
 }

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:frontend/reservation/bloc/parking_spot_bloc.dart';
+import 'package:frontend/reservation/bloc/blocs/parking_spot_bloc.dart';
 import 'package:frontend/reservation/data_provider/parking_spot_data_provider.dart';
 import 'package:frontend/reservation/models/parking_spot.dart';
 import 'package:frontend/reservation/repository/parking_spot_repository.dart';

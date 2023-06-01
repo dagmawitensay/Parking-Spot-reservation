@@ -15,30 +15,33 @@ class CompoundDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(compound.Region), actions: [
-        IconButton(
-          icon: const Icon(Icons.edit),
-          onPressed: () {
-            return (context).go('/addUpdateCompound',
-                extra: CompoundArgument(compound: compound, edit: true));
-          },
-        ),
-        const SizedBox(
-          width: 32,
-        ),
-        IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              BlocProvider.of<CompoundBloc>(context)
-                  .add(CompoundDelete(compound.id ?? 0));
-              return (context).go('/');
-            })
-      ]),
+      appBar: AppBar(
+          title: Text(compound.Region),
+          leading: BackButton(onPressed: () => (context).goNamed('home')),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                return (context).go('/addUpdateCompound',
+                    extra: CompoundArgument(compound: compound, edit: true));
+              },
+            ),
+            const SizedBox(
+              width: 32,
+            ),
+            IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () {
+                  BlocProvider.of<CompoundBloc>(context)
+                      .add(CompoundDelete(compound.id ?? 0));
+                  return (context).goNamed('home');
+                })
+          ]),
       body: Card(
           child: Column(
         children: [
           ListTile(
-            title: Text('Name: ${compound.Region}'),
+            title: Text('Name: ${compound.name}'),
             subtitle: Text('SpotPricePerHour: ${compound.SlotPricePerHour}'),
           ),
           const Text('Details',

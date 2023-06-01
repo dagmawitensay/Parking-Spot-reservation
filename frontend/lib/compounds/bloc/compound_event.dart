@@ -12,7 +12,7 @@ class CompoundCreate extends CompoundEvent {
   const CompoundCreate(this.compound);
 
   @override
-  List<Object> get props => [Compound];
+  List<Object> get props => [compound];
 
   @override
   String toString() => 'Compound Created {compound: ${compound.id}}';

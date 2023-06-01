@@ -20,9 +20,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
+  flutter_secure_storage: ^8.0.0
   go_router: ^7.1.1
   http: ^0.13.6
   image_picker: ^0.8.7+5
+  jwt_decoder: ^2.0.1
   shared_preferences: ^2.1.1
   sqflite: ^2.2.8+4
   url_strategy: ^0.2.0

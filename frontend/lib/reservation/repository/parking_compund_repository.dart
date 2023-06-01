@@ -1,13 +1,12 @@
+import 'package:frontend/reservation/data_provider/parking_compound_data_provider.dart';
+import 'package:frontend/reservation/models/parking_compound.dart';
+
 class ParkingCompoundRepository {
-  final Reservation.ParkingCompoundDataProvider dataProvider;
+  final ParkingCompoundDataProvider dataProvider;
 
-  ParkingCompoundRepository({
-    required this.dataProvider,
-    required Reservation.ParkingCompoundDataProvider compoundDataProvider,
-  });
+  ParkingCompoundRepository(this.dataProvider, {required compoundDataProvider});
 
-  Future<List<ReservationModel.ParkingCompound>>
-      getAllParkingCompounds() async {
+  Future<List<ParkingCompound>> getAllParkingCompounds() async {
     try {
       return await dataProvider.getAllParkingCompounds();
     } catch (e) {

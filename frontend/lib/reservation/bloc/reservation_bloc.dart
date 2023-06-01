@@ -62,83 +62,65 @@ class ReservationError extends ReservationState {
 class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
   final ReservationRepository reservationRepository;
 
-  ReservationBloc(this.reservationRepository) : super(ReservationLoading()) {
-    on<FetchReservations>(
-        (event, emit) => _mapFetchReservationsToState(event, emit));
-    on<CreateReservation>(
-        (event, emit) => _mapCreateReservationToState(event, emit));
-    on<UpdateReservation>(
-        (event, emit) => _mapUpdateReservationToState(event, emit));
-    on<CancelReservation>(
-        (event, emit) => _mapCancelReservationToState(event, emit));
-    on<BookingSuccessEvent>(
-        (event, emit) => _mapBookingSuccessEventToState(event, emit));
-  }
+  ReservationBloc(this.reservationRepository) : super(ReservationLoading());
 
-  void _mapFetchReservationsToState(
-      FetchReservations event, Emitter<ReservationState> emit) async {
-    try {
-      emit(ReservationLoading());
-      final reservations =
-          await reservationRepository.getReservationsForUser(event.userId);
-      emit(ReservationLoaded(reservations));
-    } catch (e) {
-      emit(ReservationError('Failed to fetch reservations: $e'));
+  Stream<ReservationState> mapEventToState(ReservationEvent event) async* {
+    if (event is FetchReservations) {
+      yield ReservationLoading();
+      try {
+        final reservations =
+            await reservationRepository.getReservationsForUser(event.userId);
+        yield ReservationLoaded(reservations);
+      } catch (e) {
+        yield ReservationError('Failed to fetch reservations: $e');
+      }
+    } else if (event is CreateReservation) {
+      try {
+        final reservation = Reservation(
+          id: '', // Generate or assign an appropriate ID for the reservation
+          userId: '', // Provide the user ID associated with the reservation
+          startTime: event.startTime,
+          endTime: event.endTime,
+          spotId: '', // Provide the spot ID for the reservation
+          createdat:
+              '', // Provide the appropriate value for the creation timestamp
+        );
+
+        await reservationRepository.createReservation(
+          reservation,
+          startTime: event.startTime,
+          endTime: event.endTime,
+        );
+
+        final allReservations =
+            await reservationRepository.getAllReservations();
+        yield ReservationLoaded(allReservations);
+
+        yield ReservationSuccess(
+            'Booking successful'); // Emit the success state
+      } catch (e) {
+        yield ReservationError('Failed to create reservation: $e');
+      }
+    } else if (event is UpdateReservation) {
+      try {
+        await reservationRepository.updateReservation(event.reservation);
+        final allReservations =
+            await reservationRepository.getAllReservations();
+        yield ReservationLoaded(allReservations);
+      } catch (e) {
+        yield ReservationError('Failed to update reservation: $e');
+      }
+    } else if (event is CancelReservation) {
+      try {
+        await reservationRepository.cancelReservation(event.reservationId);
+        final allReservations =
+            await reservationRepository.getAllReservations();
+        yield ReservationLoaded(allReservations);
+      } catch (e) {
+        yield ReservationError('Failed to cancel reservation: $e');
+      }
+    } else if (event is BookingSuccessEvent) {
+      yield ReservationSuccess('Booking successful!');
     }
-  }
-
-  void _mapCreateReservationToState(
-      CreateReservation event, Emitter<ReservationState> emit) async {
-    try {
-      final reservation = Reservation(
-        id: '', // Generate or assign an appropriate ID for the reservation
-        userId: '', // Provide the user ID associated with the reservation
-        startTime: event.startTime,
-        endTime: event.endTime,
-        spotId: '', // Provide the spot ID for the reservation
-        createdat:
-            '', // Provide the appropriate value for the creation timestamp
-      );
-
-      await reservationRepository.createReservation(
-        reservation,
-        startTime: event.startTime,
-        endTime: event.endTime,
-      );
-
-      final allReservations = await reservationRepository.getAllReservations();
-      emit(ReservationLoaded(allReservations));
-
-      emit(ReservationSuccess('Booking successful')); // Emit the success state
-    } catch (e) {
-      emit(ReservationError('Failed to create reservation: $e'));
-    }
-  }
-
-  void _mapUpdateReservationToState(
-      UpdateReservation event, Emitter<ReservationState> emit) async {
-    try {
-      await reservationRepository.updateReservation(event.reservation);
-      final allReservations = await reservationRepository.getAllReservations();
-      emit(ReservationLoaded(allReservations));
-    } catch (e) {
-      emit(ReservationError('Failed to update reservation: $e'));
-    }
-  }
-
-  void _mapCancelReservationToState(
-      CancelReservation event, Emitter<ReservationState> emit) async {
-    try {
-      await reservationRepository.cancelReservation(event.reservationId);
-      final allReservations = await reservationRepository.getAllReservations();
-      emit(ReservationLoaded(allReservations));
-    } catch (e) {
-      emit(ReservationError('Failed to cancel reservation: $e'));
-    }
-  }
-
-  void _mapBookingSuccessEventToState(
-      BookingSuccessEvent event, Emitter<ReservationState> emit) {
-    emit(ReservationSuccess('Booking successful!'));
   }
 }

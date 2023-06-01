@@ -24,7 +24,7 @@ class CompoundBloc extends Bloc<CompoundEvent, CompoundState> {
     on<CompoundCreate>((event, emit) async {
       try {
         print("here now");
-        await compoundRepository.create(event.compound);
+        final compound = await compoundRepository.create(event.compound);
         print("here trying to inser");
         final compounds = await compoundRepository.fetchAll();
         emit(CompoundOperationSuccess(compounds));
@@ -48,8 +48,11 @@ class CompoundBloc extends Bloc<CompoundEvent, CompoundState> {
 
     on<CompoundDelete>((event, emit) async {
       try {
+        print('trying to delete compound');
         await compoundRepository.delete(event.id);
+        print("after deleting compound");
         final compounds = await compoundRepository.fetchAll();
+        emit(CompoundOperationSuccess(compounds));
       } catch (error) {
         emit(CompoundOperationFailure(error));
       }

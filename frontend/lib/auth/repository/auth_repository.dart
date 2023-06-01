@@ -1,4 +1,6 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/auth/data_provider/user_data_provider.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../models/auth.dart';
 
@@ -8,7 +10,6 @@ class AuthRepository {
   AuthRepository(this.userDataProvider);
 
   Future<CompoundOwner> signUpCompoundOwner(CompoundOwner owner) async {
-    print(userDataProvider);
     return userDataProvider.signUpCompoundOwner(owner);
   }
 
@@ -19,5 +20,21 @@ class AuthRepository {
 
   Future<User> signIn(User user) async {
     return userDataProvider.signIn(user);
+  }
+
+  Future<bool> isValidToken(String token) async {
+    return userDataProvider.isValidToken(token);
+  }
+
+  Future<bool> hasToken() async {
+    return userDataProvider.hasToken();
+  }
+
+  Future<String?> getToken() async {
+    return userDataProvider.getToken();
+  }
+
+  Future<void> deleteToken() async {
+    return userDataProvider.deleteToken();
   }
 }

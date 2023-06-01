@@ -93,12 +93,13 @@ export class AuthService{
       }
        
       async Signin(dto:AuthDto){
+        console.log(dto," signin dto");
         const user = await this.prisma.User.findUnique({
           where: {
             email: dto.email
           }
         })
-        console.log(user.password)
+        console.log(user);
         if (!user){
           throw new ForbiddenException("Incorrect Email")
         }

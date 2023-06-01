@@ -1,3 +1,6 @@
+import 'package:frontend/reservation/data_provider/parking_spot_data_provider.dart';
+import 'package:frontend/reservation/models/parking_spot.dart';
+
 class ParkingSpotRepository {
   static const int itemsPerPage = 20;
 

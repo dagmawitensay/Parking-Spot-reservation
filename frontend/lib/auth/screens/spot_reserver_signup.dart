@@ -227,14 +227,16 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
                       onPressed: () {
                         final form = _formKey.currentState;
                         if (form!.validate()) {
+                          form.save();
+                          print(_reserver);
                           final CompoundOwnerSignUpEvent event = OwnerSignUp(
                               owner: CompoundOwner(
-                                  email: _reserver['email'],
-                                  firstName: _reserver['firstName'],
-                                  lastName: _reserver['lastName'],
-                                  password: _reserver['password'],
-                                  username: _reserver['username'],
-                                  ));
+                            email: _reserver['email'],
+                            firstName: _reserver['firstName'],
+                            lastName: _reserver['lastName'],
+                            password: _reserver['password'],
+                            username: _reserver['username'],
+                          ));
                           BlocProvider.of<CompoundOwnerSignupBloc>(context)
                               .add(event);
                           (context).goNamed('signin');

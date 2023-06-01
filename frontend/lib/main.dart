@@ -8,6 +8,7 @@ import 'package:frontend/auth/bloc/blocs/spot_reserver_signup_bloc.dart';
 import 'package:frontend/auth/bloc/events/authentication_event.dart';
 import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
 import 'package:frontend/auth/bloc/events/signin_event.dart';
+import 'package:frontend/auth/bloc/states/authenticatoin_state.dart';
 import 'package:frontend/auth/bloc/states/owner_signup_state.dart';
 import 'package:frontend/auth/bloc/states/spot_reserver_signup_event.dart';
 import 'package:frontend/auth/data_provider/user_data_provider.dart';
@@ -15,6 +16,7 @@ import 'package:frontend/auth/repository/auth_repository.dart';
 import 'package:frontend/auth/screens/owner_signup.dart';
 import 'package:frontend/auth/screens/signin.dart';
 import 'package:frontend/auth/screens/spot_reserver_signup.dart';
+import 'package:frontend/compounds/bloc/compound_state.dart';
 import 'package:frontend/compounds/screens/compound_list.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -69,9 +71,12 @@ class AuthApp extends StatelessWidget {
         child: MultiBlocProvider(
             providers: [
               BlocProvider(
+                  create: (context) =>
+                      AuthenticationBloc(authRepository: authRepository)
+                        ..add(AppStarted())),
+              BlocProvider(
                 create: (context) => SignInBloc(authRepository: authRepository)
                   ..add(const SignInFormInitalizedEvent()),
-                // child: MaterialApp(home: const LoginPage())
               ),
               BlocProvider(
                 create: (context) =>
@@ -84,7 +89,7 @@ class AuthApp extends StatelessWidget {
               BlocProvider(
                   create: (context) =>
                       CompoundBloc(compoundRepository: compoundRepository)
-                        ..add(const CompoundLoad()))
+                        ..add(const CompoundLoad())),
             ],
             child: MaterialApp.router(
                 title: 'Compound App',
@@ -99,12 +104,22 @@ class AuthApp extends StatelessWidget {
   final _router = GoRouter(
     routes: [
       GoRoute(
-        name: "home",
-        path: '/',
-        builder: (context, state) => HomePage(),
-      ),
+          name: "home",
+          path: '/',
+          builder: (context, state) => CompoundList(),
+          redirect: (context, state) {
+            if (state is AuthenticationUnauthenticated) {
+              print('user is authenticated');
+              return '/startingPage';
+            }
+            return '/';
+          }),
       GoRoute(
-          name: 'owenerSignup',
+          name: 'startingPage',
+          path: '/home',
+          builder: (context, state) => HomePage()),
+      GoRoute(
+          name: 'ownerSignup',
           path: '/auth/owner/signup',
           builder: (context, state) {
             return const OwnerSignupPage();
@@ -115,6 +130,7 @@ class AuthApp extends StatelessWidget {
           builder: (context, state) {
             return const SpotReserverSignupPage();
           }),
+
       GoRoute(
           name: 'signin',
           path: '/auth/signin',
@@ -127,6 +143,12 @@ class AuthApp extends StatelessWidget {
           builder: (context, state) {
             CompoundArgument args = state.extra as CompoundArgument;
             return AddUpdateCompound(args: args);
+          },
+          redirect: (context, state) {
+            if (state is CompoundOperationFailure) {
+              return '/auth/signin';
+            }
+            return '/addUpdateCompound';
           }),
       GoRoute(
           name: 'compoundList',
@@ -221,46 +243,3 @@ class AuthApp extends StatelessWidget {
 //               ),
 //             )));
 //   }
-
-//   final GoRouter _router = GoRouter(
-//     routes: <GoRoute>[
-//       GoRoute(
-//           path: '/',
-//           builder: (context, state) => CompoundList(),
-//           routes: <GoRoute>[
-//             GoRoute(
-//                 path: 'addUpdateCompound',
-//                 builder: (context, state) {
-//                   CompoundArgument args = state.extra as CompoundArgument;
-//                   return AddUpdateCompound(args: args);
-//                 }),
-//             GoRoute(
-//                 path: 'details',
-//                 builder: (context, state) {
-//                   CompoundArgument args = state.extra as CompoundArgument;
-//                   return CompoundDetail(compound: args.compound!);
-//                 }),
-//             GoRoute(
-//                 path: 'auth/owner/signup',
-//                 builder: (context, state) {
-//                   return const OwnerSignupPage();
-//                 }),
-//             GoRoute(
-//                 path: 'auth/reserver/signup',
-//                 builder: (context, state) {
-//                   return const SpotReserverSignupPage();
-//                 }),
-//             GoRoute(
-//                 path: 'auth/signin',
-//                 builder: (context, state) {
-//                   return const LoginPage();
-//                 }),
-//             GoRoute(
-//                 path: '/compoundList',
-//                 builder: (context, state) {
-//                   return CompoundList();
-//                 })
-//           ]),
-//     ],
-//   );
-// }

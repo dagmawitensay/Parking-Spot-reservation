@@ -25,7 +25,7 @@ class CompoundList extends StatelessWidget {
                 itemCount: compounds.length,
                 itemBuilder: (_, idx) => Center(
                       child: ListTile(
-                          title: Text(compounds.elementAt(idx).Region),
+                          title: Text(compounds.elementAt(idx).name),
                           subtitle: Text(compounds
                               .elementAt(idx)
                               .SlotPricePerHour

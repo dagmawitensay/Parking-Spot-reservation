@@ -1,22 +1,21 @@
 import 'dart:convert';
+
+import 'package:frontend/reservation/models/parking_compound.dart';
 import 'package:http/http.dart' as http;
-import 'package:frontend/compounds/models/compound.dart' as Compounds;
-// import 'package:frontend/reservation/models/parking_compound.dart'
-//     as Reservation;
 
-class CompoundDataProvider {
-  static const String _baseUrl = 'http://localhost:3000/compounds';
+class ParkingCompoundDataProvider {
+  static const String _baseUrl = 'http://localhost:3000/parking-compounds';
 
-  Future<List<Compounds.Compound>> fetchAll() async {
+  Future<List<ParkingCompound>> getAllParkingCompounds() async {
     final response = await http.get(Uri.parse(_baseUrl));
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      final List<Compounds.Compound> compounds = data
-          .map((dynamic item) => Compounds.Compound.fromJson(item))
-          .toList();
-      return compounds;
+      final List<ParkingCompound> parkingCompounds = List<ParkingCompound>.from(
+        data.map((dynamic item) => ParkingCompound.fromJson(item)),
+      );
+      return parkingCompounds;
     } else {
-      throw Exception('Failed to fetch compounds');
+      throw Exception('Failed to load parking compounds');
     }
   }
 

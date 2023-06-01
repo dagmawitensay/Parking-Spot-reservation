@@ -1,7 +1,7 @@
 class Compound {
   int? id;
   int ownerId;
-  // String name;
+  String name;
   String Region;
   String Wereda;
   String Zone;
@@ -13,7 +13,7 @@ class Compound {
 
   Compound(
       {this.id,
-      // required this.name,
+      required this.name,
       required this.Region,
       required this.Wereda,
       required this.Zone,
@@ -27,7 +27,7 @@ class Compound {
   factory Compound.fromJson(Map<String, dynamic> json) {
     return Compound(
         id: json['id'],
-        // name: json['name'],
+        name: json['name'],
         Region: json['Region'],
         Wereda: json['Wereda'],
         Zone: json['Zone'],
@@ -38,17 +38,17 @@ class Compound {
         totalSpots: json['total_spots'],
         ownerId: json['owner_id']);
   }
- 
-  Map <String,dynamic> toMap(){
+
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'owner_id': ownerId,
-      'Region':Region,
+      'Region': Region,
       'Zone': Zone,
-      'Wereda':Wereda,
-      'Kebele':Kebele,
+      'Wereda': Wereda,
+      'Kebele': Kebele,
       'price': SlotPricePerHour,
-      'available_spots':availableSpots,
+      'available_spots': availableSpots,
       'total_spots': totalSpots
     };
   }

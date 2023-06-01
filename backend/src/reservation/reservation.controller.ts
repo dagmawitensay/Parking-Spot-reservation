@@ -7,15 +7,21 @@ export class ReservationController {
     constructor(private reservationService: ReservationService) {}
 
     @Post()
-    createReservation(@Body('compound_id', ParseIntPipe) compound_id: number,
+    createReservation(
     @Body('user_id', ParseIntPipe) user_id: number,
+    @Body('spot_id', ParseIntPipe) spot_id: number,
     @Body() dto: ReservationDto) {
-        return this.reservationService.createReservation(compound_id, user_id ,dto)
+        return this.reservationService.makeReservation(user_id, spot_id ,dto)
     }
 
     @Get()
     getAllUserReservations(@Body('user_id', ParseIntPipe) user_id: number) {
         return this.reservationService.getUserReservations(user_id)
+    }
+
+    @Get(':compound_id')
+    getAvailableSpots(@Param('compound_id', ParseIntPipe) compound_id: number, @Body('user_id', ParseIntPipe) user_id: number,  @Body() dto: ReservationDto) {
+        return this.reservationService.hasAvailableSpots(compound_id, user_id, dto);
     }
 
     @Put(':reservation_id')

@@ -9,24 +9,32 @@ class AuthenticationBloc
   final AuthRepository authRepository;
 
   AuthenticationBloc({required this.authRepository})
-      : super(AutenticationInital()) {
-    on<AuthenticationStarted>((event, emit) {
-      emit(AutenticationInital());
-    });
-
-    on<AuthenticationLoggedIn>((event, emit) {
-      final user = event.user;
-      if (user is CompoundOwner) {
-        emit(OwnerAuthenticated(user));
-      } else if (user is SpotReservingUser) {
-        emit(ReserverAuthenticated(user));
+      : super(AuthenticationUninitalized()) {
+    on<AppStarted>((event, emit) async {
+      final bool hasToken = await authRepository.hasToken();
+      if (hasToken) {
+        final token = await authRepository.getToken();
+        final bool isValid = await authRepository.isValidToken(token!);
+        if (isValid) {
+          emit(AuthenticationAuthenticated());
+        } else {
+          emit(AuthenticationUnauthenticated());
+        }
       } else {
-        emit(const AuthenticatoinFailure('Unkown user'));
+        emit(AuthenticationUnauthenticated());
       }
     });
 
-    on<AuthenticationLoggedOut>((event, emit) {
-      emit(AutenticationInital());
+    // on<LoggedIn>((event, emit) async {
+    //   emit(AuthenticationLoading());
+    //   await authRepository.persitstToken(event.token);
+    //   emit(AuthenticationAuthenticated());
+    // });
+
+    on<LoggedOut>((event, emit) async {
+      emit(AuthenticationLoading());
+      await authRepository.deleteToken();
+      emit(AuthenticationUnauthenticated());
     });
   }
 }

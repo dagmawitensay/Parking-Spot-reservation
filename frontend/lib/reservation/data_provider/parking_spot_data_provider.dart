@@ -3,7 +3,7 @@ import 'package:frontend/reservation/models/parking_spot.dart';
 import 'package:http/http.dart' as http;
 
 class ParkingSpotDataProvider {
-  static const String baseUrl = 'http://localhost:3000/parking_spot_id';
+  static const String baseUrl = 'http://localhost:3000/parking-spots';
 
   Future<List<ParkingSpot>> fetchParkingSpots(int page) async {
     final response = await http.get(Uri.parse('$baseUrl?page=$page'));

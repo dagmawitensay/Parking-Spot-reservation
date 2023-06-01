@@ -1,4 +1,6 @@
-part of 'parking_spot_bloc.dart';
+import 'package:equatable/equatable.dart';
+
+import '../models/parking_spot.dart';
 
 abstract class ParkingSpotState extends Equatable {
   const ParkingSpotState();

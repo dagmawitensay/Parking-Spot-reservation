@@ -11,6 +11,7 @@ export class ParkingCompoundService {
     
         const parking_compound = await this.prisma.parking_compound.create({
             data: {
+                name: dto.name,
                 owner_id: owner_id,
                 Region: dto.Region,
                 Zone: dto.Zone,

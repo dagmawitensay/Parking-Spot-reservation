@@ -1,16 +1,21 @@
 import 'dart:convert';
+
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/compounds/models/compound.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/auth.dart';
 
+//10.0.2.2
 class UserDataProvider {
   static const String _baseUrl = 'http://localhost:3000/auth';
   SharedPreferences? prefs;
+  final FlutterSecureStorage storage = new FlutterSecureStorage();
 
   Future<CompoundOwner> signUpCompoundOwner(CompoundOwner owner) async {
-    print(owner);
     final response = await http.post(
       Uri.parse('$_baseUrl/owner/signup'),
       headers: <String, String>{
@@ -30,10 +35,8 @@ class UserDataProvider {
 
     if (response.statusCode == 201) {
       final responseBody = json.decode(response.body);
-      final accessToken = responseBody['access_token'];
-      final prefs = await SharedPreferences.getInstance();
 
-      prefs.setString('access_token', accessToken);
+      persitstToken(responseBody['access_token']);
 
       return owner;
     } else {
@@ -57,10 +60,7 @@ class UserDataProvider {
 
     if (response.statusCode == 201) {
       final responseBody = json.decode(response.body);
-      final accessToken = responseBody['access_token'];
-      final prefs = await SharedPreferences.getInstance();
-
-      prefs.setString('access_token', accessToken);
+      persitstToken(responseBody['access_token']);
       return SpotReservingUser.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to create user');
@@ -83,38 +83,35 @@ class UserDataProvider {
 
     if (response.statusCode == 201) {
       final responseBody = json.decode(response.body);
-      final accessToken = responseBody['access_token'];
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('access_token', accessToken);
+
+      persitstToken(responseBody['access_token']);
       return user;
     } else {
       throw Exception('Failed to create owner');
     }
   }
+
+  Future<bool> isValidToken(String token) async {
+    return !(JwtDecoder.isExpired(token));
+  }
+
+  Future<bool> hasToken() async {
+    var value = await storage.read(key: 'token');
+    return value != null;
+  }
+
+  Future<String?> getToken() async {
+    var value = await storage.read(key: 'token');
+    print(value);
+    print(JwtDecoder.isExpired(value!));
+    return value;
+  }
+
+  Future<void> persitstToken(String token) async {
+    await storage.write(key: 'token', value: token);
+  }
+
+  Future<void> deleteToken() async {
+    storage.deleteAll();
+  }
 }
-
-//   Future<User> signIn(User user) async {
-//     print("here signing in");
-//     final http.Response response = await http
-//         .post(
-//           headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
-//           body: jsonEncode(<String, dynamic>{
-//         'email': user.email,
-//         'password': user.password,
-//       }),
-//           );
-//     print(user.email);
-//     print(user.password);
-//     print(response.body);
-//     if (response.statusCode == 201) {
-//       final responseBody = json.decode(response.body);
-//       final accessToken = responseBody['access_token'];
-//       final prefs = await SharedPreferences.getInstance();
-
-//       prefs.setString('access_token', accessToken);
-//       return user;
-//     } else {
-//       throw Exception('Credentials not correct');
-//     }
-//   }
-// }

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ParkSpotPage extends StatefulWidget {
-  final String compoundId;
+  final int compoundId;
 
   const ParkSpotPage({super.key, required this.compoundId});
 
@@ -163,10 +163,24 @@ class ParkSpotPageState extends State<ParkSpotPage> {
         throw Exception('Failed to check availability');
       }
     } catch (e) {
+      print('Failed to check spot availability: $e');
       // Handle any errors that occur during the availability check
       // ignore: avoid_print
-      print('Failed to check spot availability: $e');
       return false;
     }
+  }
+}
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: ParkSpotPage(
+      compoundId: 13,
+    ));
   }
 }

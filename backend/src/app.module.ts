@@ -10,6 +10,7 @@ import { JwtStrategy } from './auth/strategy';
 import { JwtGuard } from './auth/guard';
 import { UserModule } from './user/user.module';
 import { ParkingCompoundModule } from './parking-compound/parkingCompound.module';
+import { ReservationModule } from './reservation/reservation.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ParkingCompoundModule } from './parking-compound/parkingCompound.module
     SpotUserModule,
     UserModule,
     ParkingCompoundModule,
+    ReservationModule
   ]
   // providers: [
   //   JwtStrategy

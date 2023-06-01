@@ -93,6 +93,3 @@ syncDeletedData() async {
 }
 
 }
-
-
-

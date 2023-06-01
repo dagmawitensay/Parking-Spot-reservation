@@ -1,6 +1,7 @@
+
 import 'package:equatable/equatable.dart';
-import 'package:frontend/auth/bloc/events/spot_reserver_signup_event.dart';
-import 'package:frontend/auth/models/auth.dart';
+
+import '../../models/auth.dart';
 
 abstract class SpotReserverSignupState extends Equatable {
   const SpotReserverSignupState();
@@ -9,24 +10,26 @@ abstract class SpotReserverSignupState extends Equatable {
   List<Object> get props => [];
 }
 
-class SignupInitial extends SpotReserverSignupState {}
+class ReserverSignUpInital extends SpotReserverSignupState {}
 
-class SignUpLoading extends SpotReserverSignupState {}
+class ReserverSignUpLoading extends SpotReserverSignupState {}
 
-class SignUpSuccess extends SpotReserverSignupState {
+class ReserverSignUpSucess extends SpotReserverSignupState {
   final SpotReservingUser reserver;
 
-  const SignUpSuccess(this.reserver);
+  const ReserverSignUpSucess(this.reserver);
 
   @override
   List<Object> get props => [reserver];
 }
 
-class SignUpFailure extends SpotReserverSignupState {
+class ReserverSignUpFailure extends SpotReserverSignupState {
   final String errorMessage;
 
-  const SignUpFailure(this.errorMessage);
+  const ReserverSignUpFailure(this.errorMessage);
 
   @override
   List<Object> get props => [errorMessage];
 }
+
+class ReserverSignUPSubmissionState extends SpotReserverSignupState {}

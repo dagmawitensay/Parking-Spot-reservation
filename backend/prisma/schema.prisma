@@ -66,7 +66,6 @@ model compound_owner {
   id         Int    @id @default(autoincrement())
   first_name String @db.VarChar(150)
   last_name  String @db.VarChar(150)
-  phone_no   String @db.VarChar(150)
   user       User   @relation(fields: [user_id], references: [id])
   user_id    Int    @unique
 }
@@ -75,7 +74,6 @@ model spot_user {
   id         Int    @id @default(autoincrement())
   first_name String @db.VarChar(150)
   last_name  String @db.VarChar(150)
-  phone_no   String @db.VarChar(150)
   user       User   @relation(fields: [user_id], references: [id])
   user_id    Int    @unique
 }

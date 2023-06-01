@@ -8,15 +8,16 @@ class AuthRepository {
   AuthRepository(this.userDataProvider);
 
   Future<CompoundOwner> signUpCompoundOwner(CompoundOwner owner) async {
-    return this.userDataProvider.signUpCompoundOwner(owner);
+    print(userDataProvider);
+    return userDataProvider.signUpCompoundOwner(owner);
   }
 
   Future<SpotReservingUser> signUPSpotReserver(
       SpotReservingUser reserver) async {
-    return this.userDataProvider.signUpSpotReserver(reserver);
+    return userDataProvider.signUpSpotReserver(reserver);
   }
 
   Future<User> signIn(User user) async {
-    return this.userDataProvider.signIn(user);
+    return userDataProvider.signIn(user);
   }
 }

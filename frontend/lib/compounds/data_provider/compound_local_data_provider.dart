@@ -28,17 +28,44 @@ Future<List<Compound>> getCompounds() async{
   });
 
 }
+Future<Compound> getCompound(int id) async {
+  final localdatabase = await local.database;
+  List<Map<String, dynamic>> compound = await localdatabase!.query(
+    'parking_compound',
+    where: 'id = ?',
+    whereArgs: [id],
+    limit: 1
+    );
+    
+    return Compound.fromJson(compound.first);
+ 
+}
+Future<List<Compound>> getCompoundsOfOwner(int id) async{
+  final localdatabase = await local.database;
+  List<Map<String,dynamic>> maps = await localdatabase!.query(
+    'parking_compound',
+     where: 'owner_id = ?',
+     whereArgs: [id]
+    );
 
-Future<void> updateCompound( Compound data) async{
+  return List.generate(maps.length, (index){
+    return Compound.fromJson(maps[index]);
+  });
+
+
+}
+
+Future<Compound> updateCompound( Compound data) async{
   final localdatabase = await local.database;
 
-  await localdatabase?.update(
+   await localdatabase?.update(
     'parking_compound',
     data.toMap(),
     conflictAlgorithm: ConflictAlgorithm.replace,
     where: 'id = ?',
     whereArgs: [data.id]
   );
+  return data;
 }
 
 Future<void> deleteCompoundStatus(int id) async{

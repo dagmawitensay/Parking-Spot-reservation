@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/auth/bloc/blocs/owner_signup_bloc.dart';
 import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
 import 'package:frontend/auth/models/auth.dart';
+import 'package:go_router/go_router.dart';
 
 class SpotReserverSignupPage extends StatefulWidget {
   const SpotReserverSignupPage({Key? key}) : super(key: key);
@@ -234,9 +234,10 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
                                   lastName: _reserver['lastName'],
                                   password: _reserver['password'],
                                   username: _reserver['username'],
-                                  phoneNo: _reserver['phoneNo']));
+                                  ));
                           BlocProvider.of<CompoundOwnerSignupBloc>(context)
                               .add(event);
+                          (context).goNamed('signin');
                         }
                       },
                       child: const Text('Sign Up'),
@@ -246,7 +247,7 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
                   Center(
                       child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      (context).goNamed('signin');
                     },
                     child: const Text('Already have an account? Login'),
                   )),
@@ -283,10 +284,12 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
 }
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

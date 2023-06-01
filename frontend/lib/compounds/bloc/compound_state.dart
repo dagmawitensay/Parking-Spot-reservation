@@ -14,7 +14,7 @@ class CompoundLoading extends CompoundState {}
 class CompoundOperationSuccess extends CompoundState {
   final List<Compound> compounds;
 
-  CompoundOperationSuccess([this.compounds = const []]);
+  const CompoundOperationSuccess([this.compounds = const []]);
 
   @override
   List<Object> get props => [compounds];

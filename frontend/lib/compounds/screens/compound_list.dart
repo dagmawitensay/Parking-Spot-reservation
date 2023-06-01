@@ -6,10 +6,12 @@ import 'package:go_router/go_router.dart';
 import '../bloc/compound_state.dart';
 
 class CompoundList extends StatelessWidget {
+  const CompoundList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('List of Compounds')),
+      appBar: AppBar(title: const Text('List of Compounds')),
       body: BlocBuilder<CompoundBloc, CompoundState>(
         builder: (_, state) {
           if (state is CompoundOperationFailure) {
@@ -28,7 +30,10 @@ class CompoundList extends StatelessWidget {
                               .elementAt(idx)
                               .SlotPricePerHour
                               .toString()),
-                          onTap: () => (context).go('./details')),
+                          onTap: () => (context).go('/details',
+                              extra: CompoundArgument(
+                                  edit: true,
+                                  compound: compounds.elementAt(idx)))),
                     ));
           }
 

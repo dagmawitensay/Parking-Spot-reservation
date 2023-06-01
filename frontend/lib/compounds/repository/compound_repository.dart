@@ -12,6 +12,7 @@ class CompoundRepository {
   CompoundRepository(this.dataProvider,this.localDataProvider,this.connectivitychecker);
  
   Future<Compound> create(Compound compound) async {
+
      final localCreateddata = await localDataProvider.createCompound(compound);
      final isConnected = await connectivitychecker.checkNetworkConnectivity();
 
@@ -26,12 +27,14 @@ class CompoundRepository {
      }   
   }
 
-  Future<Compound> get(int id) {
-    // final isConnected = await connectivitychecker.checkNetworkConnectivity();
-    // if (isConnected){
-      
-    // }
-    return this.dataProvider.getCompound(id);
+  Future<Compound> get(int id) async {
+   final isConnected = await connectivitychecker.checkNetworkConnectivity();
+   if (isConnected){
+     return dataProvider.getCompound(id);
+   }else {
+   return localDataProvider.getCompound(id);
+   }
+   
   }
 
   Future<List<Compound>> fetchAll() async{
@@ -48,13 +51,14 @@ class CompoundRepository {
  
   }
 
-  Future<void> update(int id, Compound compound) async {
+  Future<Compound> update(Compound compound) async {
     final isConnected = await connectivitychecker.checkNetworkConnectivity();
     if (isConnected){
-      dataProvider.updateCompound(id, compound);
+      return dataProvider.updateCompound(compound);
     } else{
-      localDataProvider.updateCompound(compound);
-      localDataProvider.updatesyncPendingCompound(id,true,'updated');
+      localDataProvider.updatesyncPendingCompound(compound.id!,true,'updated');
+      return localDataProvider.updateCompound(compound);
+      
     }
   }
 
@@ -69,8 +73,25 @@ class CompoundRepository {
 
   }
 
+ 
+  Future<List<Compound>> fetchAllOwner(int ownerId) async {
+    final isConnected = await connectivitychecker.checkNetworkConnectivity();
+    
+    if(isConnected){
+      return await dataProvider.fetchAllOwner(ownerId);
+    } else {
+      return await localDataProvider.getCompoundsOfOwner(ownerId);
+    }
+    
+  }
+
 
   Future<List<Compound>> fetchCompound(int userId) {
-    return this.dataProvider.fetchCompounds(userId);
+    return dataProvider.fetchCompounds(userId);
   }
-}
+
+  
+
+  }
+
+

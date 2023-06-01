@@ -20,18 +20,36 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
   final _formkey = GlobalKey<FormState>();
 
   final Map<String, dynamic> _compound = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-              '${widget.args.edit ? "Edit Compound" : "Add New Compound"}')),
+              widget.args.edit ? "Edit Compound" : "Add New Compound")),
       body: Padding(
           padding: const EdgeInsets.fromLTRB(30.0, 8.0, 30.0, 8.0),
           child: Form(
             key: _formkey,
             child: ListView(
               children: [
+                TextFormField(
+                    initialValue:
+                        widget.args.edit ? widget.args.compound?.Wereda : '',
+                    validator: (value) {
+                      if (value != null && value.isEmpty) {
+                        return 'please enter name';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(labelText: 'Name'),
+                    onSaved: (value) {
+                      setState(
+                        () {
+                          _compound['name'] = value;
+                        },
+                      );
+                    }),
                 TextFormField(
                     initialValue:
                         widget.args.edit ? widget.args.compound?.Region : '',
@@ -82,23 +100,6 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                         },
                       );
                     }),
-                // TextFormField(
-                //   initialValue: widget.args.edit? widget.args.compound?.City: '',
-                //   validator: (value) {
-                //     if (value != null && value.isEmpty) {
-                //       return 'Please enter city';
-                //     }
-                //     return null;
-                //   },
-                //   decoration: const InputDecoration(labelText: 'City'),
-                //   onSaved: (value) {
-                //     setState(
-                //       () {
-                //         _compound['City'] = value;
-                //       },
-                //     );
-                //   },
-                // ),
                 TextFormField(
                     initialValue: widget.args.edit
                         ? widget.args.compound?.Kebele.toString()
@@ -156,6 +157,28 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                     );
                   },
                 ),
+                TextFormField(
+                  initialValue: widget.args.edit
+                      ? widget.args.compound?.totalSpots.toString()
+                      : '',
+                  validator: (value) {
+                    if (value != null && value.isEmpty) {
+                      return 'Please enter avialable spots';
+                    }
+                    return null;
+                  },
+                  decoration:
+                      const InputDecoration(labelText: 'Availbable Spots'),
+                  onSaved: (value) {
+                    setState(
+                      () {
+                        _compound['availableSpots'] = value;
+                      },
+                    );
+                  },
+                ),
+                ElevatedButton(
+                    onPressed: () async {}, child: const Text('Pick Compound Image')),
                 Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: ElevatedButton.icon(
@@ -163,41 +186,45 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                         final form = _formkey.currentState;
                         if (form != null && form.validate()) {
                           form.save();
-                          print(_compound);
+                          print(widget.args.compound?.id);
                           final CompoundEvent event = widget.args.edit
-                              ? CompoundUpdate(
-                                  widget.args.compound?.id ?? 0,
-                                  Compound(
-                                      id: widget.args.compound?.id,
-                                      ownerId: _compound['ownerId'],
-                                      Region: _compound['Region'],
-                                      Wereda: _compound['Wereda'],
-                                      Zone: _compound['Zone'],
-                                      Kebele: _compound['Kebele'],
-                                      // City: _compound['City'],
-                                      availableSpots:
-                                          _compound['availableSpots'],
-                                      SlotPricePerHour:
-                                          _compound['SlotPricePerHour'],
-                                      totalSpots: _compound['totalSpots']))
+                              ? CompoundUpdate(Compound(
+                                  id: widget.args.compound?.id,
+                                  // ownerId: _compound['ownerId'],
+                                  ownerId: 1,
+                                  // name: _compound['name'],
+                                  Region: _compound['Region'],
+                                  Wereda: _compound['Wereda'],
+                                  Zone: _compound['Zone'],
+                                  Kebele: _compound['Kebele'],
+                                  // City: _compound['City'],
+                                  // availableSpots:
+                                  //     _compound['availableSpots'],
+                                  availableSpots:
+                                      int.parse(_compound['availableSpots']),
+                                  SlotPricePerHour: double.parse(
+                                      _compound['SlotPricePerHour']),
+                                  totalSpots:
+                                      int.parse(_compound['totalSpots'])))
                               : CompoundCreate(Compound(
                                   id: null,
                                   ownerId: 1,
+                                  // name: _compound['name'],
                                   Region: _compound['Region'],
                                   Wereda: _compound['Wereda'],
                                   Zone: _compound['Zone'],
                                   Kebele: _compound['Kebele'],
                                   // City: _compound['City'],
                                   // availableSpots: _compound['availableSpots'],
-                                  availableSpots: 2,
+                                  availableSpots:
+                                      int.parse(_compound['availableSpots']),
                                   SlotPricePerHour: double.parse(
                                       _compound['SlotPricePerHour']),
                                   // totalSpots: 3
                                   totalSpots:
                                       int.parse(_compound['totalSpots'])));
-                          print(event);
                           BlocProvider.of<CompoundBloc>(context).add(event);
-                          (context).go('/');
+                          (context).go('/compoundList');
                         }
                       },
                       label: const Text('SAVE'),

@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
 import 'package:frontend/auth/bloc/states/owner_signup_state.dart';
-import 'package:frontend/auth/models/auth.dart';
 import 'package:frontend/auth/repository/auth_repository.dart';
 
 class CompoundOwnerSignupBloc
@@ -9,14 +8,23 @@ class CompoundOwnerSignupBloc
   final AuthRepository authRepository;
 
   CompoundOwnerSignupBloc({required this.authRepository})
-      : super(SignUpInital()) {
+      : super(OwnerSignUpInital()) {
+    on<OwnerSignUpFormInitalizedEvent>((event, emit) async {
+      print('Owner signUp initalizing');
+      emit(OwnerSignUpInital());
+    });
+
+    // on<OwnerSignUpEmailChangedEvent>((event, emit)async {
+    //   final emailStatus = event.email;
+    //   emit(Owner)
+    // })
     on<OwnerSignUp>((event, emit) async {
-      emit(SignUpLoading());
+      emit(OwnerSignUPSubmissionState());
       try {
         final owner = await authRepository.signUpCompoundOwner(event.owner);
-        emit(SignUpSucess(owner));
+        emit(OwnerSignUpSucess(owner));
       } catch (error) {
-        emit(SignUpFailure(error.toString()));
+        emit(OwnerSignUpFailure(error.toString()));
       }
     });
   }

@@ -42,6 +42,7 @@ import 'localDatabase/connectivity_checking.dart';
 import 'sync_manager/syncing.dart';
 
 void main() {
+  print("app starting");
   UserDataProvider userdataProvider = UserDataProvider();
   CompoundDataProvider compoundDataProvider = CompoundDataProvider();
   SyncManager syncManager = SyncManager();
@@ -179,10 +180,9 @@ class AuthApp extends StatelessWidget {
             return CompoundDetail(compound: args.compound!);
           }),
       GoRoute(
-        name: "userCompounList",
-        path: '/compoundListUser',
-        builder: (context, state) => CompoundListForUser(),
-      ),
+          name: "userCompounList",
+          path: '/compoundListUser',
+          builder: (context, state) => CompoundListForUser()),
       GoRoute(
           name: 'timerPage',
           path: '/reservationTime',
@@ -201,8 +201,8 @@ class AuthApp extends StatelessWidget {
                 endTime: state.queryParameters['endTime']!);
           }),
       GoRoute(
-          name: 'details',
-          path: '/details',
+          name: 'bookingDetails',
+          path: '/bookingDetails',
           builder: (context, state) {
             return BookDetail(
               startTime: state.queryParameters['startTime']!,

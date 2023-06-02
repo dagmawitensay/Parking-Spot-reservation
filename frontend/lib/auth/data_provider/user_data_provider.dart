@@ -111,7 +111,8 @@ class UserDataProvider {
   }
 
   Future<void> deleteToken() async {
-    storage.deleteAll();
+    
+     storage.deleteAll();
   }
 
   Future<String> getRole() async {

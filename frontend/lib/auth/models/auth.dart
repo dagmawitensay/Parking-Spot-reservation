@@ -63,12 +63,11 @@ class SpotReservingUser extends User {
 
   factory SpotReservingUser.fromJson(Map<String, dynamic> json) {
     return SpotReservingUser(
-      id: json['id'],
-      username: json['username'],
-      email: json['email'],
-      password: json['password'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-    );
+        id: json['id'],
+        username: json['username'],
+        email: json['email'],
+        password: json['password'],
+        firstName: json['firstName'],
+        lastName: json['lastName'],);
   }
 }

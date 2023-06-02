@@ -82,10 +82,12 @@ class LocalDatabaseProvider {
         parking_spot_id  INTEGER,
         start_time    TEXT,
         end_time  TEXT,
+        
 
         FOREIGN KEY(user_id) REFERENCES  User (id) ON DELETE CASCADE, ON UPDATE CASCADE,
         FOREIGN KEY(parking_spot_id) REFERENCES parking_spots ON DELETE CASCADE, ON UPDATE CASCADE
       )
+
 
       CREATE TABLE reviews(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -94,10 +96,13 @@ class LocalDatabaseProvider {
         rating      INTEGER,
         comment   TEXT,
         
+        
         FOREIGN KEY(user_id)  REFERENCES User(id) ON DELETE CASCADE, ON UPDATE CASCADE
+        
       );
       ''');
     });
+    
     return database;
   }
 }

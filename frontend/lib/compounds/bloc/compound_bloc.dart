@@ -8,6 +8,7 @@ class CompoundBloc extends Bloc<CompoundEvent, CompoundState> {
   final CompoundRepository compoundRepository;
 
   CompoundBloc({required this.compoundRepository}) : super(CompoundLoading()) {
+    print("startint to listen events");
     on<CompoundLoad>((event, emit) async {
       emit(CompoundLoading());
       try {

@@ -13,9 +13,11 @@ class CompoundBloc extends Bloc<CompoundEvent, CompoundState> {
       try {
         print("trying now");
         final compounds = await compoundRepository.fetchAll();
+
         print("finished trying");
         emit(CompoundOperationSuccess(compounds));
       } catch (error) {
+        print(error);
         emit(CompoundOperationFailure(error));
         // print(error);
       }

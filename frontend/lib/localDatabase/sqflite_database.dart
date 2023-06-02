@@ -27,39 +27,10 @@ class LocalDatabaseProvider{
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''
-      
-      CREATE TABLE User (
-        id  INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_name TEXT,
-        hash   TEXT,
-        refresh_token TEXT,
-        role  TEXT CHECK(role  IN ('owner', 'reserver'))
-        email  TEXT NOT NULL UNIQUE,
-      );
-
-      CREATE TABLE  compound_owner (
-        id  INTEGER PRIMARY KEY AUTOINCREMENT,
-        first_name TEXT,
-        last_name  TEXT,
-        phone_no  TEXT,
-        user_id  INTEGER,
-
-        FOREIGN KEY(user_id) REFERENCES User(id) ON DELETE CASCADE, ON UPDATE CASCADE
-      );
-
-      CREATE TABLE spot_user(
-        id INTEGER  PRIMARY KEY AUTOINCREMENT,
-        first_name TEXT,
-        last_name  TEXT,
-        phone_no  TEXT,
-        user_id  INTEGER,
-
-        FOREIGN KEY(user_id) REFERENCES User(id) ON DELETE CASCADE, ON UPDATE CASCADE
-      );
-
       CREATE TABLE parking_compound (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           owner_id   INTEGER,
+          name    TEXT,
           Region  TEXT,
           Zone   TEXT,
           Wereda TEXT,
@@ -67,10 +38,9 @@ class LocalDatabaseProvider{
           price  REAL,
           available_spots INTEGER,
           total_spots   INTEGER,
-          sync_status TEXT CHECK(sync_status IN ('created','updated','deleted'))
-
-          FOREIGN KEY (owner_id) REFERENCES compound_owner (id) ON DELETE CASCADE ON UPDATE CASCADE 
-         )' ;
+          synced  INTEGER DEFAULT 0,
+          sync_status TEXT DEFAULT 'created' CHECK(sync_status IN ('created','updated','deleted')) 
+         ) ;
 
       CREATE TABLE parking_spots(
         id  INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -85,8 +55,7 @@ class LocalDatabaseProvider{
         parking_spot_id  INTEGER,
         start_time    TEXT,
         end_time  TEXT,
-
-        FOREIGN KEY(user_id) REFERENCES  User (id) ON DELETE CASCADE, ON UPDATE CASCADE,
+        
         FOREIGN KEY(parking_spot_id) REFERENCES parking_spots ON DELETE CASCADE, ON UPDATE CASCADE
       )
 
@@ -96,14 +65,35 @@ class LocalDatabaseProvider{
         parking_compound_id INTEGER,
         rating      INTEGER,
         comment   TEXT,
-        
-        FOREIGN KEY(user_id)  REFERENCES User(id) ON DELETE CASCADE, ON UPDATE CASCADE
       );
       ''');
-      }
-      
+      },
+      // onUpgrade: ((db, oldVersion, newVersion) async{
+      //   if (oldVersion == 1 && newVersion == 2){
+      //     await db.execute('ALTER TABLE parking_compound ADD COLUMN name TEXT');
+      //   }
+      // })
+
+       onUpgrade: (Database db, int oldVersion, int newVersion) async {
+        //
+        //Iterate from the current version to the latest version and execute SQL statements
+        for (int version = oldVersion; version < newVersion; version++) {
+          await _performDBUpgrade(db, version + 1);
+        }
+      }, 
     );
     return database;
+  }
+   static Future<void> _performDBUpgrade(Database db, int upgradeToVersion) async {
+    switch (upgradeToVersion) {
+      case 2:
+        await _dbUpdatesVersion_1(db);
+        break;
+
+    }
+  }
+static Future<void> _dbUpdatesVersion_1(Database db) async {
+      // await db.execute('ALTER TABLE parking_compound ADD COLUMN name TEXT');
   }
 
 }

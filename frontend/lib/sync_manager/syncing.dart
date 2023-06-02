@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 class SyncManager{
   final CompoundLocalDataProvider syncMethods = CompoundLocalDataProvider();
   final Connectivity _connectivity = Connectivity();
+  final CompoundLocalDataProvider localDataProvider = CompoundLocalDataProvider();
   
   bool isConnected = false;
 
@@ -35,10 +36,10 @@ class SyncManager{
         try {
           http.Response response = await http.post(Uri.parse('http://localhost:3000/parking-compounds'), body: payload);
           if (response.statusCode == 201){
-            
             await syncMethods.updatesyncPendingCompound(data.id!, true, 'created');
+            await localDataProvider.deleteSyncedCompounds(data);
           } else {
-
+            throw Exception('Unable to create');
           }
         } catch(error){
           return (error);
@@ -59,8 +60,9 @@ class SyncManager{
           if (response.statusCode == 204){
             
             await syncMethods.updatesyncPendingCompound(data.id!, true, 'updated');
+            await localDataProvider.deleteSyncedCompounds(data);
           } else {
-
+            throw Exception("Unable to update");
           }
         } catch(error){
           throw Exception('Failed to load Compound');
@@ -82,6 +84,7 @@ syncDeletedData() async {
           if (response.statusCode == 204){
             
             await syncMethods.updatesyncPendingCompound(data.id!, true, 'deleted');
+            await localDataProvider.deleteSyncedCompounds(data);
           } 
         } catch(error){
         throw Exception('Failed to delete compound');

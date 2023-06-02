@@ -37,14 +37,16 @@ class CompoundRepository {
    
   }
 
-  Future<List<Compound>> fetchAll() async{
+  Future<List<Compound>> fetchAll() async{ 
+    print("here before connected");
+  
     final isConnected = await connectivitychecker.checkNetworkConnectivity();
-    final compounds = await localDataProvider.getCompounds();
-
     if (isConnected){
+      print("Yes conneted");
       final fromRemote = await dataProvider.fetchAll();
       return fromRemote;
     }else{
+      final compounds = await localDataProvider.getCompounds();
       return compounds;
     }
 

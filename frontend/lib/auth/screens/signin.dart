@@ -218,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
                     Center(
                         child: TextButton(
                       onPressed: () {
-                        (context).goNamed('signin');
+                        (context).goNamed('ownerSignup');
                       },
                       child: const Text("Don't have an account? Sign up"),
                     )),

@@ -32,8 +32,8 @@ export class AuthService{
               compoundOwner :{
                 create: {
                   first_name: dto.first_name,
-                  last_name: dto.last_name,
-                  phone_no: dto.phone_no
+                  last_name: dto.last_name
+                  // phone_no: dto.phone_no
                 }
               }
             },
@@ -72,7 +72,7 @@ export class AuthService{
                 create: {
                   first_name: dto.first_name,
                   last_name: dto.last_name,
-                  phone_no: dto.phone_no
+                 // phone_no: dto.phone_no
                 }
               }            
               

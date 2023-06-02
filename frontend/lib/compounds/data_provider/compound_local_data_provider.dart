@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sqflite/sqflite.dart';
 import '../../localDatabase/sqflite_database.dart';
 import '../models/compound.dart';
@@ -20,15 +22,22 @@ Future<Compound> createCompound(Compound compoundData) async{
 
 Future<List<Compound>> getCompounds() async{
   final localdatabase = await local.database;
-
+  print("in getting compounds");
   List<Map<String,dynamic>> maps = await  localdatabase!.query('parking_compound');
+  print(maps);
+  // return [Compound.fromJson(maps[0])];
+  // final List<dynamic> data = (maps);
+      final List<Compound> compounds = List<Compound>.from(
+        maps.map((dynamic item) => Compound.fromJson(item)),
+      );
+      return compounds;
+  // return List.generate(maps.length, (index){
+  //   return Compound.fromJson(maps[index]);
+  }
 
-  return List.generate(maps.length, (index){
-    return Compound.fromJson(maps[index]);
-  });
 
-}
 Future<Compound> getCompound(int id) async {
+  print("I am here");
   final localdatabase = await local.database;
   List<Map<String, dynamic>> compound = await localdatabase!.query(
     'parking_compound',
@@ -153,5 +162,17 @@ return List.generate(maps.length, (index){
   return Compound.fromJson(maps[index]);
 });
 
+}
+
+Future <Compound> deleteSyncedCompounds(Compound data) async {
+  final localdatabase = await local.database;
+  
+   await localdatabase!.delete(
+    'parking_compound',
+    where: 'id = ?',
+    whereArgs: [data.id]
+  );
+
+  return data;
 }
 }

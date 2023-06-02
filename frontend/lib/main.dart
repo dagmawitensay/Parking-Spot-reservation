@@ -6,11 +6,11 @@ import 'package:frontend/auth/bloc/blocs/owner_signup_bloc.dart';
 import 'package:frontend/auth/bloc/blocs/signin_bloc.dart';
 import 'package:frontend/auth/bloc/blocs/spot_reserver_signup_bloc.dart';
 import 'package:frontend/auth/bloc/events/authentication_event.dart';
-import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
+// import 'package:frontend/auth/bloc/events/owner_signup_event.dart';
 import 'package:frontend/auth/bloc/events/signin_event.dart';
 import 'package:frontend/auth/bloc/states/authenticatoin_state.dart';
-import 'package:frontend/auth/bloc/states/owner_signup_state.dart';
-import 'package:frontend/auth/bloc/states/spot_reserver_signup_event.dart';
+// import 'package:frontend/auth/bloc/states/owner_signup_state.dart';
+// import 'package:frontend/auth/bloc/states/spot_reserver_signup_event.dart';
 import 'package:frontend/auth/data_provider/user_data_provider.dart';
 import 'package:frontend/auth/repository/auth_repository.dart';
 import 'package:frontend/auth/screens/owner_signup.dart';
@@ -43,7 +43,7 @@ void main() {
   ConnectivityChecks  connectivitychecker = ConnectivityChecks();
 
   final AuthRepository authRepository = AuthRepository(userdataProvider);
-   final CompoundRepository compoundRepository =
+  final CompoundRepository compoundRepository =
       CompoundRepository(compoundDataProvider, localProvider,connectivitychecker);
   syncManager.syncingManager();
   Bloc.observer = MyBlocObserver();

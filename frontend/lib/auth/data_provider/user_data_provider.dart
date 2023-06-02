@@ -11,7 +11,7 @@ import '../models/auth.dart';
 
 //10.0.2.2
 class UserDataProvider {
-  static const String _baseUrl = 'http://localhost:3000/auth';
+  static const String _baseUrl = 'http://10.0.2.2:3000/auth';
   SharedPreferences? prefs;
   final FlutterSecureStorage storage = new FlutterSecureStorage();
 
@@ -68,6 +68,7 @@ class UserDataProvider {
   }
 
   Future<User> signIn(User user) async {
+    print("entry to signin");
     final response = await http.post(
       Uri.parse('$_baseUrl/signin'),
       headers: <String, String>{

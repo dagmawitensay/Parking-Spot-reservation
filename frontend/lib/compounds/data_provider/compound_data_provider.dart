@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/compound.dart';
 import 'package:http/http.dart' as http;
 
 // 10.0.2.2
 class CompoundDataProvider {
-  static const String _baseUrl = 'http://localhost:3000/parking-compounds';
+  static const String _baseUrl = 'http://10.0.2.2:3000/parking-compounds';
   final FlutterSecureStorage storage = new FlutterSecureStorage();
 
   Future<Compound> createCompound(Compound compound) async {
@@ -107,6 +107,7 @@ class CompoundDataProvider {
   }
 
   Future<List<Compound>> fetchAll() async {
+    print("start");
     final http.Response response = await http.get(
       Uri.parse(_baseUrl),
       headers: <String, String>{

@@ -43,10 +43,10 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
               builder: (context, state) {
             print(state);
             print("printed state");
-            if (state is AuthenticationUnauthenticated) {
-              (context).goNamed('signin');
-              return Container();
-            } else {
+            // if (state is AuthenticationUnauthenticated) {
+            //   (context).goNamed('signin');
+            //   return Container();
+            // } else {
               return Padding(
                   padding: const EdgeInsets.fromLTRB(30.0, 8.0, 30.0, 8.0),
                   child: Form(
@@ -269,7 +269,8 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                     ),
                   ));
             }
-          }),
+          // }),
+          )
         ));
   }
 }

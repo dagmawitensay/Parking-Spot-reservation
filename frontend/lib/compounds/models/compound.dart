@@ -27,7 +27,8 @@ class Compound {
   factory Compound.fromJson(Map<String, dynamic> json) {
     return Compound(
         id: json['id'],
-        name: json['name'],
+        // name: json['name'],
+        name:"bole",
         Region: json['Region'],
         Wereda: json['Wereda'],
         Zone: json['Zone'],

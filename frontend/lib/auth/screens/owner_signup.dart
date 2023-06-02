@@ -23,7 +23,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _phoneNoController = TextEditingController();
+  // final TextEditingController _phoneNoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

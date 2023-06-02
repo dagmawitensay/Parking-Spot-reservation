@@ -14,9 +14,6 @@ export class Dto{
 
     // @IsString()
     // role:string;
-    
-    @IsNotEmpty()
-    phone_no:string;
 
     @IsString()
     @IsNotEmpty()

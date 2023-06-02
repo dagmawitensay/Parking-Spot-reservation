@@ -37,4 +37,8 @@ class AuthRepository {
   Future<void> deleteToken() async {
     return userDataProvider.deleteToken();
   }
+
+  Future<String> getRole() async {
+    return userDataProvider.getRole();
+  }
 }

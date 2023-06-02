@@ -33,6 +33,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            leading: BackButton(onPressed: () => (context).goNamed('home')),
             title:
                 Text(widget.args.edit ? "Edit Compound" : "Add New Compound")),
         body: BlocProvider(
@@ -41,8 +42,6 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                 ..add(AppStarted()),
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
-            print(state);
-            print("printed state");
             if (state is AuthenticationUnauthenticated) {
               (context).goNamed('signin');
               return Container();
@@ -92,7 +91,9 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                               );
                             }),
                         TextFormField(
-                            initialValue: '',
+                            initialValue: widget.args.edit
+                                ? widget.args.compound?.Wereda
+                                : '',
                             validator: (value) {
                               if (value != null && value.isEmpty) {
                                 return 'Pease enter wereda';

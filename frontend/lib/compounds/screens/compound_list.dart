@@ -5,13 +5,34 @@ import 'package:frontend/compounds/screens/compound_route.dart';
 import 'package:go_router/go_router.dart';
 import '../bloc/compound_state.dart';
 
-class CompoundList extends StatelessWidget {
-  const CompoundList({super.key});
+class CompoundList extends StatefulWidget {
+  const CompoundList({Key? key}) : super(key: key);
+
+  @override
+  _CompoundListState createState() => _CompoundListState();
+}
+
+class _CompoundListState extends State<CompoundList> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if (index == 0) {
+      (context).goNamed('home');
+    } else if (index == 1) {
+      (context).goNamed('profile');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('List of Compounds')),
+      appBar: AppBar(
+        title: const Text('List of Compounds'),
+      ),
       body: BlocBuilder<CompoundBloc, CompoundState>(
         builder: (_, state) {
           if (state is CompoundOperationFailure) {
@@ -46,6 +67,20 @@ class CompoundList extends StatelessWidget {
                 .go('/addUpdateCompound', extra: CompoundArgument(edit: false));
           },
           child: const Icon(Icons.add)),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 }

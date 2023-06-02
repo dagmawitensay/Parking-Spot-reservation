@@ -74,6 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
+          
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',

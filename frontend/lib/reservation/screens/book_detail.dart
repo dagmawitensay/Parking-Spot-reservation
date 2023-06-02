@@ -139,12 +139,18 @@ class _BookDetailState extends State<BookDetail> {
                   padding: const EdgeInsets.all(20),
                   child: Text('Something went wrong')),
               ElevatedButton(
+                
                   onPressed: () {
                     (context).goNamed('userCompounList');
                   },
+                
                   child: const Text('Go back'))
+              
             ],
+                
           ));
+              
         }));
+    
   }
 }

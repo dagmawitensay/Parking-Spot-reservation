@@ -34,12 +34,39 @@ import 'package:frontend/compounds/screens/home_page.dart';
 import 'package:frontend/compounds/data_provider/compound_local_data_provider.dart';
 
 class MockCompoundDataProvider extends CompoundDataProvider {
-  
+
 }
 void main(){
   group( "The whole app widgets",(){
-    testWidgets('')
-  })
+    // testWidgets('')
+  testWidgets('Add to move to the adding', (tester) async {
+
+  await tester.tap(find.byType(FloatingActionButton));
+
+  // Rebuild the widget after the state has changed.
+  await tester.pump();
+
+  // Expect to find the item on screen.
+  expect(find.text('hi'), findsOneWidget);
+      final firstNameField = find.byKey(const Key('Name'));
+      final lastNameField = find.byKey(const Key('Region'));
+      final usernameField = find.byKey(const Key('Wereda'));
+      final emailField = find.byKey(const Key('Zone'));
+      final passwordField = find.byKey(const Key('Kebele'));
+      final signUpButton = find.byKey(const Key('Price Per Slot'));
+      final totalSpots   = find.byKey(const Key('Total Spots'));
+      final availableSpots = find.byKey(const Key('Availbable Spots'));
+
+      expect(firstNameField, findsOneWidget);
+      expect(lastNameField, findsOneWidget);
+      expect(usernameField, findsOneWidget);
+      expect(emailField, findsOneWidget);
+      expect(passwordField, findsOneWidget);
+      expect(signUpButton, findsOneWidget);
+      expect(totalSpots, findsOneWidget);
+      expect(availableSpots, findsOneWidget);
+});
+  });
   
 }
 

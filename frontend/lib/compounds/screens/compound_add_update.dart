@@ -218,10 +218,6 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                                 final form = _formkey.currentState;
                                 if (form != null && form.validate()) {
                                   form.save();
-                                  print(widget.args.compound?.id);
-                                  print(_compound);
-                                  print(_compound['name']);
-                                  print("got null");
                                   final CompoundEvent event = widget.args.edit
                                       ? CompoundUpdate(Compound(
                                           id: widget.args.compound?.id,

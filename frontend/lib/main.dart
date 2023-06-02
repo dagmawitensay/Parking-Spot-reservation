@@ -43,7 +43,6 @@ import 'localDatabase/connectivity_checking.dart';
 import 'sync_manager/syncing.dart';
 
 void main() {
-  print("app starting");
   UserDataProvider userdataProvider = UserDataProvider();
   CompoundDataProvider compoundDataProvider = CompoundDataProvider();
   SyncManager syncManager = SyncManager();

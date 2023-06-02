@@ -25,12 +25,6 @@ class AuthenticationBloc
       }
     });
 
-    // on<LoggedIn>((event, emit) async {
-    //   emit(AuthenticationLoading());
-    //   await authRepository.persitstToken(event.token);
-    //   emit(AuthenticationAuthenticated());
-    // });
-
     on<LoggedOut>((event, emit) async {
       emit(AuthenticationLoading());
       await authRepository.deleteToken();

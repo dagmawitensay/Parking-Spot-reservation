@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 // 10.0.2.2
 class CompoundDataProvider {
   static const String _baseUrl = 'http://localhost:3000/parking-compounds';
-  final FlutterSecureStorage storage = new FlutterSecureStorage();
+  late final FlutterSecureStorage storage = new FlutterSecureStorage();
 
   Future<Compound> createCompound(Compound compound) async {
     var token = await storage.read(key: 'token');

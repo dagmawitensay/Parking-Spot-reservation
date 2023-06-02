@@ -33,6 +33,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            leading: BackButton(onPressed: () => (context).goNamed('home')),
             title:
                 Text(widget.args.edit ? "Edit Compound" : "Add New Compound")),
         body: BlocProvider(
@@ -41,12 +42,10 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                 ..add(AppStarted()),
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
-            print(state);
-            print("printed state");
-            // if (state is AuthenticationUnauthenticated) {
-            //   (context).goNamed('signin');
-            //   return Container();
-            // } else {
+            if (state is AuthenticationUnauthenticated) {
+              (context).goNamed('signin');
+              return Container();
+            } else {
               return Padding(
                   padding: const EdgeInsets.fromLTRB(30.0, 8.0, 30.0, 8.0),
                   child: Form(
@@ -92,7 +91,9 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                               );
                             }),
                         TextFormField(
-                            initialValue: '',
+                            initialValue: widget.args.edit
+                                ? widget.args.compound?.Wereda
+                                : '',
                             validator: (value) {
                               if (value != null && value.isEmpty) {
                                 return 'Pease enter wereda';
@@ -217,10 +218,6 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                                 final form = _formkey.currentState;
                                 if (form != null && form.validate()) {
                                   form.save();
-                                  print(widget.args.compound?.id);
-                                  print(_compound);
-                                  print(_compound['name']);
-                                  print("got null");
                                   final CompoundEvent event = widget.args.edit
                                       ? CompoundUpdate(Compound(
                                           id: widget.args.compound?.id,

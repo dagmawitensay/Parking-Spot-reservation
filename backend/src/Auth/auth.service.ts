@@ -32,8 +32,12 @@ export class AuthService{
               compoundOwner :{
                 create: {
                   first_name: dto.first_name,
+<<<<<<< HEAD
                   last_name: dto.last_name
                   // phone_no: dto.phone_no
+=======
+                  last_name: dto.last_name,
+>>>>>>> 1d802ade27bb303a1fdbadf33eec1c124f59a3c5
                 }
               }
             },
@@ -72,7 +76,10 @@ export class AuthService{
                 create: {
                   first_name: dto.first_name,
                   last_name: dto.last_name,
+<<<<<<< HEAD
                  // phone_no: dto.phone_no
+=======
+>>>>>>> 1d802ade27bb303a1fdbadf33eec1c124f59a3c5
                 }
               }            
               

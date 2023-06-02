@@ -55,8 +55,14 @@ class LocalDatabaseProvider {
         start_time    TEXT,
         end_time  TEXT,
         
+<<<<<<< HEAD
+=======
+
+        FOREIGN KEY(user_id) REFERENCES  User (id) ON DELETE CASCADE, ON UPDATE CASCADE,
+>>>>>>> 1d802ade27bb303a1fdbadf33eec1c124f59a3c5
         FOREIGN KEY(parking_spot_id) REFERENCES parking_spots ON DELETE CASCADE, ON UPDATE CASCADE
       )
+
 
       CREATE TABLE reviews(
         id INTEGER PRIMARY KEY AUTOINCREMENT,

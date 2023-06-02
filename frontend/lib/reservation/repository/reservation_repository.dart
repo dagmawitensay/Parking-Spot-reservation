@@ -26,11 +26,16 @@ class ReservationRepository {
     return dataProvider.updateReservation(reservation);
   }
 
+  
   Future<void> cancelReservation(String reservationId) async {
+    
     return dataProvider.cancelReservation(reservationId);
+    
   }
 
+  
   Future<List<Reservation>> getAllReservations() async {
     return dataProvider.getAllReservations();
+    
   }
 }

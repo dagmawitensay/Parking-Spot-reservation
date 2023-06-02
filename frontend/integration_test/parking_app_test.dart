@@ -22,7 +22,10 @@ void main(){
     await Future.delayed(const Duration(seconds: 3));
   await tester.pumpAndSettle();
 
-  final 
+  final firstname = find.byKey(const Key('firsname'));
+  final lastname = find.byKey(const Key('lastname'));
+  final  password = find.byKey(const Key('password'));
+  final username = find.byKey(const Key('username'));
 
 
   await tester.tap(find.byType(FloatingActionButton));

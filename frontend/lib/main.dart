@@ -29,6 +29,7 @@ import 'package:frontend/reservation/screens/time_picker_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
 import '../compounds/bloc_observer.dart';
+import 'auth/screens/profile.dart';
 import 'compounds/bloc/compound_bloc.dart';
 import 'compounds/bloc/compound_event.dart';
 import 'compounds/data_provider/compound_data_provider.dart';
@@ -42,7 +43,6 @@ import 'localDatabase/connectivity_checking.dart';
 import 'sync_manager/syncing.dart';
 
 void main() {
-  print("app starting");
   UserDataProvider userdataProvider = UserDataProvider();
   CompoundDataProvider compoundDataProvider = CompoundDataProvider();
   SyncManager syncManager = SyncManager();
@@ -216,6 +216,12 @@ class AuthApp extends StatelessWidget {
           path: '/reservationSucesss',
           builder: (context, state) {
             return const BookingSuccessPage();
+          }),
+      GoRoute(
+          name: 'profile',
+          path: '/profile',
+          builder: (context, state) {
+            return ProfilePage();
           })
     ],
   );

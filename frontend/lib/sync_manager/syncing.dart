@@ -86,9 +86,11 @@ syncDeletedData() async {
             await syncMethods.updatesyncPendingCompound(data.id!, true, 'deleted');
             await localDataProvider.deleteSyncedCompounds(data);
           } 
+          
         } catch(error){
         throw Exception('Failed to delete compound');
     
+          
         }
       }
     }

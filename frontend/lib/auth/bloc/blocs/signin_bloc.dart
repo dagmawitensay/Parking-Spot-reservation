@@ -14,8 +14,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     on<SignIn>((event, emit) async {
       emit(SignInSubmissionState());
       try {
-        final owner = await authRepository.signIn(event.user);
-        emit(SignInSucess(owner));
+        final user = await authRepository.signIn(event.user);
+        emit(SignInSucess(user));
       } catch (error) {
         emit(SignInFailure(error.toString()));
       }

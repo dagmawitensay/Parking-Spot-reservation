@@ -52,7 +52,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
-                          
+                           key:Key('firstname'),
                             controller: _firstNameController,
                             decoration: InputDecoration(
                               labelText: 'First Name',
@@ -88,6 +88,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                             }),
                         const SizedBox(height: 16.0),
                         TextFormField(
+                            key: Key('lastname'),
                             controller: _lastNameController,
                             decoration: InputDecoration(
                               labelText: 'Last Name',
@@ -123,6 +124,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                             }),
                         const SizedBox(height: 16.0),
                         TextFormField(
+                          key:Key('username'),
                           controller: _usernameController,
                           decoration: InputDecoration(
                             labelText: 'Username',
@@ -160,6 +162,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
   
                         const SizedBox(height: 16.0),
                         TextFormField(
+                           key:Key('email'),
                             controller: _emailController,
                             decoration: InputDecoration(
                               hintText: 'example@gmail.com',
@@ -195,6 +198,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                             }),
                         const SizedBox(height: 16.0),
                         TextFormField(
+                          key: Key('password'),
                           controller: _passwordController,
                           decoration: InputDecoration(
                             labelText: 'Password',
@@ -271,28 +275,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                           },
                           child: const Text('Already have an account? Login'),
                         )),
-                        // Center(
-                        //   child: Column(
-                        //     mainAxisAlignment: MainAxisAlignment.center,
-                        //     children: [
-                        //       ElevatedButton.icon(
-                        //         onPressed: () {
-                        //           // Continue with Google logic here
-                        //         },
-                        //         icon: const Icon(Icons.g_translate),
-                        //         label: const Text('Continue with Google'),
-                        //       ),
-                        //       const SizedBox(height: 16.0),
-                        //       ElevatedButton.icon(
-                        //         onPressed: () {
-                        //           // Continue with Facebook logic here
-                        //         },
-                        //         icon: const Icon(Icons.facebook),
-                        //         label: const Text('Continue with Facebook'),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
+                    
                       ],
                     ),
                   ),

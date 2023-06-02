@@ -98,6 +98,7 @@ class LocalDatabaseProvider {
       );
       ''');
     });
+    
     return database;
   }
 }

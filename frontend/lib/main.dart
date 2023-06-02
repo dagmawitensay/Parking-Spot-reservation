@@ -178,45 +178,45 @@ class AuthApp extends StatelessWidget {
             CompoundArgument args = state.extra as CompoundArgument;
             return CompoundDetail(compound: args.compound!);
           }),
-      GoRoute(
-        name: "userCompounList",
-        path: '/compoundListUser',
-        builder: (context, state) => CompoundListForUser(),
-      ),
-      GoRoute(
-          name: 'timerPage',
-          path: '/reservationTime',
-          builder: (context, state) {
-            int compound_id = int.parse(state.queryParameters['compound_id']!);
-            return DateTimePicker(compound_id: compound_id);
-          }),
-      GoRoute(
-          name: 'parkingSpots',
-          path: '/parkingSpots',
-          builder: (context, state) {
-            return ParkingSpots(
-                compoundId: int.parse(state.queryParameters['compound_id']!),
-                date: DateTime.parse(state.queryParameters['date']!),
-                startTime: state.queryParameters['startTime']!,
-                endTime: state.queryParameters['endTime']!);
-          }),
-      GoRoute(
-          name: 'details',
-          path: '/details',
-          builder: (context, state) {
-            return BookDetail(
-              startTime: state.queryParameters['startTime']!,
-              endTime: state.queryParameters['endTime']!,
-              compoundId: int.parse(state.queryParameters['compound_id']!),
-              spotId: int.parse(state.queryParameters['spot_id']!),
-            );
-          }),
-      GoRoute(
-          name: 'sucess',
-          path: '/reservationSucesss',
-          builder: (context, state) {
-            return const BookingSuccessPage();
-          })
+      // GoRoute(
+      //   name: "userCompounList",
+      //   path: '/compoundListUser',
+      //   builder: (context, state) => CompoundListForUser(),
+      // ),
+      // GoRoute(
+      //     name: 'timerPage',
+      //     path: '/reservationTime',
+      //     builder: (context, state) {
+      //       int compound_id = int.parse(state.queryParameters['compound_id']!);
+      //       return DateTimePicker(compound_id: compound_id);
+      //     }),
+      // GoRoute(
+      //     name: 'parkingSpots',
+      //     path: '/parkingSpots',
+      //     builder: (context, state) {
+      //       return ParkingSpots(
+      //           compoundId: int.parse(state.queryParameters['compound_id']!),
+      //           date: DateTime.parse(state.queryParameters['date']!),
+      //           startTime: state.queryParameters['startTime']!,
+      //           endTime: state.queryParameters['endTime']!);
+      //     }),
+      // GoRoute(
+      //     name: 'details',
+      //     path: '/details',
+      //     builder: (context, state) {
+      //       return BookDetail(
+      //         startTime: state.queryParameters['startTime']!,
+      //         endTime: state.queryParameters['endTime']!,
+      //         compoundId: int.parse(state.queryParameters['compound_id']!),
+      //         spotId: int.parse(state.queryParameters['spot_id']!),
+      //       );
+      //     }),
+      // GoRoute(
+      //     name: 'sucess',
+      //     path: '/reservationSucesss',
+      //     builder: (context, state) {
+      //       return const BookingSuccessPage();
+      //     })
     ],
   );
 }

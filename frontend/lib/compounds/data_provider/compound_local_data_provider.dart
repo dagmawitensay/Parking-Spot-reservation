@@ -145,13 +145,13 @@ Future<void> updatesyncPendingCompound(int id, bool issynced, operation) async{
   final localdatabase = await local.database;
   await localdatabase!.update(
     'parking_compound',
-    {'sync_status' : issynced ? operation: null},
+    {'sync_status' : issynced ? operation: 'created'},
     where: 'id = ?',
     whereArgs: [id]
   );
 }
 
-Future<List<Compound>> getDeletePendingCompound(bool deleted) async{
+Future<List<Compound>> getDeletePendingCompound(bool issynced) async{
 final localdatabase = await local.database;
 final List<Map<String,dynamic>> maps = await localdatabase!.query(
   'parking_compound',

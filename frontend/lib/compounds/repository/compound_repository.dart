@@ -12,16 +12,15 @@ class CompoundRepository {
       this.dataProvider, this.localDataProvider, this.connectivitychecker);
 
   Future<Compound> create(Compound compound) async {
-    final localCreateddata = await localDataProvider.createCompound(compound);
+    
     final isConnected = await connectivitychecker.checkNetworkConnectivity();
 
     if (isConnected) {
       final newCreatedCompound = await dataProvider.createCompound(compound);
-      await localDataProvider.updatesyncPendingCompound(
-          compound.id!, true, 'created');
       return newCreatedCompound;
     } else {
-      localDataProvider.updatesyncPendingCompound(compound.id!, false, null);
+      final localCreateddata = await localDataProvider.createCompound(compound);
+     
       return localCreateddata;
     }
   }

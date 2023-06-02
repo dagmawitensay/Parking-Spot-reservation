@@ -139,10 +139,14 @@ class ReservationDataProvider {
       final reservations = jsonData
           .map((reservation) => Reservation.fromJson(reservation))
           .toList();
+      
       return reservations;
+      
     } else {
+      
       throw Exception(
           'Failed to fetch all reservations. Status code: ${response.statusCode}');
+      
     }
   }
 }

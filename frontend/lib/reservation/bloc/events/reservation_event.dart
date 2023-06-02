@@ -1,13 +1,64 @@
-abstract class ReservationEvent {}
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-class CheckAvailabilityEvent extends ReservationEvent {
-  final int parkingSpotId;
-  final DateTime startTime;
-  final DateTime endTime;
+abstract class ReservationEvent extends Equatable {
+  const ReservationEvent();
+  @override
+  List<Object> get props => [];
+}
 
-  CheckAvailabilityEvent({
-    required this.parkingSpotId,
+class ParkingSpotLoad extends ReservationEvent {
+  final int compoundId;
+  final DateTime date;
+  final String startTime;
+  final String endTime;
+  const ParkingSpotLoad(
+      this.compoundId, this.date, this.startTime, this.endTime);
+}
+
+class StartTimeChanged extends ReservationEvent {
+  final TimeOfDay startTime;
+
+  const StartTimeChanged(this.startTime);
+}
+
+class EndTimeChanged extends ReservationEvent {
+  final TimeOfDay endTime;
+
+  EndTimeChanged(this.endTime);
+}
+
+class Next extends ReservationEvent {
+  final int compound_id;
+  final String startTime;
+  final String endTime;
+  final DateTime date;
+
+  const Next(this.compound_id, this.startTime, this.endTime, this.date);
+}
+
+class PriceCalculation extends ReservationEvent {
+  final String startTime;
+  final String endTime;
+  final int compoundId;
+  const PriceCalculation({
     required this.startTime,
     required this.endTime,
+    required this.compoundId,
   });
+}
+
+class ReserveSpot extends ReservationEvent {
+  final String startTime;
+  final String endTime;
+  final int spot_id;
+  final double price;
+  final String plateNo;
+
+  const ReserveSpot(
+      {required this.startTime,
+      required this.endTime,
+      required this.spot_id,
+      required this.plateNo,
+      required this.price});
 }

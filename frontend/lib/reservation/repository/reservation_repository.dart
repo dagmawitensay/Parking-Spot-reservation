@@ -10,21 +10,16 @@ class ReservationRepository {
     return dataProvider.getReservationsForUser(userId);
   }
 
-  Future<void> createReservation(
-    Reservation reservation, {
-    required DateTime startTime,
-    required DateTime endTime,
-  }) async {
-    final reservation = Reservation(
-      id: '', // Generate or assign an appropriate ID for the reservation
-      userId: '', // Provide the user ID associated with the reservation
-      startTime: startTime,
-      endTime: endTime,
-      spotId: '', // Provide the spot ID for the reservation
-      createdat: '', // Provide the appropriate value for the creation timestamp
-    );
+  Future<Reservation> createReservation(startTime, endTime, price, plateNo, spotId) async {
+    return dataProvider.createReservation(startTime, endTime, price, plateNo, spotId);
+  }
 
-    return dataProvider.createReservation(reservation);
+  Future hasReservations(compoundId, startTime, endTime) {
+    return dataProvider.hasAvailableSpots(compoundId, startTime, endTime);
+  }
+
+  Future calculatePrice(compoundId, startTime, endTime) async{
+    return await dataProvider.calculatePrice(compoundId, startTime, endTime);
   }
 
   Future<void> updateReservation(Reservation reservation) async {

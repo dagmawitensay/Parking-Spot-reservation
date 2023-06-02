@@ -1,9 +1,9 @@
 class Reservation {
-  final String? id;
-  final String userId;
-  final DateTime startTime;
-  final DateTime endTime;
-  final String spotId;
+  int? id;
+  int userId;
+  String startTime;
+  String endTime;
+  int spotId;
 
   Reservation({
     this.id,
@@ -11,25 +11,19 @@ class Reservation {
     required this.startTime,
     required this.endTime,
     required this.spotId,
+    // required this.City,
   });
 
   factory Reservation.fromJson(Map<String, dynamic> json) {
     return Reservation(
       id: json['id'],
-      userId: json['userId'],
-      startTime: DateTime.parse(json['startTime']),
-      endTime: DateTime.parse(json['endTime']),
-      spotId: json['spotId'], // Fix the key here
+      startTime: json['start_time'],
+      endTime: json['end_time'],
+      userId: json['user_id'],
+      spotId: json['parking_spot_id'],
+      // City: json['City'],
+      // price: json['price'],
+      // plateNo: json['plateNo'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'userId': userId,
-      'startTime': startTime.toIso8601String(),
-      'endTime': endTime.toIso8601String(),
-      'spotId': spotId,
-    };
   }
 }

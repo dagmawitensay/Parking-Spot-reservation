@@ -1,21 +1,20 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class LocalDatabaseProvider{
-  static final LocalDatabaseProvider  _instance = LocalDatabaseProvider._internal();
+class LocalDatabaseProvider {
+  static final LocalDatabaseProvider _instance =
+      LocalDatabaseProvider._internal();
   factory LocalDatabaseProvider() => _instance;
 
-  static  Database?  localdatabase;
+  static Database? localdatabase;
 
-  Future<Database?> get database async{
-    if (localdatabase != null){
+  Future<Database?> get database async {
+    if (localdatabase != null) {
       return localdatabase;
-
     }
-    
-    localdatabase  = await initializeDatabase();
-    return localdatabase;
 
+    localdatabase = await initializeDatabase();
+    return localdatabase;
   }
 
   LocalDatabaseProvider._internal();

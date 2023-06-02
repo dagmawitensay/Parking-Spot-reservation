@@ -26,7 +26,7 @@ export class ReservationService {
         for (let reservation of existing_user_reservations) {
             if ((new Date(dto.start_time) <= reservation.end_time && new Date(dto.end_time) >= reservation.start_time)
             || reservation.start_time <= new Date(dto.end_time) && reservation.end_time >= new Date(dto.start_time)){
-                return [[], parking_spot_ids];
+                return {'parkingSpots': [[], parking_spot_ids]};
             }
         }
 
@@ -44,7 +44,7 @@ export class ReservationService {
         const unreserved_spots_id = parking_spot_ids.filter(p => !reserved_spots_id.includes(p))
 
         if (unreserved_spots_id.length > 0) {
-            return [unreserved_spots_id, parking_spot_ids];
+            return {'parkingSpots': [unreserved_spots_id, parking_spot_ids]};
         } else {
             const reserved_at_time_spots_id = []
 
@@ -58,9 +58,9 @@ export class ReservationService {
             const available_spots = parking_spot_ids.filter(p => !reserved_at_time_spots_id.includes(p))
 
             if (available_spots.length > 0){
-                return [available_spots, parking_spot_ids]
+                return {'parkingSpots': [available_spots, parking_spot_ids]}
             }else {
-                return [[], parking_spot_ids];
+                return {'parkingSpots' : [[], parking_spot_ids]};
             }
         }
 }
@@ -123,6 +123,11 @@ export class ReservationService {
 // }
 
     async makeReservation(user_id: number, spot_id: number, dto: ReservationDto){
+        console.log('backend')
+        console.log(user_id);
+        console.log(spot_id);
+        console.log(dto);
+
         const reservation = await this.prisma.reservations.create({
             data: {
                 user_id: user_id,

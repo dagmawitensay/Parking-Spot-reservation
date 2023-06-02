@@ -52,6 +52,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
+                          
                             controller: _firstNameController,
                             decoration: InputDecoration(
                               labelText: 'First Name',

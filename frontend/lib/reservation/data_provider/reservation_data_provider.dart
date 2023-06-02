@@ -1,10 +1,61 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/reservation/models/reservation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:jwt_decoder/jwt_decoder.dart';
+
 class ReservationDataProvider {
-  final baseUrl =
-      'http://localhost:3000/reservation'; // Replace with your API URL
+  final baseUrl = 'http://localhost:3000/reservations';
+  final FlutterSecureStorage storage = new FlutterSecureStorage();
+
+  Future hasAvailableSpots(compoundId, startTime, endTime) async {
+    String? token = await storage.read(key: 'token');
+    print(token);
+    //int userId = int.parse(JwtDecoder.decode(token!)['sub']);
+    final http.Response response =
+        await http.post(Uri.parse('$baseUrl/$compoundId'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, dynamic>{
+              'user_id': 1,
+              'start_time': startTime,
+              'end_time': endTime,
+            }));
+
+    if (response.statusCode == 201) {
+      print(response.body);
+      final value = json.decode(response.body)['parkingSpots'];
+      print('value is');
+      print(value);
+      return value;
+    } else {
+      throw Exception('Can not get available spots data');
+    }
+  }
+
+  Future calculatePrice(compoundId, startTime, endTime) async {
+    final response = await http
+        .get(Uri.parse('http://localhost:3000/parking-compounds/$compoundId'));
+
+    if (response.statusCode == 200) {
+      final price = double.parse(jsonDecode(response.body)['price']);
+      DateTime time1 = DateTime.parse(startTime);
+      DateTime time2 = DateTime.parse(endTime);
+
+      Duration timeDifference = time2.difference(time1);
+
+      double hoursDifference = timeDifference.inMinutes / 60;
+
+      double totalPrice = hoursDifference * price;
+
+      return totalPrice;
+    } else {
+      throw Exception(
+          'Can not find compouond data of compoupnd with id: $compoundId');
+    }
+  }
 
   Future<List<Reservation>> getReservationsForUser(String userId) async {
     final url = Uri.parse('$baseUrl/reservations?userId=$userId');
@@ -23,16 +74,30 @@ class ReservationDataProvider {
     }
   }
 
-  Future<void> createReservation(Reservation reservation) async {
-    final url = Uri.parse('$baseUrl/reservations');
+  Future<Reservation> createReservation(String startTime, String endTime,
+      double price, String plateNo, int spotId) async {
+    String? token = await storage.read(key: 'token');
+    if (token != null) {
+      int user_id = JwtDecoder.decode(token)['sub'];
+    }
 
     final response = await http.post(
-      url,
+      Uri.parse('http://localhost:3000/reservations/'),
       headers: {'Content-Type': 'application/json'},
-      body: json.encode(reservation.toJson()),
+      body: jsonEncode(<String, dynamic>{
+        'user_id': 1,
+        'spot_id': spotId,
+        'start_time': startTime,
+        'end_time': endTime,
+        // 'plateNo': plateNo,
+        // 'totalPrice': price
+      }),
     );
-
-    if (response.statusCode != 201) {
+    print(response.statusCode);
+    print(response.body);
+    if (response.statusCode == 201) {
+      return Reservation.fromJson(jsonDecode(response.body));
+    } else {
       throw Exception(
           'Failed to create reservation. Status code: ${response.statusCode}');
     }
@@ -44,7 +109,7 @@ class ReservationDataProvider {
     final response = await http.put(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: json.encode(reservation.toJson()),
+      body: json.encode(reservation),
     );
 
     if (response.statusCode != 200) {

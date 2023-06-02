@@ -1,9 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
 // Events
-abstract class TimePickerEvent {}
+abstract class TimePickerEvent extends Equatable {
+  const TimePickerEvent();
+  @override
+  List<Object> get props => [];
+}
 
 class StartTimeChanged extends TimePickerEvent {
   final TimeOfDay startTime;
@@ -22,3 +27,7 @@ class DateChanged extends TimePickerEvent {
 
   DateChanged({required this.date});
 }
+
+
+
+

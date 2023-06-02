@@ -31,7 +31,7 @@ export class ParkingCompoundCotroller {
 
     // get parking compound for specific owner
     @Get(':compound_id')
-    find_compound(@Param('compound_id', ParseIntPipe) compound_id: number,  @Body() dto: ParkingCompoundDto) {
+    find_compound(@Param('compound_id', ParseIntPipe) compound_id: number) {
         return this.parkingCompoundService.getCompound(compound_id)
     }
 

@@ -1,5 +1,10 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/reservation/bloc/blocs/reservation_bloc.dart';
+import 'package:frontend/reservation/bloc/events/reservation_event.dart';
+import 'package:frontend/reservation/bloc/states/reservation_state.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class DateTimePicker extends StatefulWidget {
@@ -25,7 +30,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
   TimeOfDay endTime = TimeOfDay(hour: 00, minute: 00);
 
   final TextEditingController? _dateController = TextEditingController();
-  final TextEditingController? _timeController = TextEditingController();
+  final TextEditingController? _startTimeController = TextEditingController();
+  final TextEditingController? _endTimeController = TextEditingController();
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -53,8 +59,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
         _hour = startTime.hour.toString();
         _minute = startTime.minute.toString();
         _time = _hour! + ' : ' + _minute!;
-        _timeController!.text = _time!;
-        _timeController!.text = formatDate(
+        _startTimeController!.text = _time!;
+        _startTimeController!.text = formatDate(
             DateTime(2019, 08, 1, startTime.hour, startTime.minute),
             [hh, ':', nn, " ", am]).toString();
       });
@@ -72,8 +78,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
         _hour = endTime.hour.toString();
         _minute = endTime.minute.toString();
         _time = _hour! + ' : ' + _minute!;
-        _timeController!.text = _time!;
-        _timeController!.text = formatDate(
+        _endTimeController!.text = _time!;
+        _endTimeController!.text = formatDate(
             DateTime(2019, 08, 1, endTime.hour, endTime.minute),
             [hh, ':', nn, " ", am]).toString();
       });
@@ -101,7 +107,10 @@ class _DateTimePickerState extends State<DateTimePicker> {
   void initState() {
     _dateController!.text = DateFormat.yMd().format(DateTime.now());
 
-    _timeController!.text = formatDate(
+    _startTimeController!.text = formatDate(
+        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
+        [hh, ':', nn, " ", am]).toString();
+    _endTimeController!.text = formatDate(
         DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
         [hh, ':', nn, " ", am]).toString();
     super.initState();
@@ -114,9 +123,9 @@ class _DateTimePickerState extends State<DateTimePicker> {
     dateTime = DateFormat.yMd().format(DateTime.now());
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text('Pick Reservation Time'),
-      ),
+          centerTitle: true,
+          title: Text('Pick Reservation Time'),
+          leading: BackButton(onPressed: () => (context).goNamed('userCompounList'))),
       body: Container(
         width: _width,
         height: _height,
@@ -189,7 +198,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                       },
                       enabled: false,
                       keyboardType: TextInputType.text,
-                      controller: _timeController,
+                      controller: _startTimeController,
                       decoration: InputDecoration(
                           disabledBorder:
                               UnderlineInputBorder(borderSide: BorderSide.none),
@@ -227,7 +236,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                       },
                       enabled: false,
                       keyboardType: TextInputType.text,
-                      controller: _timeController,
+                      controller: _endTimeController,
                       decoration: InputDecoration(
                           disabledBorder:
                               UnderlineInputBorder(borderSide: BorderSide.none),
@@ -242,10 +251,24 @@ class _DateTimePickerState extends State<DateTimePicker> {
                         child: ElevatedButton(
                       child: Text('Next'),
                       onPressed: () {
-                        print(formatDateTime(selectedDate, startTime));
-                        print(dateTime);
-                        print(startTime);
-                        print(endTime);
+                        if (TimeOfDay(hour: 00, minute: 00) == startTime &&
+                            TimeOfDay(hour: 00, minute: 00) == endTime) {
+                          print("please peak time intervals");
+                        }
+                        ReservationEvent event = ParkingSpotLoad(
+                            widget.compound_id,
+                            selectedDate,
+                            formatDateTime(selectedDate, startTime),
+                            formatDateTime(selectedDate, endTime));
+                        BlocProvider.of<ReservationBloc>(context).add(event);
+                        (context).goNamed('parkingSpots', queryParameters: {
+                          'compound_id': [widget.compound_id.toString()],
+                          'date': [selectedDate.toString()],
+                          'startTime': [
+                            formatDateTime(selectedDate, startTime)
+                          ],
+                          'endTime': [formatDateTime(selectedDate, endTime)]
+                        });
                       },
                     )))
               ],

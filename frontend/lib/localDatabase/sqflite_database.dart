@@ -1,32 +1,29 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class LocalDatabaseProvider{
-  static final LocalDatabaseProvider  _instance = LocalDatabaseProvider._internal();
+class LocalDatabaseProvider {
+  static final LocalDatabaseProvider _instance =
+      LocalDatabaseProvider._internal();
   factory LocalDatabaseProvider() => _instance;
 
-  static  Database?  localdatabase;
+  static Database? localdatabase;
 
-  Future<Database?> get database async{
-    if (localdatabase != null){
+  Future<Database?> get database async {
+    if (localdatabase != null) {
       return localdatabase;
-
     }
-    
-    localdatabase  = await initializeDatabase();
-    return localdatabase;
 
+    localdatabase = await initializeDatabase();
+    return localdatabase;
   }
 
   LocalDatabaseProvider._internal();
 
   Future<Database> initializeDatabase() async {
     final path = join(await getDatabasesPath(), 'parking_database.db');
-    final database = await openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, version) async {
-        await db.execute('''
+    final database =
+        await openDatabase(path, version: 1, onCreate: (db, version) async {
+      await db.execute('''
       
       CREATE TABLE User (
         id  INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -100,10 +97,7 @@ class LocalDatabaseProvider{
         FOREIGN KEY(user_id)  REFERENCES User(id) ON DELETE CASCADE, ON UPDATE CASCADE
       );
       ''');
-      }
-      
-    );
+    });
     return database;
   }
-
 }

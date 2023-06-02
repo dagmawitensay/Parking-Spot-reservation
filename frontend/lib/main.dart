@@ -18,6 +18,14 @@ import 'package:frontend/auth/screens/signin.dart';
 import 'package:frontend/auth/screens/spot_reserver_signup.dart';
 import 'package:frontend/compounds/bloc/compound_state.dart';
 import 'package:frontend/compounds/screens/compound_list.dart';
+import 'package:frontend/reservation/bloc/blocs/reservation_bloc.dart';
+import 'package:frontend/reservation/data_provider/reservation_data_provider.dart';
+import 'package:frontend/reservation/repository/reservation_repository.dart';
+import 'package:frontend/reservation/screens/book_detail.dart';
+import 'package:frontend/reservation/screens/compound_list_for_user.dart';
+import 'package:frontend/reservation/screens/parking_spots.dart';
+import 'package:frontend/reservation/screens/success_page.dart';
+import 'package:frontend/reservation/screens/time_picker_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
 import '../compounds/bloc_observer.dart';
@@ -33,35 +41,39 @@ import 'compounds/data_provider/compound_local_data_provider.dart';
 import 'localDatabase/connectivity_checking.dart';
 import 'sync_manager/syncing.dart';
 
-
-
 void main() {
   UserDataProvider userdataProvider = UserDataProvider();
   CompoundDataProvider compoundDataProvider = CompoundDataProvider();
-   SyncManager      syncManager = SyncManager();
+  SyncManager syncManager = SyncManager();
   CompoundLocalDataProvider localProvider = CompoundLocalDataProvider();
-  ConnectivityChecks  connectivitychecker = ConnectivityChecks();
+  ConnectivityChecks connectivitychecker = ConnectivityChecks();
 
   final AuthRepository authRepository = AuthRepository(userdataProvider);
-   final CompoundRepository compoundRepository =
-      CompoundRepository(compoundDataProvider, localProvider,connectivitychecker);
+  final CompoundRepository compoundRepository = CompoundRepository(
+      compoundDataProvider, localProvider, connectivitychecker);
+  final ReservationRepository reservationRepository =
+      ReservationRepository(ReservationDataProvider());
   syncManager.syncingManager();
   Bloc.observer = MyBlocObserver();
   setPathUrlStrategy();
 
   runApp(AuthApp(
-      authRepository: authRepository, compoundRepository: compoundRepository));
+    authRepository: authRepository,
+    compoundRepository: compoundRepository,
+    reservationRepository: reservationRepository,
+  ));
 }
 
 class AuthApp extends StatelessWidget {
   final AuthRepository authRepository;
   final CompoundRepository compoundRepository;
-
+  final ReservationRepository reservationRepository;
 
   AuthApp(
       {Key? key,
       required this.authRepository,
-      required this.compoundRepository})
+      required this.compoundRepository,
+      required this.reservationRepository})
       : super(key: key);
 
   @override
@@ -90,6 +102,10 @@ class AuthApp extends StatelessWidget {
                   create: (context) =>
                       CompoundBloc(compoundRepository: compoundRepository)
                         ..add(const CompoundLoad())),
+              BlocProvider(
+                create: (context) => ReservationBloc(
+                    reservationRepository: reservationRepository),
+              ),
             ],
             child: MaterialApp.router(
                 title: 'Compound App',
@@ -130,7 +146,6 @@ class AuthApp extends StatelessWidget {
           builder: (context, state) {
             return const SpotReserverSignupPage();
           }),
-
       GoRoute(
           name: 'signin',
           path: '/auth/signin',
@@ -163,83 +178,45 @@ class AuthApp extends StatelessWidget {
             CompoundArgument args = state.extra as CompoundArgument;
             return CompoundDetail(compound: args.compound!);
           }),
-      // GoRoute(
-      //   path: '/compounds/:id',
-      //   pageBuilder: (context, state) => CompoundDetailsPage(compoundId: state.params['id']),
-      // ),
-      // GoRoute(
-      //   path: '/compounds/add',
-      //   pageBuilder: (context, state) => CompoundAddUpdatePage(),
-      //   authGuard: CompoundOwnerAuthGuard(), // Implement appropriate auth guard for compound owners.
-      // ),
-      // GoRoute(
-      //   path: '/compounds/:id/update',
-      //   pageBuilder: (context, state) => CompoundAddUpdatePage(compoundId: state.params['id']),
-      //   authGuard: CompoundOwnerAuthGuard(), // Implement appropriate auth guard for compound owners.
-      // ),
-      // GoRoute(
-      //   path: '/reservations',
-      //   pageBuilder: (context, state) => ReservationPage(),
-      //   authGuard: SpotUserAuthGuard(), // Implement appropriate auth guard for spot users.
-      // ),
+      GoRoute(
+        name: "userCompounList",
+        path: '/compoundListUser',
+        builder: (context, state) => CompoundListForUser(),
+      ),
+      GoRoute(
+          name: 'timerPage',
+          path: '/reservationTime',
+          builder: (context, state) {
+            int compound_id = int.parse(state.queryParameters['compound_id']!);
+            return DateTimePicker(compound_id: compound_id);
+          }),
+      GoRoute(
+          name: 'parkingSpots',
+          path: '/parkingSpots',
+          builder: (context, state) {
+            return ParkingSpots(
+                compoundId: int.parse(state.queryParameters['compound_id']!),
+                date: DateTime.parse(state.queryParameters['date']!),
+                startTime: state.queryParameters['startTime']!,
+                endTime: state.queryParameters['endTime']!);
+          }),
+      GoRoute(
+          name: 'details',
+          path: '/details',
+          builder: (context, state) {
+            return BookDetail(
+              startTime: state.queryParameters['startTime']!,
+              endTime: state.queryParameters['endTime']!,
+              compoundId: int.parse(state.queryParameters['compound_id']!),
+              spotId: int.parse(state.queryParameters['spot_id']!),
+            );
+          }),
+      GoRoute(
+          name: 'sucess',
+          path: '/reservationSucesss',
+          builder: (context, state) {
+            return const BookingSuccessPage();
+          })
     ],
   );
 }
-// void main() {
-//   UserDataProvider userdataProvider = UserDataProvider();
-//   CompoundDataProvider compoundDataProvider = CompoundDataProvider();
-
-//   final AuthRepository authRepository = AuthRepository(userdataProvider);
-//   final CompoundRepository compoundRepository =
-//       CompoundRepository(compoundDataProvider);
-
-//   Bloc.observer = MyBlocObserver();
-
-//   runApp(AuthApp(
-//     authRepository: authRepository,
-//     compoundRepository: compoundRepository,
-//   ));
-// }
-
-// class AuthApp extends StatelessWidget {
-//   final AuthRepository authRepository;
-//   final CompoundRepository compoundRepository;
-
-//   AuthApp(
-//       {Key? key,
-//       required this.authRepository,
-//       required this.compoundRepository})
-//       : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return RepositoryProvider.value(
-//         value: authRepository,
-//         child: MultiBlocProvider(
-//             providers: [
-//               BlocProvider<CompoundOwnerSignupBloc>(
-//                 create: (context) =>
-//                     CompoundOwnerSignupBloc(authRepository: authRepository)
-//                       ..add(const OwnerSignUpFormInitalizedEvent()),
-//                 // child: MaterialApp(title: 'auth', home: const OwnerSignupPage())
-//               ),
-//               BlocProvider<SignInBloc>(
-//                   create: (context) =>
-//                       SignInBloc(authRepository: authRepository)
-//                         ..add(const SignInFormInitalizedEvent())),
-//               BlocProvider<CompoundBloc>(
-//                   create: (context) =>
-//                       CompoundBloc(compoundRepository: compoundRepository)
-//                         ..add(const CompoundLoad()))
-//             ],
-//             child: MaterialApp.router(
-//               title: 'Compound App',
-//               routerDelegate: _router.routerDelegate,
-//               routeInformationParser: _router.routeInformationParser,
-//               routeInformationProvider: _router.routeInformationProvider,
-//               theme: ThemeData(
-//                 primarySwatch: Colors.blue,
-//                 visualDensity: VisualDensity.adaptivePlatformDensity,
-//               ),
-//             )));
-//   }

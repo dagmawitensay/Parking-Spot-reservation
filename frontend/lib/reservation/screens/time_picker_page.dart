@@ -1,101 +1,256 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/compounds/data_provider/compound_data_provider.dart';
-import 'package:frontend/compounds/repository/compound_repository.dart';
-import 'package:frontend/reservation/bloc/time_picker_bloc.dart';
-import 'package:frontend/reservation/bloc/time_picker_event.dart';
-import 'package:frontend/reservation/bloc/time_picker_state.dart';
-import 'package:frontend/reservation/models/parking_spot.dart';
-import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
-class TimePickerPage extends StatelessWidget {
-  final ParkingSpot parkingSpot;
+class DateTimePicker extends StatefulWidget {
+  final int compound_id;
+  const DateTimePicker({required this.compound_id});
+  @override
+  _DateTimePickerState createState() => _DateTimePickerState();
+}
 
-  const TimePickerPage({Key? key, required this.parkingSpot}) : super(key: key);
+class _DateTimePickerState extends State<DateTimePicker> {
+  double? _height;
+  double? _width;
+
+  String? _setTime, _setDate;
+
+  String? _hour, _minute, _time;
+
+  String? dateTime;
+
+  DateTime selectedDate = DateTime.now();
+
+  TimeOfDay startTime = TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay endTime = TimeOfDay(hour: 00, minute: 00);
+
+  final TextEditingController? _dateController = TextEditingController();
+  final TextEditingController? _timeController = TextEditingController();
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked != null)
+      setState(() {
+        selectedDate = picked;
+        _dateController!.text = DateFormat.yMd().format(selectedDate);
+      });
+  }
+
+  Future<Null> _selectStartTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: startTime,
+    );
+    print(picked);
+    if (picked != null)
+      setState(() {
+        startTime = picked;
+        _hour = startTime.hour.toString();
+        _minute = startTime.minute.toString();
+        _time = _hour! + ' : ' + _minute!;
+        _timeController!.text = _time!;
+        _timeController!.text = formatDate(
+            DateTime(2019, 08, 1, startTime.hour, startTime.minute),
+            [hh, ':', nn, " ", am]).toString();
+      });
+  }
+
+  Future<Null> _selectEndTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: startTime,
+    );
+    if (picked != null)
+      setState(() {
+        endTime = picked;
+        print(picked);
+        _hour = endTime.hour.toString();
+        _minute = endTime.minute.toString();
+        _time = _hour! + ' : ' + _minute!;
+        _timeController!.text = _time!;
+        _timeController!.text = formatDate(
+            DateTime(2019, 08, 1, endTime.hour, endTime.minute),
+            [hh, ':', nn, " ", am]).toString();
+      });
+  }
+
+  String formatDateTime(DateTime inputDate, TimeOfDay inputTime) {
+    final parsedDate = inputDate;
+    final formattedDate = DateFormat('yyyy-MM-dd').format(parsedDate);
+
+    final now = DateTime.now();
+    final dateTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      inputTime.hour,
+      inputTime.minute,
+    );
+
+    final formattedTime = DateFormat('HH:mm:ss').format(dateTime);
+
+    return '$formattedDate $formattedTime';
+  }
+
+  @override
+  void initState() {
+    _dateController!.text = DateFormat.yMd().format(DateTime.now());
+
+    _timeController!.text = formatDate(
+        DateTime(2019, 08, 1, DateTime.now().hour, DateTime.now().minute),
+        [hh, ':', nn, " ", am]).toString();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    _height = MediaQuery.of(context).size.height;
+    _width = MediaQuery.of(context).size.width;
+    dateTime = DateFormat.yMd().format(DateTime.now());
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Time Picker'),
+        centerTitle: true,
+        title: Text('Pick Reservation Time'),
       ),
-      body: BlocBuilder<TimePickerBloc, TimePickerState>(
-        builder: (context, state) {
-          final timePickerBloc = BlocProvider.of<TimePickerBloc>(context);
-          final startTime =
-              (state is StartTimeSelected) ? state.startTime : null;
-          final endTime = (state is EndTimeSelected) ? state.endTime : null;
-          final isNextButtonEnabled = startTime != null && endTime != null;
-
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+      body: Container(
+        width: _width,
+        height: _height,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
                 Text(
-                  'Selected Start Time: ${startTime ?? ''}',
+                  'Choose Date',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5),
                 ),
-                const SizedBox(height: 16.0),
-                Text(
-                  'Selected End Time: ${endTime ?? ''}',
-                ),
-                const SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: () {
-                    timePickerBloc.add(SelectStartTime());
+                InkWell(
+                  onTap: () {
+                    _selectDate(context);
                   },
-                  child: const Text('Select Start Time'),
-                ),
-                const SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: () {
-                    timePickerBloc.add(SelectEndTime());
-                  },
-                  child: const Text('Select End Time'),
-                ),
-                const SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: isNextButtonEnabled
-                      ? () {
-                          final parameters = {
-                            'startTime': startTime.toString(),
-                            'endTime': endTime.toString(),
-                            'parkingSpot': parkingSpot.toString(),
-                          };
-
-                          final queryString =
-                              Uri(queryParameters: parameters).query;
-                          final url = '/booking_details?$queryString';
-                          GoRouter.of(context).go(url);
-                        }
-                      : null,
-                  child: const Text('Next'),
+                  child: Container(
+                    width: _width! / 1.7,
+                    height: _height! / 9,
+                    margin: EdgeInsets.only(top: 30),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(color: Colors.grey[200]),
+                    child: TextFormField(
+                      style: TextStyle(fontSize: 40),
+                      textAlign: TextAlign.center,
+                      enabled: false,
+                      keyboardType: TextInputType.text,
+                      controller: _dateController,
+                      onSaved: (String? val) {
+                        _setDate = val;
+                      },
+                      decoration: InputDecoration(
+                          disabledBorder:
+                              UnderlineInputBorder(borderSide: BorderSide.none),
+                          // labelText: 'Time',
+                          contentPadding: EdgeInsets.only(top: 0.0)),
+                    ),
+                  ),
                 ),
               ],
             ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Time Picker App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: BlocProvider(
-        create: (context) => TimePickerBloc(),
-        child: TimePickerPage(
-          parkingSpot: ParkingSpot(compoundId: 11, id: 56),
+            Column(
+              children: <Widget>[
+                Text(
+                  'Choose Start Time',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5),
+                ),
+                InkWell(
+                  onTap: () {
+                    _selectStartTime(context);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 30),
+                    width: _width! / 1.7,
+                    height: _height! / 9,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(color: Colors.grey[200]),
+                    child: TextFormField(
+                      style: TextStyle(fontSize: 40),
+                      textAlign: TextAlign.center,
+                      onSaved: (String? val) {
+                        _setTime = val;
+                      },
+                      enabled: false,
+                      keyboardType: TextInputType.text,
+                      controller: _timeController,
+                      decoration: InputDecoration(
+                          disabledBorder:
+                              UnderlineInputBorder(borderSide: BorderSide.none),
+                          // labelText: 'Time',
+                          contentPadding: EdgeInsets.all(5)),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                Text(
+                  'Choose End Time',
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5),
+                ),
+                InkWell(
+                  onTap: () {
+                    _selectEndTime(context);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 30),
+                    width: _width! / 1.7,
+                    height: _height! / 9,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(color: Colors.grey[200]),
+                    child: TextFormField(
+                      style: TextStyle(fontSize: 40),
+                      textAlign: TextAlign.center,
+                      onSaved: (String? val) {
+                        _setTime = val;
+                      },
+                      enabled: false,
+                      keyboardType: TextInputType.text,
+                      controller: _timeController,
+                      decoration: InputDecoration(
+                          disabledBorder:
+                              UnderlineInputBorder(borderSide: BorderSide.none),
+                          // labelText: 'Time',
+                          contentPadding: EdgeInsets.all(5)),
+                    ),
+                  ),
+                ),
+                Container(
+                    padding: const EdgeInsets.all(30),
+                    child: Center(
+                        child: ElevatedButton(
+                      child: Text('Next'),
+                      onPressed: () {
+                        print(formatDateTime(selectedDate, startTime));
+                        print(dateTime);
+                        print(startTime);
+                        print(endTime);
+                      },
+                    )))
+              ],
+            )
+          ],
         ),
       ),
     );

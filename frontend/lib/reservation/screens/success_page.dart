@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/reservation/bloc/reservation_bloc.dart';
+import 'package:frontend/reservation/bloc/blocs/reservation_bloc.dart';
 
-import '../bloc/reservation_state.dart';
+import '../bloc/states/reservation_state.dart';
 
 class BookingSuccessPage extends StatelessWidget {
   const BookingSuccessPage({super.key});

@@ -7,10 +7,12 @@ class ParkingSpot {
     required this.compoundId,
   });
 
+  
   factory ParkingSpot.fromJson(Map<String, dynamic> json) {
     return ParkingSpot(
       id: json['id'],
       compoundId: json['compound_id'],
+      
     );
   }
 }

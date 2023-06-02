@@ -3,15 +3,23 @@ class User {
   String? username;
   String email;
   String password;
+  String? role;
 
-  User({required this.email, this.username, this.id, required this.password});
+  User(
+      {required this.email,
+      this.username,
+      this.id,
+      required this.password,
+      this.role});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
         id: json['id'],
         username: json['username'],
         email: json['email'],
-        password: json['password']);
+        password: json['password'],
+        role: json['role']
+        );
   }
 }
 
@@ -26,7 +34,10 @@ class CompoundOwner extends User {
     required String password,
     required this.firstName,
     required this.lastName,
+<<<<<<< HEAD
     required String name,
+=======
+>>>>>>> 1d802ade27bb303a1fdbadf33eec1c124f59a3c5
   }) : super(id: id, username: username, email: email, password: password);
 
   factory CompoundOwner.fromJson(Map<String, dynamic> json) {
@@ -56,6 +67,7 @@ class SpotReservingUser extends User {
 
   factory SpotReservingUser.fromJson(Map<String, dynamic> json) {
     return SpotReservingUser(
+<<<<<<< HEAD
       id: json['id'],
       username: json['username'],
       email: json['email'],
@@ -63,5 +75,13 @@ class SpotReservingUser extends User {
       firstName: json['firstName'],
       lastName: json['lastName'],
     );
+=======
+        id: json['id'],
+        username: json['username'],
+        email: json['email'],
+        password: json['password'],
+        firstName: json['firstName'],
+        lastName: json['lastName'],);
+>>>>>>> 1d802ade27bb303a1fdbadf33eec1c124f59a3c5
   }
 }

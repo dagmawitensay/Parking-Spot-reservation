@@ -37,9 +37,11 @@ class CompoundUpdate extends CompoundEvent {
   String toString() => 'Compound Updated {compound: ${compound.id}}';
 }
 
+
 class CompoundDelete extends CompoundEvent {
   final int id;
 
+  
   const CompoundDelete(this.id);
 
   @override

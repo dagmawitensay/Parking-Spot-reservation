@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/compounds/models/compound.dart';
 import 'package:http/http.dart' as http;
@@ -36,7 +35,7 @@ class UserDataProvider {
     if (response.statusCode == 201) {
       final responseBody = json.decode(response.body);
 
-      persitstToken(responseBody['access_token']);
+      persitstToken(responseBody['access_token'], responseBody['role']);
 
       return owner;
     } else {
@@ -60,7 +59,7 @@ class UserDataProvider {
 
     if (response.statusCode == 201) {
       final responseBody = json.decode(response.body);
-      persitstToken(responseBody['access_token']);
+      persitstToken(responseBody['access_token'], responseBody['role']);
       return SpotReservingUser.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to create user');
@@ -79,12 +78,11 @@ class UserDataProvider {
       }),
     );
 
-    print(response.body);
-
     if (response.statusCode == 201) {
+      user.role = jsonDecode(response.body)['role'];
       final responseBody = json.decode(response.body);
 
-      persitstToken(responseBody['access_token']);
+      persitstToken(responseBody['access_token'], responseBody['role']);
       return user;
     } else {
       throw Exception('Failed to create owner');
@@ -107,12 +105,18 @@ class UserDataProvider {
     return value;
   }
 
-  Future<void> persitstToken(String token) async {
+  Future<void> persitstToken(String token, String role) async {
     await storage.write(key: 'token', value: token);
+    await storage.write(key: 'role', value: role);
   }
 
   Future<void> deleteToken() async {
     
      storage.deleteAll();
+  }
+
+  Future<String> getRole() async {
+    var role = await storage.read(key: 'role');
+    return role!;
   }
 }

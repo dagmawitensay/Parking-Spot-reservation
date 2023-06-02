@@ -149,8 +149,11 @@ class _LoginPageState extends State<LoginPage> {
                               });
                             }
                             if (state is SignInSucess) {
-                              print("sign in");
-                              (context).goNamed('compoundList');
+                              if (state.user.role == 'owner') {
+                                (context).goNamed('compoundList');
+                              } else if (state.user.role == 'reserver') {
+                                (context).goNamed('userCompounList');
+                              }
                             }
                           }
                         },
@@ -169,56 +172,11 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: const Text("Forgot password?"),
                     )),
-                    // const SizedBox(height: 16.0),
-                    // Center(
-                    //   child: Column(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: [
-                    //       ElevatedButton.icon(
-                    //         onPressed: () {
-                    //           // Continue with Google logic here
-                    //         },
-                    //         icon: const Icon(Icons.g_translate),
-                    //         label: const Text('Continue with Google'),
-                    //         style: ElevatedButton.styleFrom(
-                    //           primary: Colors.red,
-                    //           onPrimary: Colors.white,
-                    //           shape: RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.circular(10.0),
-                    //           ),
-                    //           padding: const EdgeInsets.symmetric(
-                    //               vertical: 16.0, horizontal: 24.0),
-                    //           shadowColor: Colors.black.withOpacity(0.2),
-                    //           elevation: 8.0,
-                    //         ),
-                    //       ),
-                    //       const SizedBox(height: 16.0),
-                    //       ElevatedButton.icon(
-                    //         onPressed: () {
-                    //           // Continue with Facebook logic here
-                    //         },
-                    //         icon: const Icon(Icons.facebook),
-                    //         label: const Text('Continue with Facebook'),
-                    //         style: ElevatedButton.styleFrom(
-                    //           primary: const Color(0xffe1aa56),
-                    //           onPrimary: Colors.white,
-                    //           shape: RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.circular(10.0),
-                    //           ),
-                    //           padding: const EdgeInsets.symmetric(
-                    //               vertical: 16.0, horizontal: 24.0),
-                    //           shadowColor: Colors.black.withOpacity(0.2),
-                    //           elevation: 8.0,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                     const SizedBox(height: 16.0),
                     Center(
                         child: TextButton(
                       onPressed: () {
-                        (context).goNamed('signin');
+                        (context).goNamed('startingPage');
                       },
                       child: const Text("Don't have an account? Sign up"),
                     )),

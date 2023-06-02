@@ -253,28 +253,7 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
                     },
                     child: const Text('Already have an account? Login'),
                   )),
-                  // Center(
-                  //   child: Column(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       ElevatedButton.icon(
-                  //         onPressed: () {
-                  //           // Continue with Google logic here
-                  //         },
-                  //         icon: const Icon(Icons.g_translate),
-                  //         label: const Text('Continue with Google'),
-                  //       ),
-                  //       const SizedBox(height: 16.0),
-                  //       ElevatedButton.icon(
-                  //         onPressed: () {
-                  //           // Continue with Facebook logic here
-                  //         },
-                  //         icon: const Icon(Icons.facebook),
-                  //         label: const Text('Continue with Facebook'),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
+               
                 ],
               ),
             ),
@@ -284,6 +263,7 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
     );
   }
 }
+
 
 void main() {
   runApp(const MyApp());

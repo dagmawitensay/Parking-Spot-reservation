@@ -62,5 +62,6 @@ class SpotReservingUser extends User {
         password: json['password'],
         firstName: json['firstName'],
         lastName: json['lastName'],);
+    
   }
 }

@@ -264,6 +264,7 @@ class _SpotReserverSignupPageState extends State<SpotReserverSignupPage> {
   }
 }
 
+
 void main() {
   runApp(const MyApp());
 }

@@ -7,7 +7,11 @@ class AuthenticationState extends Equatable {
 
 class AuthenticationUninitalized extends AuthenticationState {}
 
-class AuthenticationAuthenticated extends  AuthenticationState {}
+class AuthenticationAuthenticated extends AuthenticationState {
+  final String role;
+
+  AuthenticationAuthenticated(this.role);
+}
 
 class AuthenticationUnauthenticated extends AuthenticationState {}
 

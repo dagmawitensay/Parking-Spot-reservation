@@ -26,7 +26,7 @@ class _CompoundListForUserState extends State<CompoundListForUser> {
     if (index == 0) {
       (context).goNamed('userCompounList');
     } else if (index == 1) {
-      (context).goNamed('profile');
+      (context).goNamed('reserverProfile');
     } else if (index == 2) {
       ReservationEvent event = ReservationLoad();
       BlocProvider.of<ReservationBloc>(context).add(event);

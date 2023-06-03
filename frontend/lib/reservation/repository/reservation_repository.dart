@@ -6,8 +6,9 @@ class ReservationRepository {
 
   ReservationRepository(this.dataProvider);
 
-  Future<List<Reservation>> getReservationsForUser() async {
-    return dataProvider.getReservationsForUser();
+  Future<List<dynamic>> getReservationsForUser() async {
+    final reservations = await dataProvider.getReservationsForUser();
+    return reservations;
   }
 
   Future<Reservation> createReservation(
@@ -29,7 +30,7 @@ class ReservationRepository {
   }
 
   Future<void> deleteReservation(int reservationId) async {
-    return dataProvider.deleteReservation(reservationId);
+    dataProvider.deleteReservation(reservationId);
   }
 
   Future<List<Reservation>> getAllReservations() async {

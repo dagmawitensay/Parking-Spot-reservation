@@ -11,9 +11,8 @@ export class ParkingSpotController {
     }
 
     @Get(':parking_spot_id')
-    getParkingSpot(@Param('parking_spot_id', ParseIntPipe) parking_spot_id: number, 
-    @Param('compound_id', ParseIntPipe) compound_id: number) {
-        return this.parkingSpotService.getParkingSpot(compound_id, parking_spot_id)
+    getParkingSpot(@Param('parking_spot_id', ParseIntPipe) parking_spot_id: number, ) {
+        return this.parkingSpotService.getParkingSpot(parking_spot_id)
     }
 
     // get all parking spots of a compound

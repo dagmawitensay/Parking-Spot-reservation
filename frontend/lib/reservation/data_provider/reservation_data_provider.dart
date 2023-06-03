@@ -56,27 +56,22 @@ class ReservationDataProvider {
     }
   }
 
-  Future<List<Reservation>> getReservationsForUser() async {
+  Future<List<dynamic>> getReservationsForUser() async {
     String? token = await storage.read(key: 'token');
-    if (token != null) {
-      int user_id = JwtDecoder.decode(token)['sub'];
+    int user_id = JwtDecoder.decode(token!)['sub'];
 
-      final response = await http.get(
-          Uri.parse('http://localhost:3000/reservations/user_id'),
-          headers: <String, String>{'Authorization': 'Bearer $token'});
-      print(response.statusCode);
-      print(response.body);
+    final response = await http.get(
+        Uri.parse('http://localhost:3000/reservations/$user_id'),
+        headers: <String, String>{'Authorization': 'Bearer $token'});
+    print(response.statusCode);
+    print(response.body);
 
-      if (response.statusCode == 200) {
-        final jsonData = jsonDecode(response.body);
-        final reservations = jsonData
-            .map((reservation) => Reservation.fromJson(reservation))
-            .toList();
-        return reservations;
-      } else {
-        throw Exception(
-            'Failed to fetch reservations. Status code: ${response.statusCode}');
-      }
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      final reservations = jsonData
+          .map((reservation) => Reservation.fromJson(reservation))
+          .toList();
+      return reservations;
     } else {
       throw Exception('Failed to fetch reservations.');
     }
@@ -103,8 +98,6 @@ class ReservationDataProvider {
           // 'totalPrice': price
         }),
       );
-      print(response.statusCode);
-      print(response.body);
       if (response.statusCode == 201) {
         return Reservation.fromJson(jsonDecode(response.body));
       } else {
@@ -134,8 +127,9 @@ class ReservationDataProvider {
   Future<void> deleteReservation(int reservationId) async {
     String? token = await storage.read(key: 'token');
 
-    final response = await http
-        .post(Uri.parse('http://localhost:3000/reservations/$reservationId'));
+    final response = await http.delete(
+        Uri.parse('http://localhost:3000/reservations/$reservationId'),
+        headers: <String, String>{'Authorization': 'Bearer $token'});
 
     print(response.statusCode);
     print(response.body);

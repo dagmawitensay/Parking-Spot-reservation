@@ -23,7 +23,7 @@ class _CompoundListState extends State<CompoundList> {
     if (index == 0) {
       (context).goNamed('home');
     } else if (index == 1) {
-      (context).goNamed('profile');
+      (context).goNamed('ownerProfile');
     }
   }
 

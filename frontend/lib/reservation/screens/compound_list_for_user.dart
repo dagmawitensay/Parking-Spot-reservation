@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/compounds/bloc/compound_bloc.dart';
 import 'package:frontend/compounds/screens/compound_route.dart';
+import 'package:frontend/reservation/bloc/blocs/reservation_bloc.dart';
+import 'package:frontend/reservation/bloc/events/reservation_event.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../compounds/bloc/compound_state.dart';
@@ -26,6 +28,8 @@ class _CompoundListForUserState extends State<CompoundListForUser> {
     } else if (index == 1) {
       (context).goNamed('profile');
     } else if (index == 2) {
+      ReservationEvent event = ReservationLoad();
+      BlocProvider.of<ReservationBloc>(context).add(event);
       (context).goNamed('reservations');
     }
   }

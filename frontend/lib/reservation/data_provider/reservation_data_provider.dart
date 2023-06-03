@@ -15,7 +15,7 @@ class ReservationDataProvider {
   Future hasAvailableSpots(compoundId, startTime, endTime) async {
     String? token = await storage.read(key: 'token');
 
-    int userId = int.parse(JwtDecoder.decode(token!)['sub']);
+    int userId = JwtDecoder.decode(token!)['sub'];
     final http.Response response =
         await http.post(Uri.parse('$baseUrl/$compoundId'),
             headers: <String, String>{
@@ -26,12 +26,8 @@ class ReservationDataProvider {
               'start_time': startTime,
               'end_time': endTime,
             }));
-
     if (response.statusCode == 201) {
-      print(response.body);
       final value = json.decode(response.body)['parkingSpots'];
-      print('value is');
-      print(value);
       return value;
     } else {
       throw Exception('Can not get available spots data');
@@ -66,8 +62,8 @@ class ReservationDataProvider {
       int user_id = JwtDecoder.decode(token)['sub'];
 
       final response = await http.get(
-        Uri.parse('http://localhost:3000/reservations/user_id'),
-      );
+          Uri.parse('http://localhost:3000/reservations/user_id'),
+          headers: <String, String>{'Authorization': 'Bearer $token'});
       print(response.statusCode);
       print(response.body);
 
@@ -94,7 +90,10 @@ class ReservationDataProvider {
 
       final response = await http.post(
         Uri.parse('http://localhost:3000/reservations/'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: jsonEncode(<String, dynamic>{
           'user_id': user_id,
           'spot_id': spotId,

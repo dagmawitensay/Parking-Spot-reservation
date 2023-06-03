@@ -11,6 +11,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
     on<ParkingSpotLoad>((event, emit) async {
       emit(ParkingSpotsLoading());
       try {
+        print("failed in here");
         final parkingSpotsData = await reservationRepository.hasReservations(
             event.compoundId, event.startTime, event.endTime);
         emit(ParkingSpotsSucess(parkingSpotsData));

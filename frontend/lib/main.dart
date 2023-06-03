@@ -19,6 +19,8 @@ import 'package:frontend/auth/screens/spot_reserver_signup.dart';
 import 'package:frontend/compounds/bloc/compound_state.dart';
 import 'package:frontend/compounds/screens/compound_list.dart';
 import 'package:frontend/reservation/bloc/blocs/reservation_bloc.dart';
+import 'package:frontend/reservation/bloc/events/reservation_event.dart';
+import 'package:frontend/reservation/bloc/states/reservation_state.dart';
 import 'package:frontend/reservation/data_provider/reservation_data_provider.dart';
 import 'package:frontend/reservation/repository/reservation_repository.dart';
 import 'package:frontend/reservation/screens/book_detail.dart';
@@ -106,8 +108,7 @@ class AuthApp extends StatelessWidget {
                         ..add(const CompoundLoad())),
               BlocProvider(
                 create: (context) => ReservationBloc(
-                    reservationRepository: reservationRepository),
-              ),
+                    reservationRepository: reservationRepository)),
             ],
             child: MaterialApp.router(
                 title: 'Compound App',

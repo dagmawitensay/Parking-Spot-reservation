@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/auth/bloc/blocs/authentication_bloc.dart';
 import 'package:frontend/auth/bloc/blocs/signin_bloc.dart';
+import 'package:frontend/auth/bloc/events/authentication_event.dart';
 import 'package:frontend/auth/bloc/events/signin_event.dart';
+import 'package:frontend/auth/bloc/states/authenticatoin_state.dart';
 import 'package:frontend/auth/bloc/states/signin_state.dart';
 import 'package:frontend/auth/data_provider/user_data_provider.dart';
 import 'package:frontend/auth/repository/auth_repository.dart';
@@ -45,47 +48,54 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         title: const Text('User Profile'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-                padding: const EdgeInsets.all(17), child: Text('User Profile')),
-            Container(
-                padding: const EdgeInsets.all(17),
-                child: ElevatedButton(
-                  onPressed: () {
-                    SignInEvent event = AccountDelete();
-                    BlocProvider.of<SignInBloc>(context).add(event);
+      body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(17),
+                  child: Text('User Profile')),
+              Container(
+                  padding: const EdgeInsets.all(17),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      SignInEvent event = AccountDelete();
+                      BlocProvider.of<SignInBloc>(context).add(event);
 
-                    BlocListener<SignInBloc, SignInState>(
-                      listener: (context, state) {
-                        if (state is AccountDeleteSuccess) {
-                          (context).goNamed('startingPage');
-                        } else if (state is AccountDeleteFaliure) {
-                          if (role == 'owner') {
-                            (context).goNamed('home');
-                          } else if (role == 'reserver') {
-                            (context).goNamed('userCompounList');
+                      BlocListener<SignInBloc, SignInState>(
+                        listener: (context, state) {
+                          if (state is AccountDeleteSuccess) {
+                            (context).goNamed('startingPage');
+                          } else if (state is AccountDeleteFaliure) {
+                            if (role == 'owner') {
+                              (context).goNamed('home');
+                            } else if (role == 'reserver') {
+                              (context).goNamed('userCompounList');
+                            }
                           }
-                        }
-                      },
-                    );
-                  },
-                  child: const Text('Delete Account'),
-                )),
-            Container(
-                padding: const EdgeInsets.all(17),
-                child: ElevatedButton(
-                  onPressed: () {
-                    authRepository.deleteToken();
-                    (context).goNamed('signin');
-                  },
-                  child: const Text('Log Out'),
-                )),
-          ],
-        ),
-      ),
+                        },
+                      );
+                    },
+                    child: const Text('Delete Account'),
+                  )),
+              Container(
+                  padding: const EdgeInsets.all(17),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      AuthenticationEvent event = LoggedOut();
+                      BlocProvider.of<AuthenticationBloc>(context).add(event);
+                      if (state is AuthenticationUnauthenticated) {
+                        (context).goNamed('signin');
+                      } else if (state is AuthenticationAuthenticated) {}
+                    },
+                    child: const Text('Log Out'),
+                  )),
+            ],
+          ),
+        );
+      }),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

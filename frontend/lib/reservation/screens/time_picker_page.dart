@@ -23,6 +23,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
   String? _hour, _minute, _time;
 
   String? dateTime;
+  String message = '';
 
   DateTime selectedDate = DateTime.now();
 
@@ -248,28 +249,40 @@ class _DateTimePickerState extends State<DateTimePicker> {
                 ),
                 Container(
                     padding: const EdgeInsets.all(30),
+                    child: Center(child: Text(message))),
+                Container(
+                    padding: const EdgeInsets.all(30),
                     child: Center(
                         child: ElevatedButton(
                       child: Text('Next'),
                       onPressed: () {
-                        if (TimeOfDay(hour: 00, minute: 00) == startTime &&
-                            TimeOfDay(hour: 00, minute: 00) == endTime) {
-                          print("please peak time intervals");
-                        }
-                        ReservationEvent event = ParkingSpotLoad(
-                            widget.compound_id,
-                            selectedDate,
-                            formatDateTime(selectedDate, startTime),
+                        DateTime time1 = DateTime.parse(
+                            formatDateTime(selectedDate, startTime));
+                        DateTime time2 = DateTime.parse(
                             formatDateTime(selectedDate, endTime));
-                        BlocProvider.of<ReservationBloc>(context).add(event);
-                        (context).goNamed('parkingSpots', queryParameters: {
-                          'compound_id': [widget.compound_id.toString()],
-                          'date': [selectedDate.toString()],
-                          'startTime': [
-                            formatDateTime(selectedDate, startTime)
-                          ],
-                          'endTime': [formatDateTime(selectedDate, endTime)]
-                        });
+
+                        if ((TimeOfDay(hour: 00, minute: 00) == startTime &&
+                                TimeOfDay(hour: 00, minute: 00) == endTime) ||
+                            time2.isBefore(time1)) {
+                          setState(() {
+                            message = "Please select correct time";
+                          });
+                        } else {
+                          ReservationEvent event = ParkingSpotLoad(
+                              widget.compound_id,
+                              selectedDate,
+                              formatDateTime(selectedDate, startTime),
+                              formatDateTime(selectedDate, startTime));
+                          BlocProvider.of<ReservationBloc>(context).add(event);
+                          (context).goNamed('parkingSpots', queryParameters: {
+                            'compound_id': [widget.compound_id.toString()],
+                            'date': [selectedDate.toString()],
+                            'startTime': [
+                              formatDateTime(selectedDate, startTime)
+                            ],
+                            'endTime': [formatDateTime(selectedDate, endTime)]
+                          });
+                        }
                       },
                     )))
               ],

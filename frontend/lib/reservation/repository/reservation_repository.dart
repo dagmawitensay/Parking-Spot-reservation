@@ -6,19 +6,21 @@ class ReservationRepository {
 
   ReservationRepository(this.dataProvider);
 
-  Future<List<Reservation>> getReservationsForUser(String userId) async {
-    return dataProvider.getReservationsForUser(userId);
+  Future<List<Reservation>> getReservationsForUser() async {
+    return dataProvider.getReservationsForUser();
   }
 
-  Future<Reservation> createReservation(startTime, endTime, price, plateNo, spotId) async {
-    return dataProvider.createReservation(startTime, endTime, price, plateNo, spotId);
+  Future<Reservation> createReservation(
+      startTime, endTime, price, plateNo, spotId) async {
+    return dataProvider.createReservation(
+        startTime, endTime, price, plateNo, spotId);
   }
 
   Future hasReservations(compoundId, startTime, endTime) {
     return dataProvider.hasAvailableSpots(compoundId, startTime, endTime);
   }
 
-  Future calculatePrice(compoundId, startTime, endTime) async{
+  Future calculatePrice(compoundId, startTime, endTime) async {
     return await dataProvider.calculatePrice(compoundId, startTime, endTime);
   }
 
@@ -26,16 +28,11 @@ class ReservationRepository {
     return dataProvider.updateReservation(reservation);
   }
 
-  
-  Future<void> cancelReservation(String reservationId) async {
-    
-    return dataProvider.cancelReservation(reservationId);
-    
+  Future<void> deleteReservation(int reservationId) async {
+    return dataProvider.deleteReservation(reservationId);
   }
 
-  
   Future<List<Reservation>> getAllReservations() async {
     return dataProvider.getAllReservations();
-    
   }
 }

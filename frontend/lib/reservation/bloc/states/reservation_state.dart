@@ -49,3 +49,11 @@ class ReservationFailure extends ReservationState {
 
   const ReservationFailure(this.errorMessage);
 }
+
+class ReservationOperationSucess extends ReservationState {
+  final List<Reservation> reservations;
+  const ReservationOperationSucess(this.reservations);
+
+  @override
+  List<Object> get props => [];
+}

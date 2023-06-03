@@ -11,6 +11,7 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
     on<ParkingSpotLoad>((event, emit) async {
       emit(ParkingSpotsLoading());
       try {
+        print("failed in here");
         final parkingSpotsData = await reservationRepository.hasReservations(
             event.compoundId, event.startTime, event.endTime);
         emit(ParkingSpotsSucess(parkingSpotsData));
@@ -23,6 +24,28 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
       final price = await reservationRepository.calculatePrice(
           event.compoundId, event.startTime, event.endTime);
       emit(PriceCalculated(price));
+    });
+
+    on<ReservationLoad>((event, emit) async {
+      emit(ReservationLoading());
+      try {
+        final reservations =
+            await reservationRepository.getReservationsForUser();
+        emit(ReservationOperationSucess(reservations));
+      } catch (error) {
+        emit(ReservationFailure(error.toString()));
+      }
+    });
+
+    on<ReservationDelete>((event, emit) async {
+      try {
+        await reservationRepository.deleteReservation(event.id);
+        final reservations =
+            await reservationRepository.getReservationsForUser();
+        emit(ReservationOperationSucess(reservations));
+      } catch (error) {
+        emit(ReservationFailure(error.toString()));
+      }
     });
 
     on<ReserveSpot>((event, emit) async {

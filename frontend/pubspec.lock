@@ -438,10 +438,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: c2f3c66400649bd132f721c88218945d6406f693092b2f741b79ae9cdb046e59
+      sha256: "3083c3a3245adf9f3eb7bacf0eaa6a1f087dd538fab73a13a2f7907602601692"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.6+16"
+    version: "0.8.6+19"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -515,10 +515,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "6b0206b0bf4f04961fc5438198ccb3a885685cd67d4d4a32cc20ad7f8adbe015"
+      sha256: "0a217c6c989d21039f1498c3ed9f3ed71b354e69873f13a8dfc3c9fe76f1b452"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   logging:
     dependency: transitive
     description:
@@ -560,7 +560,6 @@ packages:
     source: hosted
     version: "1.0.4"
   mockito:
-    dependency: "direct dev"
     dependency: "direct main"
     description:
       name: mockito
@@ -576,15 +575,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
-  package_config:
-    dependency: transitive
-    description:
-      name: package_config
-      sha256: "1c5b77ccc91e4823a5af61ee74e6b972db1ef98c2ff5a18d3161c982a55448bd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
-  path:
   node_preamble:
     dependency: transitive
     description:
@@ -902,14 +892,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
-  timing:
-    dependency: transitive
-    description:
-      name: timing
-      sha256: "70a3b636575d4163c477e6de42f247a23b315ae20e86442bebe32d3cabf61c32"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   test_core:
     dependency: transitive
     description:
@@ -918,6 +900,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.5.1"
+  timing:
+    dependency: transitive
+    description:
+      name: timing
+      sha256: "70a3b636575d4163c477e6de42f247a23b315ae20e86442bebe32d3cabf61c32"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   typed_data:
     dependency: transitive
     description:
@@ -950,10 +940,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "11.3.0"
-      sha256: f3743ca475e0c9ef71df4ba15eb2d7684eecd5c8ba20a462462e4e8b561b2e11
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.6.0"
   watcher:
     dependency: transitive
     description:

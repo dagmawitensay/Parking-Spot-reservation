@@ -48,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 16.0),
                     TextFormField(
+                       key: Key('signinemail'),
                         controller: _emailController,
                         decoration: InputDecoration(
                           labelText: 'Email',
@@ -85,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                         }),
                     const SizedBox(height: 16.0),
                     TextFormField(
+                        key: Key('signinpassword'),
                         controller: _passwordController,
                         decoration: InputDecoration(
                           hintText: 'enter your password',

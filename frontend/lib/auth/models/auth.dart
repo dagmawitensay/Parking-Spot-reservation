@@ -53,7 +53,7 @@ class SpotReservingUser extends User {
   String lastName;
 
   SpotReservingUser({
-    required int id,
+    int? id,
     required String username,
     required String email,
     required String password,

@@ -41,4 +41,8 @@ class AuthRepository {
   Future<String> getRole() async {
     return userDataProvider.getRole();
   }
+
+  Future<void> deleteAccount() async {
+    await userDataProvider.deleteAccount();
+  }
 }

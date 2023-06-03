@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:frontend/auth/models/auth.dart';
 
-
 abstract class SignInState extends Equatable {
   const SignInState();
 
@@ -32,3 +31,10 @@ class SignInFailure extends SignInState {
 }
 
 class SignInSubmissionState extends SignInState {}
+
+class AccountDeleteSuccess extends SignInState {}
+
+class AccountDeleteFaliure extends SignInState {
+  final String errorMessage;
+  const AccountDeleteFaliure(this.errorMessage);
+}

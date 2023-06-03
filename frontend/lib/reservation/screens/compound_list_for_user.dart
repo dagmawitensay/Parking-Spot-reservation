@@ -43,21 +43,50 @@ class _CompoundListForUserState extends State<CompoundListForUser> {
           if (state is CompoundOperationSuccess) {
             final compounds = state.compounds;
 
-            return ListView.builder(
+            return GridView.builder(
+                padding: const EdgeInsets.all(20),
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 500,
+                    childAspectRatio: 3 / 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10),
                 itemCount: compounds.length,
-                itemBuilder: (_, idx) => Center(
-                        child: ListTile(
-                      title: Text(compounds.elementAt(idx).name),
-                      subtitle: Text(
-                          compounds.elementAt(idx).SlotPricePerHour.toString()),
+                itemBuilder: (BuildContext ctx, index) {
+                  return GestureDetector(
                       onTap: () {
                         (context).goNamed('timerPage', queryParameters: {
                           'compound_id': [
-                            compounds.elementAt(idx).id.toString()
+                            compounds.elementAt(index).id.toString()
                           ]
                         });
                       },
-                    )));
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Colors.brown[100],
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(compounds.elementAt(index).name)),
+                            Container(
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Spot Price Per Hour: "),
+                                      Text(compounds
+                                          .elementAt(index)
+                                          .SlotPricePerHour
+                                          .toString())
+                                    ]))
+                          ],
+                        ),
+                      ));
+                });
           }
 
           return const CircularProgressIndicator();

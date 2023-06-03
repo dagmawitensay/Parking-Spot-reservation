@@ -17,7 +17,11 @@ class AddUpdateCompound extends StatefulWidget {
   static const routeName = 'compoundAddUpdate';
   final CompoundArgument args;
 
-  const AddUpdateCompound({Key? key, required this.args}) : super(key: key);
+  const AddUpdateCompound(
+      {Key? key,
+      required this.args,
+      required Null Function(dynamic compound) onSave})
+      : super(key: key);
 
   @override
   _AddUpdateCompoundState createState() => _AddUpdateCompoundState();
@@ -267,7 +271,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                   ));
             }
           // }),
-          )
+  })
         ));
   }
 }

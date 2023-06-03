@@ -33,7 +33,7 @@ class UserDataProvider {
     print('$_baseUrl/owner/signup');
 
     if (response.statusCode == 201) {
-      final responseBody = json.decode(response.body);
+      final responseBody = jsonDecode(response.body);
 
       persitstToken(responseBody['access_token'], responseBody['role']);
 
@@ -53,16 +53,21 @@ class UserDataProvider {
           'username': reserver.username,
           'email': reserver.email,
           'password': reserver.password,
-          'firstName': reserver.email,
-          'lastName': reserver.lastName
+          'first_name': reserver.email,
+          'last_name': reserver.lastName
         }));
-
+    print(response.body);
     if (response.statusCode == 201) {
-      final responseBody = json.decode(response.body);
+      final responseBody = jsonDecode(response.body);
       persitstToken(responseBody['access_token'], responseBody['role']);
-      return SpotReservingUser.fromJson(jsonDecode(response.body));
+      print(responseBody['access_token']);
+      var role = responseBody['role'];
+      reserver.role = role;
+      return reserver;
     } else {
-      throw Exception('Failed to create user');
+      throw Exception(jsonDecode(response.body)['message']
+          ? jsonDecode(response.body)['message']
+          : 'Operation Failure');
     }
   }
 
@@ -90,6 +95,19 @@ class UserDataProvider {
     }
   }
 
+  Future<void> deleteAccount() async {
+    var token = await getToken();
+    var user_id = await JwtDecoder.decode(token!)['sub'];
+    final response = await http.delete(
+        Uri.parse(
+          'http://localhost:3000/user/$user_id',
+        ),
+        headers: <String, String>{'Authorization': 'Bearer $token'});
+    if (!(response.statusCode == 200 || response.statusCode == 204)) {
+      throw Exception('Failed to delete Profile');
+    }
+  }
+
   Future<bool> isValidToken(String token) async {
     return !(JwtDecoder.isExpired(token));
   }
@@ -101,7 +119,6 @@ class UserDataProvider {
 
   Future<String?> getToken() async {
     var value = await storage.read(key: 'token');
-    print(value);
     print(JwtDecoder.isExpired(value!));
     return value;
   }
@@ -112,8 +129,7 @@ class UserDataProvider {
   }
 
   Future<void> deleteToken() async {
-    
-     storage.deleteAll();
+    storage.deleteAll();
   }
 
   Future<String> getRole() async {

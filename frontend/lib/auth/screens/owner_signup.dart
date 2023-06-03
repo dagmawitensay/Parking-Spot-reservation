@@ -17,6 +17,7 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
   final _formKey = GlobalKey<FormState>();
 
   final Map<String, dynamic> _owner = {};
+  String message = '';
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -159,7 +160,6 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                             _owner['username'] = value;
                           },
                         ),
-  
                         const SizedBox(height: 16.0),
                         TextFormField(
                            key:Key('email'),
@@ -252,17 +252,28 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                                 final CompoundOwnerSignUpEvent event =
                                     OwnerSignUp(
                                         owner: CompoundOwner(
-                                            email: _owner['email'],
-                                            firstName: _owner['firstName'],
-                                            lastName: _owner['lastName'],
-                                            password: _owner['password'],
-                                            username: _owner['username'],
-                                            ));
+                                  email: _owner['email'],
+                                  firstName: _owner['firstName'],
+                                  lastName: _owner['lastName'],
+                                  password: _owner['password'],
+                                  username: _owner['username'],
+                                ));
                                 print(event);
                                 BlocProvider.of<CompoundOwnerSignupBloc>(
                                         context)
                                     .add(event);
-                                (context).goNamed('signin');
+                                if (state is OwnerSignUpSucess) {
+                                  (context).goNamed('home');
+                                } else if (state is OwnerSignUpFailure) {
+                                  print(state.errorMessage ==
+                                      'Exception: Credentials taken');
+                                  setState(() {
+                                    if (state.errorMessage ==
+                                        'Exception: Credentials taken') {
+                                      message = 'Credentials taken';
+                                    }
+                                  });
+                                }
                               }
                             },
                             child: const Text('Sign Up'),
@@ -276,7 +287,6 @@ class _OwnerSignupPageState extends State<OwnerSignupPage> {
                           },
                           child: const Text('Already have an account? Login'),
                         )),
-                    
                       ],
                     ),
                   ),

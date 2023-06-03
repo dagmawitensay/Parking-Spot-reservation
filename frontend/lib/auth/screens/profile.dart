@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/auth/bloc/blocs/signin_bloc.dart';
+import 'package:frontend/auth/bloc/events/signin_event.dart';
+import 'package:frontend/auth/bloc/states/signin_state.dart';
 import 'package:frontend/auth/data_provider/user_data_provider.dart';
 import 'package:frontend/auth/repository/auth_repository.dart';
 import 'package:go_router/go_router.dart';
@@ -14,6 +18,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final AuthRepository authRepository = AuthRepository(UserDataProvider());
   int _selectedIndex = 0;
+  var role = '';
 
   void _onItemTapped(int index) async {
     var role = await authRepository.getRole();
@@ -50,7 +55,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(17),
                 child: ElevatedButton(
                   onPressed: () {
-                    // Delete account logic
+                    SignInEvent event = AccountDelete();
+                    BlocProvider.of<SignInBloc>(context).add(event);
+
+                    BlocListener<SignInBloc, SignInState>(
+                      listener: (context, state) {
+                        if (state is AccountDeleteSuccess) {
+                          (context).goNamed('startingPage');
+                        } else if (state is AccountDeleteFaliure) {
+                          if (role == 'owner') {
+                            (context).goNamed('home');
+                          } else if (role == 'reserver') {
+                            (context).goNamed('userCompounList');
+                          }
+                        }
+                      },
+                    );
                   },
                   child: const Text('Delete Account'),
                 )),
@@ -74,7 +94,6 @@ class _ProfilePageState extends State<ProfilePage> {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',

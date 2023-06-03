@@ -51,3 +51,9 @@ class SignIn extends SignInEvent {
   @override
   List<Object> get props => [user];
 }
+
+class AccountDelete extends SignInEvent {
+  const AccountDelete();
+  @override
+  List<Object> get props => [];
+}

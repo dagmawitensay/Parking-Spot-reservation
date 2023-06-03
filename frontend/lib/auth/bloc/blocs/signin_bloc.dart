@@ -20,5 +20,14 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
         emit(SignInFailure(error.toString()));
       }
     });
+
+    on<AccountDelete>((event, emit) async {
+      try {
+        await authRepository.deleteAccount();
+        emit(AccountDeleteSuccess());
+      } catch (error) {
+        AccountDeleteFaliure(error.toString());
+      }
+    });
   }
 }

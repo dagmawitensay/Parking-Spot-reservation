@@ -78,7 +78,13 @@ void main(){
       await tester.enterText(totalSpots, '30');
       await tester.enterText(availableSpots, '60');
 
-      
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('savecompound')));
+
+      await Future.delayed(const Duration (seconds:2));
+
+
 });
 
 }

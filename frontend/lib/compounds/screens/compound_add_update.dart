@@ -56,7 +56,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                     child: ListView(
                       children: [
                         TextFormField(
-                          Key: Key('Name'),
+                          key: Key('Name'),
                             initialValue: widget.args.edit
                                 ? widget.args.compound?.name
                                 : '',
@@ -76,7 +76,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                               );
                             }),
                         TextFormField(
-                          Key: Key('Region'),
+                           key: Key('Region'),
                             initialValue: widget.args.edit
                                 ? widget.args.compound?.Region
                                 : '',
@@ -96,7 +96,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                               );
                             }),
                         TextFormField(
-                          Key: key("Wereda"),
+                           key: Key("Wereda"),
                             initialValue: widget.args.edit
                                 ? widget.args.compound?.Wereda
                                 : '',
@@ -116,7 +116,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                               );
                             }),
                         TextFormField(
-                          Key: key('Zone'),
+                          key: Key('Zone'),
                             initialValue: widget.args.edit
                                 ? widget.args.compound?.Wereda
                                 : '',
@@ -136,7 +136,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                               );
                             }),
                         TextFormField(
-                          Key: key('Price per slot'),
+                           key: Key('Price per slot'),
                             initialValue: widget.args.edit
                                 ? widget.args.compound?.Kebele.toString()
                                 : '',
@@ -156,7 +156,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                               );
                             }),
                         TextFormField(
-                          key: key('Total  Spots');
+                          key: Key('Total  Spots'),
                           initialValue: widget.args.edit
                               ? widget.args.compound?.SlotPricePerHour
                                   .toString()
@@ -178,7 +178,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                           },
                         ),
                         TextFormField(
-                          key:key('Available Spots');
+                          key:Key('Available Spots'),
                           initialValue: widget.args.edit
                               ? widget.args.compound?.totalSpots.toString()
                               : '',
@@ -219,6 +219,7 @@ class _AddUpdateCompoundState extends State<AddUpdateCompound> {
                           },
                         ),
                         ElevatedButton(
+                            key: Key('savecompound'),
                             onPressed: () async {},
                             child: const Text('Pick Compound Image')),
                         Padding(

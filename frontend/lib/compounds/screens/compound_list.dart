@@ -51,7 +51,7 @@ class _CompoundListState extends State<CompoundList> {
                     mainAxisSpacing: 10),
                 itemCount: compounds.length,
                 itemBuilder: (BuildContext ctx, index) {
-                  return GestureDetector(
+                  return GestureDetector(                   
                       onTap: () {
                         (context).goNamed('timerPage', queryParameters: {
                           'compound_id': [

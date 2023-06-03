@@ -37,7 +37,7 @@ export class AuthService{
               }
             },
           });
-        // console.log(user.password)
+
         return this.signToken(user.id, user.email,user.role);
       
         } catch (error) {

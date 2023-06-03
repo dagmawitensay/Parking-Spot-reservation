@@ -32,7 +32,8 @@ import 'package:frontend/reservation/screens/time_picker_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_strategy/url_strategy.dart';
 import '../compounds/bloc_observer.dart';
-import 'auth/screens/profile.dart';
+import 'auth/screens/owner_profile.dart';
+import 'auth/screens/reserver_profile.dart';
 import 'compounds/bloc/compound_bloc.dart';
 import 'compounds/bloc/compound_event.dart';
 import 'compounds/data_provider/compound_data_provider.dart';
@@ -107,8 +108,8 @@ class AuthApp extends StatelessWidget {
                       CompoundBloc(compoundRepository: compoundRepository)
                         ..add(const CompoundLoad())),
               BlocProvider(
-                create: (context) => ReservationBloc(
-                    reservationRepository: reservationRepository)),
+                  create: (context) => ReservationBloc(
+                      reservationRepository: reservationRepository)),
             ],
             child: MaterialApp.router(
                 title: 'Compound App',
@@ -125,17 +126,22 @@ class AuthApp extends StatelessWidget {
       GoRoute(
           name: "home",
           path: '/',
-          builder: (context, state) => CompoundList(),
+          builder: (context, state) => const CompoundList(),
           redirect: (context, state) {
+            final state = context.read<AuthenticationBloc>().state;
             if (state is AuthenticationUnauthenticated) {
-              print('user is authenticated');
-              return '/startingPage';
+              return '/auth/signin';
+            } else if (state is AuthenticationAuthenticated) {
+              if (state.role == 'owner') {
+                return '/';
+              } else if (state.role == 'reserver') {
+                return '/compoundListUser';
+              }
             }
-            return '/';
           }),
       GoRoute(
           name: 'startingPage',
-          path: '/home',
+          path: '/startingPage',
           builder: (context, state) => HomePage()),
       GoRoute(
           name: 'ownerSignup',
@@ -163,10 +169,16 @@ class AuthApp extends StatelessWidget {
             return AddUpdateCompound(args: args);
           },
           redirect: (context, state) {
-            if (state is CompoundOperationFailure) {
+            final state = context.read<AuthenticationBloc>().state;
+            if (state is AuthenticationUnauthenticated) {
               return '/auth/signin';
+            } else if (state is AuthenticationAuthenticated) {
+              if (state.role == 'owner') {
+                return '/addUpdateCompound';
+              } else if (state.role == 'reserver') {
+                return '/auth/signin';
+              }
             }
-            return '/addUpdateCompound';
           }),
       GoRoute(
           name: 'compoundList',
@@ -220,10 +232,36 @@ class AuthApp extends StatelessWidget {
             return const BookingSuccessPage();
           }),
       GoRoute(
-          name: 'profile',
-          path: '/profile',
+          name: 'ownerProfile',
+          path: '/ownerProfile',
           builder: (context, state) {
-            return ProfilePage();
+            return OwnerProfilePage();
+          },
+          redirect: (context, state) {
+            final state = context.read<AuthenticationBloc>().state;
+            if (state is AuthenticationUnauthenticated) {
+              return '/auth/signin';
+            } else if (state is AuthenticationAuthenticated) {
+              if (state.role == 'reserver') {
+                return '/auth/signin';
+              }
+            }
+          }),
+      GoRoute(
+          name: 'reserverProfile',
+          path: '/reserverProfile',
+          builder: (context, state) {
+            return const ReserverProfilePage();
+          },
+          redirect: (context, state) {
+            final state = context.read<AuthenticationBloc>().state;
+            if (state is AuthenticationUnauthenticated) {
+              return '/auth/signin';
+            } else if (state is AuthenticationAuthenticated) {
+              if (state.role == 'owner') {
+                return '/auth/signin';
+              }
+            }
           }),
       GoRoute(
           name: 'reservations',

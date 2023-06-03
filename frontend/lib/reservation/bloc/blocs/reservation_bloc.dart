@@ -29,8 +29,11 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
     on<ReservationLoad>((event, emit) async {
       emit(ReservationLoading());
       try {
+        print("before reservation");
         final reservations =
             await reservationRepository.getReservationsForUser();
+        print("after reservation");
+        print(reservations);
         emit(ReservationOperationSucess(reservations));
       } catch (error) {
         emit(ReservationFailure(error.toString()));
@@ -59,8 +62,6 @@ class ReservationBloc extends Bloc<ReservationEvent, ReservationState> {
             event.spot_id);
         print(reservation);
         emit(ReservationSuccess(reservation));
-        print(reservation);
-        print("after sucess");
       } catch (error) {
         ReservationFailure(error.toString());
       }

@@ -51,7 +51,7 @@ class ReservationFailure extends ReservationState {
 }
 
 class ReservationOperationSucess extends ReservationState {
-  final List<Reservation> reservations;
+  final List<dynamic> reservations;
   const ReservationOperationSucess(this.reservations);
 
   @override

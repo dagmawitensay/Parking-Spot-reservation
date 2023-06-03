@@ -16,7 +16,7 @@ class AuthenticationBloc
         final token = await authRepository.getToken();
         final bool isValid = await authRepository.isValidToken(token!);
         if (isValid) {
-          emit(AuthenticationAuthenticated());
+          emit(AuthenticationAuthenticated(await authRepository.getRole()));
         } else {
           emit(AuthenticationUnauthenticated());
         }

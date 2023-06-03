@@ -104,7 +104,7 @@ class _ParkingSpotsState extends State<ParkingSpots> {
                             'compound_id': [widget.compoundId.toString()],
                             'spot_id': [resultMap[index]![0].toString()],
                             'startTime': [widget.startTime],
-                            'endTime': [widget.endTime]
+                            'endTime': [widget.endTime],
                           });
                         }
                       },

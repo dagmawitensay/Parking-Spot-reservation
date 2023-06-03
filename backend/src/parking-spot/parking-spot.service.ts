@@ -30,10 +30,10 @@ export class ParkingSpotService {
     
     }
 
-    async getParkingSpot(compound_id: number, parking_spot_id: number) {
-        const parking_spot = await this.prisma.parking_spots.findFirst({
+    async getParkingSpot(parking_spot_id: number) {
+        const parking_spot = await this.prisma.parking_spots.findUnique({
             where: {
-                compund_id: compound_id,
+
                 id: parking_spot_id
             }
         });

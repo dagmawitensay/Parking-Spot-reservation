@@ -24,6 +24,7 @@ import 'package:frontend/reservation/repository/reservation_repository.dart';
 import 'package:frontend/reservation/screens/book_detail.dart';
 import 'package:frontend/reservation/screens/compound_list_for_user.dart';
 import 'package:frontend/reservation/screens/parking_spots.dart';
+import 'package:frontend/reservation/screens/reservations.dart';
 import 'package:frontend/reservation/screens/success_page.dart';
 import 'package:frontend/reservation/screens/time_picker_page.dart';
 import 'package:go_router/go_router.dart';
@@ -222,6 +223,12 @@ class AuthApp extends StatelessWidget {
           path: '/profile',
           builder: (context, state) {
             return ProfilePage();
+          }),
+      GoRoute(
+          name: 'reservations',
+          path: '/reservations',
+          builder: (context, state) {
+            return UserReservations();
           })
     ],
   );

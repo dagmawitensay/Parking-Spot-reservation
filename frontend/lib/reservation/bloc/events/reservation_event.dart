@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/reservation/models/reservation.dart';
 
 abstract class ReservationEvent extends Equatable {
   const ReservationEvent();
@@ -61,4 +62,28 @@ class ReserveSpot extends ReservationEvent {
       required this.spot_id,
       required this.plateNo,
       required this.price});
+}
+
+class ReservationLoad extends ReservationEvent {
+  const ReservationLoad();
+  @override
+  List<Object> get props => [];
+}
+
+class ReservationUpdate extends ReservationEvent {
+  final int id;
+  final Reservation reservation;
+
+  const ReservationUpdate(this.id, this.reservation);
+  @override
+  List<Object> get props => [id, reservation];
+}
+
+class ReservationDelete extends ReservationEvent {
+  final int id;
+
+  const ReservationDelete(this.id);
+
+  @override
+  List<Object> get props => [id];
 }

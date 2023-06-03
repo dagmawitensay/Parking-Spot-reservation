@@ -1,4 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:frontend/auth/data_provider/user_data_provider.dart';
+import 'package:frontend/auth/repository/auth_repository.dart';
 import 'package:frontend/reservation/models/reservation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,18 +10,19 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 class ReservationDataProvider {
   final baseUrl = 'http://localhost:3000/reservations';
   final FlutterSecureStorage storage = new FlutterSecureStorage();
+  final AuthRepository authRepository = AuthRepository(UserDataProvider());
 
   Future hasAvailableSpots(compoundId, startTime, endTime) async {
     String? token = await storage.read(key: 'token');
-    print(token);
-    //int userId = int.parse(JwtDecoder.decode(token!)['sub']);
+
+    int userId = int.parse(JwtDecoder.decode(token!)['sub']);
     final http.Response response =
         await http.post(Uri.parse('$baseUrl/$compoundId'),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
             body: jsonEncode(<String, dynamic>{
-              'user_id': 1,
+              'user_id': userId,
               'start_time': startTime,
               'end_time': endTime,
             }));
@@ -57,20 +60,29 @@ class ReservationDataProvider {
     }
   }
 
-  Future<List<Reservation>> getReservationsForUser(String userId) async {
-    final url = Uri.parse('$baseUrl/reservations?userId=$userId');
+  Future<List<Reservation>> getReservationsForUser() async {
+    String? token = await storage.read(key: 'token');
+    if (token != null) {
+      int user_id = JwtDecoder.decode(token)['sub'];
 
-    final response = await http.get(url);
+      final response = await http.get(
+        Uri.parse('http://localhost:3000/reservations/user_id'),
+      );
+      print(response.statusCode);
+      print(response.body);
 
-    if (response.statusCode == 200) {
-      final jsonData = json.decode(response.body) as List<dynamic>;
-      final reservations = jsonData
-          .map((reservation) => Reservation.fromJson(reservation))
-          .toList();
-      return reservations;
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        final reservations = jsonData
+            .map((reservation) => Reservation.fromJson(reservation))
+            .toList();
+        return reservations;
+      } else {
+        throw Exception(
+            'Failed to fetch reservations. Status code: ${response.statusCode}');
+      }
     } else {
-      throw Exception(
-          'Failed to fetch reservations. Status code: ${response.statusCode}');
+      throw Exception('Failed to fetch reservations.');
     }
   }
 
@@ -79,27 +91,29 @@ class ReservationDataProvider {
     String? token = await storage.read(key: 'token');
     if (token != null) {
       int user_id = JwtDecoder.decode(token)['sub'];
-    }
 
-    final response = await http.post(
-      Uri.parse('http://localhost:3000/reservations/'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(<String, dynamic>{
-        'user_id': 1,
-        'spot_id': spotId,
-        'start_time': startTime,
-        'end_time': endTime,
-        // 'plateNo': plateNo,
-        // 'totalPrice': price
-      }),
-    );
-    print(response.statusCode);
-    print(response.body);
-    if (response.statusCode == 201) {
-      return Reservation.fromJson(jsonDecode(response.body));
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/reservations/'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(<String, dynamic>{
+          'user_id': user_id,
+          'spot_id': spotId,
+          'start_time': startTime,
+          'end_time': endTime,
+          // 'plateNo': plateNo,
+          // 'totalPrice': price
+        }),
+      );
+      print(response.statusCode);
+      print(response.body);
+      if (response.statusCode == 201) {
+        return Reservation.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(
+            'Failed to create reservation. Status code: ${response.statusCode}');
+      }
     } else {
-      throw Exception(
-          'Failed to create reservation. Status code: ${response.statusCode}');
+      throw Exception('Failed to create reservation)');
     }
   }
 
@@ -118,14 +132,16 @@ class ReservationDataProvider {
     }
   }
 
-  Future<void> cancelReservation(String reservationId) async {
-    final url = Uri.parse('$baseUrl/reservations/$reservationId');
+  Future<void> deleteReservation(int reservationId) async {
+    String? token = await storage.read(key: 'token');
 
-    final response = await http.delete(url);
+    final response = await http
+        .post(Uri.parse('http://localhost:3000/reservations/$reservationId'));
 
-    if (response.statusCode != 204) {
-      throw Exception(
-          'Failed to cancel reservation. Status code: ${response.statusCode}');
+    print(response.statusCode);
+    print(response.body);
+    if (!(response.statusCode == 200 || response.statusCode == 204)) {
+      throw Exception('Failed to delete compound');
     }
   }
 
@@ -139,14 +155,11 @@ class ReservationDataProvider {
       final reservations = jsonData
           .map((reservation) => Reservation.fromJson(reservation))
           .toList();
-      
+
       return reservations;
-      
     } else {
-      
       throw Exception(
           'Failed to fetch all reservations. Status code: ${response.statusCode}');
-      
     }
   }
 }

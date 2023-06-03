@@ -2,11 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 // import 'package:frontend/auth/bloc/blocs/owner_signup_bloc.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:frontend/compounds/screens/compound_list.dart';
+import 'package:frontend/auth/data_provider/user_data_provider.dart';
+import 'package:frontend/auth/models/auth.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:frontend/main.dart' as app;  
 
-// class MockCompoundDataProvider extends CompoundDataProvider {
+class MockUserDataProvider extends UserDataProvider{
+   Future<CompoundOwner> signUpCompoundOwner(CompoundOwner owner) async {
+     final FlutterSecureStorage storage = new FlutterSecureStorage();
+   CompoundOwner testOwner = CompoundOwner(
+      username:'mock', 
+      email: 'testOwner@gmail.com', 
+      password:'owner1',
+      firstName: 'testOwner',
+      lastName: 'testOwner'
+      );
+      return testOwner; 
+}
+}
+class MockCompoundDataProvider extends CompoundDataProvider {
 
-// }
+}
 void main(){
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -83,6 +101,11 @@ void main(){
       await tester.tap(find.byKey(const Key('savecompound')));
 
       await Future.delayed(const Duration (seconds:2));
+
+      expect(find.byType(CompoundList),findsOneWidget);
+
+
+
 
 
 });
